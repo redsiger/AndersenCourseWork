@@ -9,3 +9,4 @@ dependencyResolutionManagement {
 rootProject.name = "AndersenCourseWork"
 include ':app'
 include ':feature_characters'
+include ':feature_episodes'
