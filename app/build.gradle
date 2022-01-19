@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -37,6 +38,24 @@ dependencies {
     implementation project(":core")
     implementation project(":feature_characters")
     implementation project(":feature_episodes")
+
+    // Retrofit and OkHttp
+    def retrofit_version = '2.9.0'
+    def okhttp_version = '4.8.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    // Moshi
+    def moshi_ver = "1.13.0"
+    implementation "com.squareup.moshi:moshi:$moshi_ver"
+    def moshiFactory_ver = "2.9.0"
+    implementation "com.squareup.retrofit2:converter-moshi:$moshiFactory_ver"
+
+    // Dagger 2
+    def dagger_ver = "2.40.5"
+    implementation "com.google.dagger:dagger:$dagger_ver"
+    kapt "com.google.dagger:dagger-compiler:$dagger_ver"
 
     // Navigation Component
     def nav_version = "2.3.5"

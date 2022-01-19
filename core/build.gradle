@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -20,6 +21,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL", "\"https://www.breakingbadapi.com/api/\""
+        }
+        debug {
+            buildConfigField "String", "BASE_URL", "\"https://www.breakingbadapi.com/api/\""
         }
     }
     compileOptions {
@@ -32,6 +37,24 @@ android {
 }
 
 dependencies {
+
+    // Dagger 2
+    def dagger_ver = "2.40.5"
+    implementation "com.google.dagger:dagger:$dagger_ver"
+    kapt "com.google.dagger:dagger-compiler:$dagger_ver"
+
+    // Retrofit and OkHttp
+    def retrofit_version = '2.9.0'
+    def okhttp_version = '4.8.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    // Moshi
+    def moshi_ver = "1.13.0"
+    implementation "com.squareup.moshi:moshi:$moshi_ver"
+    def moshiFactory_ver = "2.9.0"
+    implementation "com.squareup.retrofit2:converter-moshi:$moshiFactory_ver"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
