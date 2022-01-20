@@ -1,6 +1,7 @@
 package com.example.androidschool.core.di
 
 import com.example.androidschool.core.BuildConfig
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -28,8 +29,15 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideConverterFactory(): Converter.Factory {
-        return MoshiConverterFactory.create()
+    fun provideConverterFactory(moshi: Moshi): Converter.Factory {
+        return MoshiConverterFactory.create(moshi)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder()
+            .build()
     }
 
     @Singleton

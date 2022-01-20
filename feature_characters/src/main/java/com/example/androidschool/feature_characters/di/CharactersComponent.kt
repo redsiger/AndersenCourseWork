@@ -1,6 +1,6 @@
 package com.example.androidschool.feature_characters.di
 
-import com.example.androidschool.feature_characters.presenter.CharactersListFragment
+import com.example.androidschool.feature_characters.ui.CharactersListFragment
 import dagger.Subcomponent
 
 @Subcomponent

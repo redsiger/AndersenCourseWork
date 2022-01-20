@@ -29,6 +29,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -49,6 +52,15 @@ dependencies {
     // Moshi
     def moshi_ver = "1.13.0"
     implementation "com.squareup.moshi:moshi:$moshi_ver"
+    def moshiFactory_ver = "2.9.0"
+    implementation "com.squareup.retrofit2:converter-moshi:$moshiFactory_ver"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_ver"
+
+    // Room
+    def roomVersion = "2.4.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
