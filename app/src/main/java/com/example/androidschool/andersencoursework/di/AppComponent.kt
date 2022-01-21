@@ -1,11 +1,11 @@
 package com.example.androidschool.andersencoursework.di
 
-import com.example.androidschool.andersencoursework.MainActivity
-import com.example.androidschool.core.di.CoreComponent
-import com.example.androidschool.core.di.NetworkModule
-import com.example.androidschool.feature_characters.di.CharactersComponent
-import com.example.androidschool.feature_characters.di.CharactersModule
-import com.example.androidschool.feature_characters.ui.CharactersListFragment
+import android.content.Context
+import com.example.androidschool.andersencoursework.ui.MainActivity
+import com.example.androidschool.andersencoursework.ui.characters.characterDetail.CharacterDetailsFragment
+import com.example.androidschool.andersencoursework.ui.characters.charactersList.CharactersListFragment
+import com.example.androidschool.data.di.DataComponent
+import com.example.androidschool.data.di.NetworkModule
 import dagger.Component
 import javax.inject.Singleton
 
@@ -13,16 +13,20 @@ import javax.inject.Singleton
 @Component(modules = [
     AppModule::class,
     NetworkModule::class,
-    CharactersModule::class,
+    DomainModule::class,
     SubcomponentsModule::class
 ])
 interface AppComponent {
 
+    fun dataComponent(): DataComponent.Factory
+
     fun inject(activity: MainActivity)
-
     fun inject(fragment: CharactersListFragment)
-
-    fun charactersComponent(): CharactersComponent.Factory
-
-    fun coreComponent(): CoreComponent.Factory
+    fun inject(characterDetailsFragment: CharacterDetailsFragment)
 }
+
+val Context.appComponent: AppComponent
+    get() = when (this) {
+        is App -> appComponent
+        else -> this.applicationContext.appComponent
+    }

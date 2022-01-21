@@ -8,6 +8,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AndersenCourseWork"
 include ':app'
-include ':core'
-include ':feature_characters'
-include ':feature_episodes'
+include ':data'
+include ':domain'
+include ':util'

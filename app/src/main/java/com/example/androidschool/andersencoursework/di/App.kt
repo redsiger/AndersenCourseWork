@@ -1,10 +1,10 @@
 package com.example.androidschool.andersencoursework.di
 
 import android.app.Application
-import com.example.androidschool.feature_characters.di.CharactersComponent
-import com.example.androidschool.feature_characters.di.CharactersComponentProvider
+import com.example.androidschool.data.di.DataComponent
+import com.example.androidschool.data.di.DataComponentProvider
 
-class App: Application(), CharactersComponentProvider {
+class App: Application(), DataComponentProvider {
 
     lateinit var appComponent: AppComponent
 
@@ -16,8 +16,8 @@ class App: Application(), CharactersComponentProvider {
             .build()
     }
 
-    override fun provideCharactersComponent(): CharactersComponent {
-        return appComponent.charactersComponent().create()
+    override fun provideDataComponent(): DataComponent {
+        return appComponent.dataComponent().create()
     }
 
 
