@@ -1,8 +1,7 @@
 package com.example.androidschool.andersencoursework.ui.characters.characterDetail
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.example.androidschool.andersencoursework.ui.characters.mappers.CharacterUIMapper
+import com.example.androidschool.andersencoursework.ui.characters.mappers.UIMapper
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
 import com.example.androidschool.domain.characters.model.CharacterAttr
@@ -18,7 +17,7 @@ class CharacterDetailsViewModel(
     private val charactersInteractor: CharactersInteractor
 ): ViewModel() {
 
-    private val mapper = CharacterUIMapper()
+    private val mapper = UIMapper()
     private var _character = MutableLiveData<Status<CharacterUIEntity>>(Status.InProgress)
     val character: LiveData<Status<CharacterUIEntity>> get() = _character
 
@@ -31,7 +30,7 @@ class CharacterDetailsViewModel(
             val response = charactersInteractor.getCharacter(CharacterAttr(characterId))
             when (response) {
                 is Status.Success -> _character.postValue(
-                    response.proceed { mapper.fromDomain(it.first()) })
+                    response.proceed { mapper.mapCharacterEntity(it) })
                 is Status.Error -> _character.postValue(response.proceed())
                 is Status.InProgress -> _character.postValue(response.proceed())
             }

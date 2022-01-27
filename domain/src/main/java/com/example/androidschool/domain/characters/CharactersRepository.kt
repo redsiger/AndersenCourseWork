@@ -8,5 +8,5 @@ import com.example.androidschool.util.Status
 
 interface CharactersRepository {
     suspend fun getCharactersPaging(): LiveData<PagingData<CharacterEntity>>
-    suspend fun getCharacter(characterAttr: CharacterAttr): Status<List<CharacterEntity>>
+    suspend fun getCharacter(characterAttr: CharacterAttr): Status<CharacterEntity>
 }

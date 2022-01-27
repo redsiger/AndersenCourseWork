@@ -24,7 +24,6 @@ class DomainModule {
         return CharactersRepositoryImpl(service)
     }
 
-
     @Singleton
     @Provides
     fun provideCharactersService(retrofit: Retrofit): CharactersService {

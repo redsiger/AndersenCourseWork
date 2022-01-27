@@ -1,29 +1,33 @@
 package com.example.androidschool.andersencoursework.ui.characters.charactersList
 
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.androidschool.andersencoursework.ui.characters.mappers.CharacterUIMapper
+import com.example.androidschool.andersencoursework.ui.characters.mappers.UIMapper
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
+import com.example.androidschool.domain.characters.model.CharacterAttr
+import com.example.androidschool.domain.characters.model.CharacterEntity
+import com.example.androidschool.util.Status
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class CharactersListViewModel (
     private val charactersInteractor: CharactersInteractor
 ): ViewModel() {
 
-    private val mapper = CharacterUIMapper()
+    private val mapper = UIMapper()
     private val _charactersList = MutableLiveData<PagingData<CharacterUIEntity>>()
     val charactersList: LiveData<PagingData<CharacterUIEntity>> get() = _charactersList
 
 
     suspend fun getCharactersListPaging() = charactersInteractor.getCharactersPaging().cachedIn(viewModelScope)
+
+    suspend fun getCharacter(id: Int): Status<CharacterEntity> {
+        val attr = CharacterAttr(id)
+        return charactersInteractor.getCharacter(attr)
+    }
 
     class Factory @AssistedInject constructor(
         private val charactersInteractor: CharactersInteractor

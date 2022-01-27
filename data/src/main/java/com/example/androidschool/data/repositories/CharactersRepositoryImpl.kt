@@ -38,12 +38,12 @@ class CharactersRepositoryImpl(
 //        }
 //    }
 
-    override suspend fun getCharacter(characterAttr: CharacterAttr): Status<List<CharacterEntity>> {
+    override suspend fun getCharacter(characterAttr: CharacterAttr): Status<CharacterEntity> {
         return try {
             val characterId = CharacterNetworkAttr(characterAttr.id).id
             val response = service.getCharacter(characterId)
             if (response.isSuccessful) {
-                Status.Success(response.body()!!.map { it.toDomainModel() })
+                Status.Success(response.body()!!.map { it.toDomainModel() }.first())
             } else {
                 Status.Error(response.errorBody() as HttpException)
             }

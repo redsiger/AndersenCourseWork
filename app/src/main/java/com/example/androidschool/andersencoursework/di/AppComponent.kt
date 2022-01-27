@@ -5,6 +5,7 @@ import com.example.androidschool.andersencoursework.ui.MainActivity
 import com.example.androidschool.andersencoursework.ui.characters.characterDetail.CharacterDetailsFragment
 import com.example.androidschool.andersencoursework.ui.characters.charactersList.CharactersListFragment
 import com.example.androidschool.data.di.DataComponent
+import com.example.androidschool.data.di.DatabaseModule
 import com.example.androidschool.data.di.NetworkModule
 import dagger.Component
 import javax.inject.Singleton
@@ -12,6 +13,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [
     AppModule::class,
+    DatabaseModule::class,
     NetworkModule::class,
     DomainModule::class,
     SubcomponentsModule::class

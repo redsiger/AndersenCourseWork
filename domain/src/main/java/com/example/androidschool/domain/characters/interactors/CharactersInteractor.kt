@@ -11,7 +11,7 @@ interface CharactersInteractor {
 
     suspend fun getCharactersPaging(): LiveData<PagingData<CharacterEntity>>
 
-    suspend fun getCharacter(characterAttr: CharacterAttr): Status<List<CharacterEntity>>
+    suspend fun getCharacter(characterAttr: CharacterAttr): Status<CharacterEntity>
 
     class Base(private val repository: CharactersRepository): CharactersInteractor {
 
@@ -19,7 +19,7 @@ interface CharactersInteractor {
             return repository.getCharactersPaging()
         }
 
-        override suspend fun getCharacter(characterAttr: CharacterAttr): Status<List<CharacterEntity>> {
+        override suspend fun getCharacter(characterAttr: CharacterAttr): Status<CharacterEntity> {
             return repository.getCharacter(characterAttr)
         }
 

@@ -14,8 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidschool.andersencoursework.databinding.FragmentCharactersListBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.ui.BaseFragment
+import com.example.androidschool.data.database.CharactersDao
+import com.example.androidschool.data.database.DatabaseMapper
+import com.example.androidschool.data.database.model.CharacterRoomEntity
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
+import com.example.androidschool.domain.characters.model.CharacterEntity
+import com.example.androidschool.util.Status
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,6 +42,9 @@ class CharactersListFragment: BaseFragment() {
     }
 //    @Inject
 //    lateinit var viewModelFactory: CharactersListViewModel.Factory.Factory
+
+    @Inject
+    lateinit var charactersDao: CharactersDao
 
     private val mAdapter: CharactersListPagingAdapter by lazy {
         CharactersListPagingAdapter()
@@ -64,10 +73,38 @@ class CharactersListFragment: BaseFragment() {
             layoutManager = LinearLayoutManager(requireContext())
         }
 
+        lifecycleScope.launch(Dispatchers.IO) {
+            val status = viewModel.getCharacter(1)
+            when (status) {
+                is Status.Success -> {
+                    val characterEntity = status.data
+                    printCharacterEntityInLog(characterEntity)
+                    saveCharacterEntity(characterEntity)
+                    delay(10000)
+                    printCharacterRoomInLog(charactersDao.getAll().first())
+                }
+            }
+        }
+
+
+
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.getCharactersListPaging().observe(viewLifecycleOwner) {
                 mAdapter.submitData(lifecycle, it)
             }
         }
+    }
+
+    private fun saveCharacterEntity(character: CharacterEntity) {
+        val mapper = DatabaseMapper()
+        charactersDao.insertCharacter(mapper.mapCharacterEntity(character))
+    }
+
+    private fun printCharacterRoomInLog(character: CharacterRoomEntity) {
+        Log.e("printCharacterInLog", character.toString())
+    }
+
+    private fun printCharacterEntityInLog(character: CharacterEntity) {
+        Log.e("printCharacterInLog", character.toString())
     }
 }
