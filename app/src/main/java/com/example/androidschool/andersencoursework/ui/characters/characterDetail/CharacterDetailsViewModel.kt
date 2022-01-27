@@ -24,7 +24,6 @@ class CharacterDetailsViewModel(
 
     init {
         getCharacter()
-        Log.e("DETAILS", this.toString())
     }
 
     private fun getCharacter() {

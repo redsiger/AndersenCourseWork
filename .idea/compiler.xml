@@ -4,6 +4,7 @@
     <bytecodeTargetLevel target="1.7">
       <module name="AndersenCourseWork.app" target="11" />
       <module name="AndersenCourseWork.data" target="11" />
+      <module name="AndersenCourseWork.domain" target="11" />
       <module name="AndersenCourseWork.feature_characters" target="11" />
       <module name="AndersenCourseWork.feature_episodes" target="11" />
     </bytecodeTargetLevel>

@@ -25,9 +25,7 @@ class CharacterDetailsFragment: Fragment() {
     private val args: CharacterDetailsFragmentArgs by navArgs()
     private val characterId by lazy { args.characterId }
 
-
-    @Inject
-    lateinit var charactersInteractor: CharactersInteractor
+    @Inject lateinit var charactersInteractor: CharactersInteractor
 
     private val viewModel: CharacterDetailsViewModel by viewModels {
         CharacterDetailsViewModel.Factory(characterId, charactersInteractor)

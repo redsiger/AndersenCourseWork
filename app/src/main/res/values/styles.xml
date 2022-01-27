@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!--  TEXT  -->
+    <style name="DefaultText">
+        <item name="android:textColorTertiary">@color/black</item>
+    </style>
+    
+    <!--  Character List Item  -->
+    <style name="ListItemCharacter" parent="DefaultText">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>    
+    
+    <style name="ListItemCharacter.Name">
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+</resources>

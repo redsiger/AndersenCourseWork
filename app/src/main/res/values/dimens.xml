@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--  Character List Item  -->
+    <dimen name="list_item_character_img_width">100dp</dimen>
+    <dimen name="list_item_character_img_height">150dp</dimen>
+</resources>

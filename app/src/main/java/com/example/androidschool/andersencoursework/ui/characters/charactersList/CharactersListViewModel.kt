@@ -2,6 +2,8 @@ package com.example.androidschool.andersencoursework.ui.characters.charactersLis
 
 import android.util.Log
 import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.androidschool.andersencoursework.ui.characters.mappers.CharacterUIMapper
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
@@ -13,36 +15,22 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CharactersListViewModel (
-    private val characterId: Int,
     private val charactersInteractor: CharactersInteractor
 ): ViewModel() {
 
     private val mapper = CharacterUIMapper()
-    private val _charactersList = MutableLiveData<List<CharacterUIEntity>>()
-    val charactersList: LiveData<List<CharacterUIEntity>> get() = _charactersList
+    private val _charactersList = MutableLiveData<PagingData<CharacterUIEntity>>()
+    val charactersList: LiveData<PagingData<CharacterUIEntity>> get() = _charactersList
 
-    init {
-//        getCharactersListPaging()
-        Log.e("VM", "id: ${characterId.toString()}")
-    }
 
-//    private fun getCharactersListPaging() {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            _charactersList.postValue(
-//                charactersInteractor.getCharactersPaging().map {
-//                    mapper.fromDomain(it)
-//                }
-//            )
-//        }
-//    }
+    suspend fun getCharactersListPaging() = charactersInteractor.getCharactersPaging().cachedIn(viewModelScope)
 
     class Factory @AssistedInject constructor(
-        @Assisted("characterId") private val characterId: Int,
         private val charactersInteractor: CharactersInteractor
     ): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             require(modelClass == CharactersListViewModel::class.java)
-            return CharactersListViewModel(characterId, charactersInteractor) as T
+            return CharactersListViewModel(charactersInteractor) as T
         }
 
         @AssistedFactory

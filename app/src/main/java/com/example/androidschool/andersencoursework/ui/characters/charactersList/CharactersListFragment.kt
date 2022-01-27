@@ -8,11 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidschool.andersencoursework.databinding.FragmentCharactersListBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.ui.BaseFragment
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CharactersListFragment: BaseFragment() {
@@ -27,13 +31,15 @@ class CharactersListFragment: BaseFragment() {
     @Inject
     lateinit var charactersInteractor: CharactersInteractor
 
-    private val characterId: Int =  ARG_ID
     private val viewModel: CharactersListViewModel by viewModels {
-//        viewModelFactory.create(characterId)
-        CharactersListViewModel.Factory(characterId , charactersInteractor)
+        CharactersListViewModel.Factory(charactersInteractor)
     }
 //    @Inject
 //    lateinit var viewModelFactory: CharactersListViewModel.Factory.Factory
+
+    private val mAdapter: CharactersListPagingAdapter by lazy {
+        CharactersListPagingAdapter()
+    }
 
     override fun onAttach(context: Context) {
         requireActivity().appComponent.inject(this)
@@ -53,10 +59,15 @@ class CharactersListFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.e("Service", "$viewModel")
 
-        viewBinding.btnCharacter.setOnClickListener {
-            val action =
-            CharactersListFragmentDirections.actionCharactersListToDetails(characterId)
-            findNavController().navigate(action)
+        with(viewBinding.charactersListRecycler) {
+            adapter = mAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.getCharactersListPaging().observe(viewLifecycleOwner) {
+                mAdapter.submitData(lifecycle, it)
+            }
         }
     }
 }

@@ -3,9 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.171" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/drawable/ic_chemistry.xml" value="0.222" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/drawable/ic_launcher_background.xml" value="0.222" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.222" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/drawable/splashscreen.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/activity_main.xml" value="0.20520833333333333" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_character_details.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_characters_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/list_item_character.xml" value="0.67" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/menu/activity_main_bottom_nav_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1965" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1965" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/feature_characters/src/main/res/layout/fragment_characters_list.xml" value="0.41041666666666665" />
       </map>
     </option>
