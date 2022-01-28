@@ -10,14 +10,17 @@ import com.example.androidschool.data.database.model.CharacterRoomEntity
 interface CharactersDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCharacter(character: CharacterRoomEntity)
+    suspend fun insertCharacter(character: CharacterRoomEntity)
 
-    @Insert
-    fun insertAll(characters: List<com.example.androidschool.data.database.model.CharacterRoomEntity>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(characters: List<com.example.androidschool.data.database.model.CharacterRoomEntity>)
+
+    @Query("SELECT * FROM characters WHERE charId > :offset AND charId <= (:offset + :limit)")
+    suspend fun getCharactersPaging(limit: Int, offset: Int): List<CharacterRoomEntity>
 
     @Query("SELECT * FROM characters")
-    fun getAll(): List<com.example.androidschool.data.database.model.CharacterRoomEntity>
+    suspend fun getAll(): List<com.example.androidschool.data.database.model.CharacterRoomEntity>
 
     @Query("DELETE FROM characters")
-    fun deleteAll()
+    suspend fun deleteAll()
 }

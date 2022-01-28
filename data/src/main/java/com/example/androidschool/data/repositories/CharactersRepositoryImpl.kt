@@ -5,6 +5,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
+import com.example.androidschool.data.database.CharactersDao
+import com.example.androidschool.data.database.CharactersStorage
 import com.example.androidschool.data.network.CharactersService
 import com.example.androidschool.data.network.model.CharacterNetworkAttr
 import com.example.androidschool.data.network.model.toDomainModel
@@ -16,12 +18,13 @@ import retrofit2.HttpException
 import kotlin.Exception
 
 class CharactersRepositoryImpl(
-    private val service: CharactersService
+    private val service: CharactersService,
+    private val storage: CharactersStorage
     ): CharactersRepository {
 
     override suspend fun getCharactersPaging(): LiveData<PagingData<CharacterEntity>> = Pager(
         config = PagingConfig(pageSize = 10, enablePlaceholders = false),
-        pagingSourceFactory = { CharactersPagingSource(service) }
+        pagingSourceFactory = { CharactersPagingSource(service, storage) }
     ).liveData
 
 

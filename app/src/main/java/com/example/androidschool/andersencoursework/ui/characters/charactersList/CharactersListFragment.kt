@@ -68,25 +68,21 @@ class CharactersListFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.e("Service", "$viewModel")
 
-        with(viewBinding.charactersListRecycler) {
-            adapter = mAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
+        initCharacterList()
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            val status = viewModel.getCharacter(1)
-            when (status) {
-                is Status.Success -> {
-                    val characterEntity = status.data
-                    printCharacterEntityInLog(characterEntity)
-                    saveCharacterEntity(characterEntity)
-                    delay(10000)
-                    printCharacterRoomInLog(charactersDao.getAll().first())
-                }
-            }
-        }
-
-
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            val status = viewModel.getCharacter(1)
+//            when (status) {
+//                is Status.Success -> {
+//                    val characterEntity = status.data
+//                    printCharacterEntityInLog(characterEntity)
+//                    saveCharacterEntity(characterEntity)
+////                    delay(5000)
+////                    printCharacterRoomInLog(charactersDao.getAll().first())
+//                }
+//            }
+//            printCharacters()
+//        }
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.getCharactersListPaging().observe(viewLifecycleOwner) {
@@ -95,16 +91,28 @@ class CharactersListFragment: BaseFragment() {
         }
     }
 
-    private fun saveCharacterEntity(character: CharacterEntity) {
+    private fun initCharacterList() {
+        with(viewBinding.charactersListRecycler) {
+            adapter = mAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
+    private suspend fun saveCharacterEntity(character: CharacterEntity) {
         val mapper = DatabaseMapper()
         charactersDao.insertCharacter(mapper.mapCharacterEntity(character))
     }
 
-    private fun printCharacterRoomInLog(character: CharacterRoomEntity) {
-        Log.e("printCharacterInLog", character.toString())
-    }
-
-    private fun printCharacterEntityInLog(character: CharacterEntity) {
-        Log.e("printCharacterInLog", character.toString())
-    }
+//    private suspend fun printCharacters() {
+//        val characters = charactersDao.getCharactersPaging(10, 0)
+//        Log.e("DATABASE", characters.toString())
+//    }
+//
+//    private fun printCharacterRoomInLog(character: CharacterRoomEntity) {
+//        Log.e("printCharacterInLog", character.toString())
+//    }
+//
+//    private fun printCharacterEntityInLog(character: CharacterEntity) {
+//        Log.e("printCharacterInLog", character.toString())
+//    }
 }

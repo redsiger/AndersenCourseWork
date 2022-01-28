@@ -1,9 +1,7 @@
 package com.example.androidschool.data.di
 
 import android.content.Context
-import com.example.androidschool.data.database.AppDatabase
-import com.example.androidschool.data.database.CharactersDao
-import com.example.androidschool.data.database.RoomTypeConverters
+import com.example.androidschool.data.database.*
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -28,4 +26,12 @@ class DatabaseModule {
     fun provideCharactersDao(database: AppDatabase): CharactersDao {
         return database.getCharactersDao()
     }
+
+    @Provides
+    fun provideCharactersStorage(dao: CharactersDao, mapper: DatabaseMapper): CharactersStorage {
+        return  CharactersStorage(dao, mapper)
+    }
+
+    @Provides
+    fun provideDatabaseMapper(): DatabaseMapper = DatabaseMapper()
 }
