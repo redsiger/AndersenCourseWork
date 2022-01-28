@@ -3,8 +3,13 @@
     <!--  App  -->
     <string name="app_name">Breaking Bad Api</string>
 
+    <!--  MenuItems  -->
+    <string name="menu_item_search_title">Search</string>
 
     <!--  Characters  -->
     <string name="characters_nav_graph_title">Characters</string>
+
+    <!--  Search  -->
+    <string name="fragment_search_hint">Search for characters/episodes…</string>
 
 </resources>

@@ -4,6 +4,14 @@
     android:id="@+id/characters_nav_graph"
     app:startDestination="@id/charactersListFragment">
 
+    <include app:graph="@navigation/search_nav_graph" />
+
+    <action
+        android:id="@+id/action_global_to_search"
+        app:destination="@id/search_nav_graph">
+
+    </action>
+
     <fragment
         android:id="@+id/charactersListFragment"
         android:name="com.example.androidschool.andersencoursework.ui.characters.charactersList.CharactersListFragment"

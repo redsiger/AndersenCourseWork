@@ -1,5 +1,6 @@
 package com.example.androidschool.andersencoursework.di
 
+import android.content.Context
 import com.example.androidschool.data.database.CharactersDao
 import com.example.androidschool.data.database.CharactersStorage
 import com.example.androidschool.data.network.CharactersService
@@ -22,8 +23,8 @@ class DomainModule {
 
     @Singleton
     @Provides
-    fun provideCharactersRepository(service: CharactersService, storage: CharactersStorage): CharactersRepository {
-        return CharactersRepositoryImpl(service, storage)
+    fun provideCharactersRepository(service: CharactersService, storage: CharactersStorage, context: Context): CharactersRepository {
+        return CharactersRepositoryImpl(service, storage, context)
     }
 
     @Singleton

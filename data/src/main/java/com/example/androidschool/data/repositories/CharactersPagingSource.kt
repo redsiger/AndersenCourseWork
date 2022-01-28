@@ -19,7 +19,8 @@ private const val LIMIT = 10
 
 class CharactersPagingSource(
     private val service: CharactersService,
-    private val storage: CharactersStorage
+    private val storage: CharactersStorage,
+    private val action: () -> Unit
 ): PagingSource<Int, CharacterEntity>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CharacterEntity> {
@@ -61,6 +62,7 @@ class CharactersPagingSource(
             }
         } catch (e: Exception) {
             try {
+                action()
                 Log.e("FETCH FAILED", e.toString())
                 val charactersLocal = (storage.getCharactersPaging(
                     limit = LIMIT,
@@ -78,6 +80,7 @@ class CharactersPagingSource(
                 )
             } catch (e: Exception) {
                 Log.e("ALL FAILED", e.toString())
+                action.invoke()
                 LoadResult.Error(e)
             }
         }

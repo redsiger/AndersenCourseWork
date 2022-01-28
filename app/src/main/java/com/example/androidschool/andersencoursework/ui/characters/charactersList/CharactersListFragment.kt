@@ -11,9 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentCharactersListBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.ui.BaseFragment
+import com.example.androidschool.andersencoursework.ui.setupGridLayoutManager
 import com.example.androidschool.data.database.CharactersDao
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.model.CharacterRoomEntity
@@ -68,21 +70,22 @@ class CharactersListFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.e("Service", "$viewModel")
 
+        setupToolbar(
+            viewBinding.fragmentCharactersListToolbar,
+            "Some Title",
+            R.menu.search_menu
+        ) {
+            when (it.itemId) {
+                R.id.menu_item_search -> {
+                    Log.e("MENU ITEM", "$it CLICKED")
+                    val action = CharactersListFragmentDirections.actionGlobalToSearch()
+                    findNavController().navigate(action)
+                    true
+                }
+                else -> false
+            }
+        }
         initCharacterList()
-
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            val status = viewModel.getCharacter(1)
-//            when (status) {
-//                is Status.Success -> {
-//                    val characterEntity = status.data
-//                    printCharacterEntityInLog(characterEntity)
-//                    saveCharacterEntity(characterEntity)
-////                    delay(5000)
-////                    printCharacterRoomInLog(charactersDao.getAll().first())
-//                }
-//            }
-//            printCharacters()
-//        }
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.getCharactersListPaging().observe(viewLifecycleOwner) {
@@ -92,27 +95,22 @@ class CharactersListFragment: BaseFragment() {
     }
 
     private fun initCharacterList() {
-        with(viewBinding.charactersListRecycler) {
-            adapter = mAdapter
-            layoutManager = LinearLayoutManager(requireContext())
+        with(viewBinding.fragmentCharactersListRecycler) {
+            context
+            val itemWidth = context.resources.getDimension(R.dimen.list_item_character_img_width)
+            setupGridLayoutManager(this, mAdapter, itemWidth)
+        }
+        with(viewBinding.fragmentCharactersListRefresh){
+            setOnRefreshListener {
+                this.isRefreshing = true
+                mAdapter.refresh()
+                this.isRefreshing = false
+            }
         }
     }
 
-    private suspend fun saveCharacterEntity(character: CharacterEntity) {
-        val mapper = DatabaseMapper()
-        charactersDao.insertCharacter(mapper.mapCharacterEntity(character))
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
-
-//    private suspend fun printCharacters() {
-//        val characters = charactersDao.getCharactersPaging(10, 0)
-//        Log.e("DATABASE", characters.toString())
-//    }
-//
-//    private fun printCharacterRoomInLog(character: CharacterRoomEntity) {
-//        Log.e("printCharacterInLog", character.toString())
-//    }
-//
-//    private fun printCharacterEntityInLog(character: CharacterEntity) {
-//        Log.e("printCharacterInLog", character.toString())
-//    }
 }

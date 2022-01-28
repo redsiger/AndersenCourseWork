@@ -56,6 +56,7 @@ class CharactersListPagingAdapter: PagingDataAdapter<CharacterEntity, Characters
                 listItemCharacterNickname.text = character.nickname
                 Glide.with(view.context)
                     .load(character.img)
+                    .centerCrop()
                     .into(listItemCharacterImg)
             }
         }
