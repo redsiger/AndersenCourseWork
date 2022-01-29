@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentCharactersListBinding
 import com.example.androidschool.andersencoursework.di.appComponent
@@ -42,8 +43,6 @@ class CharactersListFragment: BaseFragment() {
     private val viewModel: CharactersListViewModel by viewModels {
         CharactersListViewModel.Factory(charactersInteractor)
     }
-//    @Inject
-//    lateinit var viewModelFactory: CharactersListViewModel.Factory.Factory
 
     @Inject
     lateinit var charactersDao: CharactersDao
@@ -96,17 +95,18 @@ class CharactersListFragment: BaseFragment() {
 
     private fun initCharacterList() {
         with(viewBinding.fragmentCharactersListRecycler) {
-            context
             val itemWidth = context.resources.getDimension(R.dimen.list_item_character_img_width)
             setupGridLayoutManager(this, mAdapter, itemWidth)
         }
         with(viewBinding.fragmentCharactersListRefresh){
-            setOnRefreshListener {
-                this.isRefreshing = true
-                mAdapter.refresh()
-                this.isRefreshing = false
-            }
+            setOnRefreshListener { updateList(this) }
         }
+    }
+
+    private fun updateList(list: SwipeRefreshLayout) {
+        list.isRefreshing = true
+        mAdapter.refresh()
+        list.isRefreshing = false
     }
 
     override fun onDestroyView() {

@@ -1,0 +1,20 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+id characters
+id charactersListFragment
+id characters_nav_graph
+layout fragment_characters_list
+mipmap ic_launcher
+mipmap ic_launcher_round
+navigation characters_navigation
+string app_name
+style Theme.AndersenCourseWork

@@ -7,7 +7,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
-import com.example.androidschool.data.database.CharactersDao
 import com.example.androidschool.data.database.CharactersStorage
 import com.example.androidschool.data.network.CharactersService
 import com.example.androidschool.data.network.model.CharacterNetworkAttr
@@ -16,6 +15,7 @@ import com.example.androidschool.domain.characters.CharactersRepository
 import com.example.androidschool.domain.characters.model.CharacterAttr
 import com.example.androidschool.domain.characters.model.CharacterEntity
 import com.example.androidschool.util.Status
+import kotlinx.coroutines.flow.Flow
 import retrofit2.HttpException
 import kotlin.Exception
 
@@ -27,6 +27,10 @@ class CharactersRepositoryImpl(
 
     fun showToast() {
         Toast.makeText(context, "Oops...", Toast.LENGTH_LONG).show()
+    }
+
+    override fun searchCharactersByNameOrNickName(query: String): Flow<List<CharacterEntity>> {
+        return storage.searchCharactersByNameOrNickname(query)
     }
 
     override suspend fun getCharactersPaging(): LiveData<PagingData<CharacterEntity>> = Pager(

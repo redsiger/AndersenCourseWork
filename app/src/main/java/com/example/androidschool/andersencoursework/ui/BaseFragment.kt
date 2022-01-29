@@ -9,6 +9,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidschool.andersencoursework.ui.characters.charactersList.CharactersListPagingAdapter
+import com.example.androidschool.andersencoursework.ui.seacrh.SearchAdapter
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
 
 private const val DEFAULT_FRAGMENT_TITLE = ""
@@ -57,6 +58,32 @@ open class BaseFragment: Fragment() {
 }
 
 fun BaseFragment.setupGridLayoutManager(recyclerView: RecyclerView, recyclerAdapter: CharactersListPagingAdapter, itemWidth: Float) {
+
+    recyclerView.viewTreeObserver.addOnGlobalLayoutListener(
+        object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val width = recyclerView.width
+                val count = recyclerView.childCount
+                if (width > 0 && itemWidth > 0) {
+                    recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    val spanCountWithOffset = width / itemWidth
+                    val spanCount = spanCountWithOffset.toInt()
+
+                    val itemsWidth = spanCount * itemWidth
+                    val rest = width - itemsWidth
+                    val offset = rest / (spanCount * 2)
+
+                    recyclerView.adapter = recyclerAdapter
+                    val gridLayoutManager = GridLayoutManager(requireContext(), spanCount)
+                    recyclerView.layoutManager = gridLayoutManager
+                    recyclerView.addItemDecoration(OffsetRecyclerDecorator(offset.toInt(), gridLayoutManager, false))
+                }
+            }
+        }
+    )
+}
+
+fun BaseFragment.setupGridLayoutManager(recyclerView: RecyclerView, recyclerAdapter: SearchAdapter, itemWidth: Float) {
 
     recyclerView.viewTreeObserver.addOnGlobalLayoutListener(
         object : ViewTreeObserver.OnGlobalLayoutListener {

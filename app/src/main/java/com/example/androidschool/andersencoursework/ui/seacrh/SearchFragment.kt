@@ -10,12 +10,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentSearchBinding
+import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.ui.BaseFragment
+import com.example.androidschool.andersencoursework.ui.setupGridLayoutManager
+import com.example.androidschool.data.database.CharactersStorage
+import com.example.androidschool.data.database.model.toDomainModel
+import com.example.androidschool.domain.characters.interactors.CharactersInteractor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 class SearchFragment : BaseFragment(), CoroutineScope {
@@ -24,6 +35,19 @@ class SearchFragment : BaseFragment(), CoroutineScope {
 
     private var _binding: FragmentSearchBinding? = null
     private val viewBinding get() = _binding!!
+
+    private val mAdapter: SearchAdapter by lazy { SearchAdapter() }
+
+    @Inject lateinit var charactersInteractor: CharactersInteractor
+
+    private val viewModel: SearchViewModel by viewModels {
+        SearchViewModel.Factory(charactersInteractor)
+    }
+
+    override fun onAttach(context: Context) {
+        requireActivity().appComponent.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,13 +62,33 @@ class SearchFragment : BaseFragment(), CoroutineScope {
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(viewBinding.fragmentSearchToolbar)
+        initSearchResultList()
 
         with(viewBinding) {
             initSearch(
                 fragmentSearchInput,
                 fragmentSearchClearBtn,
-                { Log.e("SEACRH", it) }
+                this@SearchFragment::search
             )
+        }
+    }
+
+    private fun initSearchResultList() {
+        setupGridLayoutManager(
+            viewBinding.fragmentSearchResultsList,
+            mAdapter,
+            requireContext().resources.getDimension(R.dimen.list_item_character_img_width)
+        )
+    }
+
+    private fun search(query: String) {
+        lifecycleScope.launch {
+            viewModel.getSearchResults(query).collectLatest { list ->
+                list.forEach {
+                    Log.e("SEARCH", it.toString())
+                }
+                mAdapter.setList(list)
+            }
         }
     }
 
