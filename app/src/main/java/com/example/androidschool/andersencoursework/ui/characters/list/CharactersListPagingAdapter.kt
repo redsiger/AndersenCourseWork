@@ -9,22 +9,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding
+import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.domain.characters.model.CharacterEntity
 
-class CharactersListPagingAdapter: PagingDataAdapter<CharacterEntity, CharactersListPagingAdapter.CharacterViewHolder>(COMPARATOR) {
+class CharactersListPagingAdapter: PagingDataAdapter<CharacterUIEntity, CharactersListPagingAdapter.CharacterViewHolder>(COMPARATOR) {
 
     companion object {
-        private val COMPARATOR = object : DiffUtil.ItemCallback<CharacterEntity>() {
+        private val COMPARATOR = object : DiffUtil.ItemCallback<CharacterUIEntity>() {
             override fun areItemsTheSame(
-                oldItem: CharacterEntity,
-                newItem: CharacterEntity
+                oldItem: CharacterUIEntity,
+                newItem: CharacterUIEntity
             ): Boolean {
                 return oldItem.charId == newItem.charId
             }
 
             override fun areContentsTheSame(
-                oldItem: CharacterEntity,
-                newItem: CharacterEntity
+                oldItem: CharacterUIEntity,
+                newItem: CharacterUIEntity
             ): Boolean {
                 return oldItem == newItem
             }
@@ -50,7 +51,7 @@ class CharactersListPagingAdapter: PagingDataAdapter<CharacterEntity, Characters
 
         private val viewBinding = ListItemCharacterBinding.bind(view)
 
-        fun bind(character: CharacterEntity) {
+        fun bind(character: CharacterUIEntity) {
             with (viewBinding) {
                 listItemCharacterName.text = character.name
                 listItemCharacterNickname.text = character.nickname

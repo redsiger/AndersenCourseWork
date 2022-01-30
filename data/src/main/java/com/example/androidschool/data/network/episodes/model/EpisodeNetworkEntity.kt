@@ -20,16 +20,17 @@ data class EpisodeNetworkEntity(
     val series: String,
     @Json(name = "title")
     val title: String
-)
-
-fun EpisodeNetworkEntity.toDomainModel(): EpisodeEntity {
-    return EpisodeEntity(
-        airDate = this.airDate,
-        characters = this.characters,
-        episode = this.episode,
-        episodeId = this.episodeId,
-        season = this.season,
-        series = this.series,
-        title = this.title
-    )
+) {
+    fun toDomainModel(): EpisodeEntity {
+        return EpisodeEntity(
+            airDate = airDate,
+            characters = characters,
+            episode = episode,
+            episodeId = episodeId,
+            season = season,
+            series = series,
+            title = title
+        )
+    }
 }
+

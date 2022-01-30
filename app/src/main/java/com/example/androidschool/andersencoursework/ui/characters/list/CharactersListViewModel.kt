@@ -1,28 +1,39 @@
 package com.example.androidschool.andersencoursework.ui.characters.list
 
 import androidx.lifecycle.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
+import com.example.androidschool.data.repositories.characters.LoadCharactersAction
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
 import com.example.androidschool.domain.characters.model.CharacterAttr
 import com.example.androidschool.domain.characters.model.CharacterEntity
+import com.example.androidschool.domain.characters.model.PagingAttr
 import com.example.androidschool.util.Status
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.Flow
+
+private val DEFAULT_CONFIG = PagingConfig(pageSize = 10, enablePlaceholders = false)
 
 class CharactersListViewModel (
     private val charactersInteractor: CharactersInteractor
 ): ViewModel() {
 
-    private val mapper = UIMapper()
-    private val _charactersList = MutableLiveData<PagingData<CharacterUIEntity>>()
-    val charactersList: LiveData<PagingData<CharacterUIEntity>> get() = _charactersList
+    suspend fun getCharactersListPaging(): Flow<PagingData<CharacterUIEntity>> {
+        val loadAction : LoadCharactersAction = { limit, offset ->
+            charactersInteractor.getCharactersPaging(PagingAttr(limit, offset))
+        }
 
-
-    suspend fun getCharactersListPaging() = charactersInteractor.getCharactersPaging().cachedIn(viewModelScope)
+        return Pager(
+            config = DEFAULT_CONFIG,
+            pagingSourceFactory = { CharactersPagingSource(loadAction, UIMapper()) }
+        ).flow
+    }
 
     suspend fun getCharacter(id: Int): Status<CharacterEntity> {
         val attr = CharacterAttr(id)

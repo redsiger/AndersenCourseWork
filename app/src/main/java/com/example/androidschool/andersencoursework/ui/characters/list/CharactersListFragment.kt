@@ -9,16 +9,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentCharactersListBinding
 import com.example.androidschool.andersencoursework.databinding.MergeToolbarBinding
 import com.example.androidschool.andersencoursework.di.appComponent
+import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.setupGridLayoutManager
 import com.example.androidschool.data.database.characters.CharactersDao
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
+import com.example.androidschool.domain.characters.model.CharacterEntity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -83,9 +87,10 @@ class CharactersListFragment: BaseFragment() {
         }
         initCharacterList()
 
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.getCharactersListPaging().observe(viewLifecycleOwner) {
-                mAdapter.submitData(lifecycle, it)
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.getCharactersListPaging().collectLatest {
+                mAdapter.submitData(it)
             }
         }
     }
@@ -104,13 +109,6 @@ class CharactersListFragment: BaseFragment() {
         list.isRefreshing = true
         mAdapter.refresh()
         list.isRefreshing = false
-//        if (!list.isRefreshing) {
-//            list.isRefreshing = true
-//            mAdapter.refresh()
-//            list.isRefreshing = false
-//        } else {
-//            list.isRefreshing = false
-//        }
     }
 
     override fun onDestroyView() {

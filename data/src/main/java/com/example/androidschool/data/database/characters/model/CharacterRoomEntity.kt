@@ -28,20 +28,20 @@ data class CharacterRoomEntity(
     val portrayed: String,
     @ColumnInfo(name = "status")
     val status: String
-)
-
-fun CharacterRoomEntity.toDomainModel(): CharacterEntity {
-    return CharacterEntity(
-        appearance = this.appearance,
-        betterCallSaulAppearance = this.betterCallSaulAppearance,
-        birthday = this.birthday,
-        category = this.category,
-        charId = this.charId,
-        img = this.img,
-        name = this.name,
-        nickname = this.nickname,
-        occupation = this.occupation,
-        portrayed = this.portrayed,
-        status = this.status
-    )
+) {
+    fun toDomainModel(): CharacterEntity {
+        return CharacterEntity(
+            appearance = appearance,
+            betterCallSaulAppearance = betterCallSaulAppearance,
+            birthday = birthday,
+            category = category,
+            charId = charId,
+            img = img,
+            name = name,
+            nickname = nickname,
+            occupation = occupation,
+            portrayed = portrayed,
+            status = status
+        )
+    }
 }
