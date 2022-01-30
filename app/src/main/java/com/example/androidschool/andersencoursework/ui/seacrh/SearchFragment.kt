@@ -15,15 +15,12 @@ import androidx.lifecycle.lifecycleScope
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentSearchBinding
 import com.example.androidschool.andersencoursework.di.appComponent
-import com.example.androidschool.andersencoursework.ui.BaseFragment
-import com.example.androidschool.andersencoursework.ui.setupGridLayoutManager
-import com.example.androidschool.data.database.CharactersStorage
-import com.example.androidschool.data.database.model.toDomainModel
+import com.example.androidschool.andersencoursework.ui.core.BaseFragment
+import com.example.androidschool.andersencoursework.ui.core.setupGridLayoutManager
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject

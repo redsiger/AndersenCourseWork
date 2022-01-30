@@ -2,13 +2,11 @@ package com.example.androidschool.andersencoursework.ui.seacrh
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import com.example.androidschool.andersencoursework.ui.characters.mappers.UIMapper
+import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
-import com.example.androidschool.data.database.CharactersStorage
-import com.example.androidschool.data.database.model.CharacterRoomEntity
+import com.example.androidschool.andersencoursework.ui.seacrh.models.CharacterSearchEntity
+import com.example.androidschool.andersencoursework.ui.seacrh.models.SearchMapper
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
-import com.example.androidschool.domain.characters.model.CharacterEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -19,10 +17,10 @@ class SearchViewModel(
     private val charactersInteractor: CharactersInteractor
 ): ViewModel() {
 
-    private val mapper = UIMapper()
+    private val mapper = SearchMapper()
     private val coroutineContext = Dispatchers.IO
 
-    fun getSearchResults(query: String): Flow<List<CharacterUIEntity>> {
+    fun getSearchResults(query: String): Flow<List<CharacterSearchEntity>> {
         return charactersInteractor
             .searchCharactersByNameOrNickName(query)
             .map { list ->

@@ -1,12 +1,18 @@
 package com.example.androidschool.andersencoursework.di
 
 import android.content.Context
-import com.example.androidschool.data.database.CharactersDao
-import com.example.androidschool.data.database.CharactersStorage
-import com.example.androidschool.data.network.CharactersService
-import com.example.androidschool.data.repositories.CharactersRepositoryImpl
+import com.example.androidschool.data.database.DatabaseMapper
+import com.example.androidschool.data.database.characters.CharactersDao
+import com.example.androidschool.data.database.characters.CharactersStorage
+import com.example.androidschool.data.database.episodes.EpisodesDao
+import com.example.androidschool.data.network.characters.CharactersService
+import com.example.androidschool.data.network.episodes.EpisodesService
+import com.example.androidschool.data.repositories.characters.CharactersRepositoryImpl
+import com.example.androidschool.data.repositories.episodes.EpisodesRepositoryImpl
 import com.example.androidschool.domain.characters.CharactersRepository
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
+import com.example.androidschool.domain.episode.EpisodesRepository
+import com.example.androidschool.domain.episode.interactors.EpisodesInteractor
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -23,13 +29,34 @@ class DomainModule {
 
     @Singleton
     @Provides
-    fun provideCharactersRepository(service: CharactersService, storage: CharactersStorage, context: Context): CharactersRepository {
-        return CharactersRepositoryImpl(service, storage, context)
+    fun provideCharactersRepository(
+        service: CharactersService,
+        dao: CharactersDao,
+        mapper: DatabaseMapper,
+        context: Context
+    ): CharactersRepository {
+        return CharactersRepositoryImpl(service, dao, mapper, context)
     }
 
     @Singleton
     @Provides
     fun provideCharactersService(retrofit: Retrofit): CharactersService {
         return retrofit.create(CharactersService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEpisodesInteractor(repository: EpisodesRepository): EpisodesInteractor {
+        return EpisodesInteractor.Base(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEpisodesRepository(
+        service: EpisodesService,
+        dao: EpisodesDao,
+        mapper: DatabaseMapper
+    ): EpisodesRepository {
+        return EpisodesRepositoryImpl(service, dao, mapper)
     }
 }

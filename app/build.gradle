@@ -43,6 +43,8 @@ dependencies {
     implementation project(':data')
     implementation project(':domain')
 
+    // Flows
+
     // Retrofit and OkHttp
     def retrofit_version = '2.9.0'
     def okhttp_version = '4.8.0'
@@ -78,11 +80,13 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_ver"
     kapt "com.github.bumptech.glide:compiler:$glide_ver"
 
-    // PAging 3
+    // Paging 3
     def paging_version = "3.1.0"
-    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    // SwipeRefreshLayout
+    def swipeRefresh_dev = "1.1.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefresh_dev"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'

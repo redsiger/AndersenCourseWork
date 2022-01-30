@@ -2,6 +2,8 @@ package com.example.androidschool.data.di
 
 import android.content.Context
 import com.example.androidschool.data.database.*
+import com.example.androidschool.data.database.characters.CharactersDao
+import com.example.androidschool.data.database.characters.CharactersStorage
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -27,11 +29,7 @@ class DatabaseModule {
         return database.getCharactersDao()
     }
 
-    @Provides
-    fun provideCharactersStorage(dao: CharactersDao, mapper: DatabaseMapper): CharactersStorage {
-        return  CharactersStorage(dao, mapper)
-    }
-
+    @Singleton
     @Provides
     fun provideDatabaseMapper(): DatabaseMapper = DatabaseMapper()
 }

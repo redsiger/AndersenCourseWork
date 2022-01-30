@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/charactersListFragment"
-        android:name="com.example.androidschool.andersencoursework.ui.characters.charactersList.CharactersListFragment"
+        android:name="com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragment"
         android:label="CharactersListFragment" >
         <action
             android:id="@+id/action_characters_list_to_details"
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/characterDetailsFragment"
-        android:name="com.example.androidschool.andersencoursework.ui.characters.characterDetail.CharacterDetailsFragment"
+        android:name="com.example.androidschool.andersencoursework.ui.characters.details.CharacterDetailsFragment"
         android:label="CharacterDetailsFragment" >
         <argument
             android:name="characterId"

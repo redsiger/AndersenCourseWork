@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
+import com.example.androidschool.andersencoursework.ui.seacrh.models.CharacterSearchEntity
 
 class SearchAdapter: RecyclerView.Adapter<SearchAdapter.SearchResultViewHolder>() {
 
-    private var list: List<CharacterUIEntity> = emptyList()
-    fun setList(newList: List<CharacterUIEntity>) {
-        val callback = SearchAdapter.Comparator(newList, list)
+    private var list: List<CharacterSearchEntity> = emptyList()
+    fun setList(newList: List<CharacterSearchEntity>) {
+        val callback = Comparator(newList, list)
         val diffResult = DiffUtil.calculateDiff(callback)
         list = newList
         diffResult.dispatchUpdatesTo(this)
@@ -38,21 +39,23 @@ class SearchAdapter: RecyclerView.Adapter<SearchAdapter.SearchResultViewHolder>(
 
         private val viewBinding = ListItemCharacterBinding.bind(view)
 
-        fun bind(character: CharacterUIEntity) {
+        fun bind(character: CharacterSearchEntity) {
             with(viewBinding) {
                 listItemCharacterName.text = character.name
                 listItemCharacterNickname.text = character.nickname
                 Glide.with(itemView.context)
                     .load(character.img)
+                    .centerCrop()
                     .into((listItemCharacterImg))
             }
         }
     }
 
     class Comparator(
-        private val newList: List<CharacterUIEntity>,
-        private val oldList: List<CharacterUIEntity>
+        private val newList: List<CharacterSearchEntity>,
+        private val oldList: List<CharacterSearchEntity>
     ): DiffUtil.Callback() {
+
         override fun getOldListSize(): Int = oldList.size
         override fun getNewListSize(): Int = newList.size
 

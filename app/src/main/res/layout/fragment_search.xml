@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/fragment_search_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -48,7 +48,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_search_results_list"

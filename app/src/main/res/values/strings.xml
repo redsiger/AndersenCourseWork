@@ -9,6 +9,9 @@
     <!--  Characters  -->
     <string name="characters_nav_graph_title">Characters</string>
 
+    <!--  Episodes  -->
+    <string name="episodes_nav_graph_title">Episodes</string>
+
     <!--  Search  -->
     <string name="fragment_search_hint">Search for characters/episodes…</string>
 
