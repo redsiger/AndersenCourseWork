@@ -10,9 +10,10 @@ import com.bumptech.glide.Glide
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
-import com.example.androidschool.domain.characters.model.CharacterEntity
 
-class CharactersListPagingAdapter: PagingDataAdapter<CharacterUIEntity, CharactersListPagingAdapter.CharacterViewHolder>(COMPARATOR) {
+class CharactersListPagingAdapter(
+    private val action: (characterId: Int) -> Unit
+): PagingDataAdapter<CharacterUIEntity, CharactersListPagingAdapter.Holder>(COMPARATOR) {
 
     companion object {
         private val COMPARATOR = object : DiffUtil.ItemCallback<CharacterUIEntity>() {
@@ -33,29 +34,27 @@ class CharactersListPagingAdapter: PagingDataAdapter<CharacterUIEntity, Characte
         }
     }
 
-    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: Holder, position: Int) {
         getItem(position)?.let { character ->
             holder.bind(character)
+            holder.itemView.setOnClickListener { action(character.charId) }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        return CharacterViewHolder(
-            LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.list_item_character, parent, false)
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ListItemCharacterBinding.inflate(inflater, parent, false)
+        return Holder(binding)
     }
 
-    class CharacterViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
-
-        private val viewBinding = ListItemCharacterBinding.bind(view)
+    class Holder(
+        private val binding: ListItemCharacterBinding
+        ): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(character: CharacterUIEntity) {
-            with (viewBinding) {
+            with (binding) {
                 listItemCharacterName.text = character.name
-                listItemCharacterNickname.text = character.nickname
-                Glide.with(view.context)
+                Glide.with(binding.listItemCharacterImg.context)
                     .load(character.img)
                     .centerCrop()
                     .into(listItemCharacterImg)

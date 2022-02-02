@@ -2,14 +2,13 @@ package com.example.androidschool.andersencoursework.ui.favorites
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentFavoritesBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 
-class FavoritesFragment: BaseFragment() {
+class FavoritesFragment: BaseFragment(R.layout.fragment_favorites) {
 
     private var _binding: FragmentFavoritesBinding? = null
     private val viewBinding get() = _binding!!
@@ -19,12 +18,8 @@ class FavoritesFragment: BaseFragment() {
         super.onAttach(context)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
-        return viewBinding.root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentFavoritesBinding.bind(view)
     }
 }

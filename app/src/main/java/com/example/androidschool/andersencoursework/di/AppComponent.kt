@@ -1,6 +1,6 @@
 package com.example.androidschool.andersencoursework.di
 
-import android.content.Context
+import com.example.androidschool.andersencoursework.di.viewmodel.ViewModelModule
 import com.example.androidschool.andersencoursework.ui.MainActivity
 import com.example.androidschool.andersencoursework.ui.characters.details.CharacterDetailsFragment
 import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragment
@@ -19,22 +19,16 @@ import javax.inject.Singleton
     DatabaseModule::class,
     NetworkModule::class,
     DomainModule::class,
-    SubcomponentsModule::class
+    SubcomponentsModule::class,
+    ViewModelModule::class
 ])
 interface AppComponent {
 
     fun dataComponent(): DataComponent.Factory
 
-    fun inject(activity: MainActivity)
+    fun inject(fragment: CharacterDetailsFragment)
     fun inject(fragment: CharactersListFragment)
     fun inject(fragment: EpisodesListFragment)
-    fun inject(fragment: SearchFragment)
     fun inject(fragment: FavoritesFragment)
-    fun inject(characterDetailsFragment: CharacterDetailsFragment)
+    fun inject(fragment: SearchFragment)
 }
-
-val Context.appComponent: AppComponent
-    get() = when (this) {
-        is App -> appComponent
-        else -> this.applicationContext.appComponent
-    }

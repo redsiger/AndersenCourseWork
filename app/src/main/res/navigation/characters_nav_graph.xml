@@ -9,13 +9,12 @@
     <action
         android:id="@+id/action_global_to_search"
         app:destination="@id/search_nav_graph">
-
     </action>
 
     <fragment
         android:id="@+id/charactersListFragment"
         android:name="com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragment"
-        android:label="CharactersListFragment" >
+        android:label="@string/characters_fragment_title">
         <action
             android:id="@+id/action_characters_list_to_details"
             app:destination="@id/characterDetailsFragment">

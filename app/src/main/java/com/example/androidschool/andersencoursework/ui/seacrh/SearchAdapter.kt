@@ -42,7 +42,6 @@ class SearchAdapter: RecyclerView.Adapter<SearchAdapter.SearchResultViewHolder>(
         fun bind(character: CharacterSearchEntity) {
             with(viewBinding) {
                 listItemCharacterName.text = character.name
-                listItemCharacterNickname.text = character.nickname
                 Glide.with(itemView.context)
                     .load(character.img)
                     .centerCrop()

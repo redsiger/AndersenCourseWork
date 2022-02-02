@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/episodesList"
         android:name="com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListFragment"
-        android:label="EpisodesList" >
+        android:label="@string/episodes_nav_graph_title" >
         <action
             android:id="@+id/action_episodesList_to_episodeDetails"
             app:destination="@id/episodeDetails" />

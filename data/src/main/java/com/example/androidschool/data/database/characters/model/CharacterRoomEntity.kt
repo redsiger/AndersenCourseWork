@@ -45,3 +45,7 @@ data class CharacterRoomEntity(
         )
     }
 }
+
+fun List<CharacterRoomEntity>.toDomainList(): List<CharacterEntity> {
+    return this.map { it.toDomainModel() }
+}

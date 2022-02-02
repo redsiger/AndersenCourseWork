@@ -2,6 +2,6 @@
 <resources>
 
     <!--  Character List Item  -->
-    <dimen name="list_item_character_img_width">100dp</dimen>
-    <dimen name="list_item_character_img_height">150dp</dimen>
+    <dimen name="list_item_character_img_width">150dp</dimen>
+    <dimen name="list_item_character_img_height">200dp</dimen>
 </resources>

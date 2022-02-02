@@ -11,21 +11,21 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CharacterDetailsViewModel(
-    private val characterId: Int,
+private const val DEFAULT_CHARACTER_ID = -1
+
+class CharacterDetailsViewModel @Inject constructor(
     private val charactersInteractor: CharactersInteractor
 ): ViewModel() {
 
     private val mapper = UIMapper()
     private var _character = MutableLiveData<Status<CharacterUIEntity>>(Status.InProgress)
     val character: LiveData<Status<CharacterUIEntity>> get() = _character
+    private var characterId = DEFAULT_CHARACTER_ID
 
-    init {
-        getCharacter()
-    }
-
-    private fun getCharacter() {
+    fun getCharacter(id: Int) {
+        characterId = id
         viewModelScope.launch(Dispatchers.IO) {
             val response = charactersInteractor.getCharacter(CharacterAttr(characterId))
             when (response) {
@@ -37,18 +37,15 @@ class CharacterDetailsViewModel(
         }
     }
 
-    class Factory @AssistedInject constructor(
-        @Assisted("characterId") private val characterId: Int,
+
+    class Factory @Inject constructor(
         private val charactersInteractor: CharactersInteractor
     ): ViewModelProvider.Factory {
+
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             require(modelClass == CharacterDetailsViewModel::class.java)
-            return CharacterDetailsViewModel(characterId, charactersInteractor) as T
-        }
-
-        @AssistedFactory
-        interface Factory {
-            fun create(@Assisted("characterId") characterId: Int): CharacterDetailsViewModel.Factory
+            return CharacterDetailsViewModel(charactersInteractor) as T
         }
     }
 }

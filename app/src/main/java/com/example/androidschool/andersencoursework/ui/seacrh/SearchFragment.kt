@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.fragment.app.viewModels
@@ -26,7 +24,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class SearchFragment : BaseFragment(), CoroutineScope {
+class SearchFragment : BaseFragment(R.layout.fragment_search), CoroutineScope {
 
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
@@ -46,17 +44,9 @@ class SearchFragment : BaseFragment(), CoroutineScope {
         super.onAttach(context)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return viewBinding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentSearchBinding.bind(view)
 
         setupToolbar(viewBinding.fragmentSearchToolbar)
         initSearchResultList()

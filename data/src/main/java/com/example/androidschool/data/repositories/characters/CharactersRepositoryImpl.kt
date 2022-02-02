@@ -26,11 +26,12 @@ class CharactersRepositoryImpl(
     private val context: Context
     ): CharactersRepository {
 
-    private val loader = CharactersLoader(service, dao, mapper)
-
-    private fun showToast(text: String) {
+    private val onError = { text: String ->
         Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }
+
+    private val loader = CharactersLoader(service, dao, mapper, onError)
+
 
     override fun searchCharactersByNameOrNickName(query: String): Flow<List<CharacterEntity>> {
         return dao.searchCharactersByNameOrNickname(query).map { list ->
