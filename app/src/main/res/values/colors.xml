@@ -11,10 +11,13 @@
     
     
     <!--  MainTheme  -->
-    <color name="colorPrimaryVariant">#1B5E20</color>
-    <color name="colorPrimary">#33691E</color>
+    <color name="colorPrimaryVariant">@color/black</color>
+    <color name="colorPrimary">@color/black</color>
+    <color name="colorOnPrimary">@color/white</color>
     <color name="colorSecondary">#FFEB3B</color>
+    <color name="colorTertiary">#595959</color>
 <!--    <color name="colorSurface">#39473a</color>-->
-    <color name="colorSurface">@color/white</color>
+    <color name="colorSurface">@color/black</color>
     <color name="colorOnSurface">@color/white</color>
+
 </resources>

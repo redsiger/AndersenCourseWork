@@ -1,8 +1,10 @@
 package com.example.androidschool.data.database
 
 import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
+import com.example.androidschool.data.database.characters.model.CharactersRemoteKeys
 import com.example.androidschool.data.database.episodes.model.EpisodeRoomEntity
 import com.example.androidschool.domain.characters.model.CharacterEntity
+import com.example.androidschool.domain.characters.model.CharactersEntityRemoteKeys
 import com.example.androidschool.domain.episode.model.EpisodeEntity
 
 class DatabaseMapper {
@@ -20,6 +22,15 @@ class DatabaseMapper {
             occupation = characterEntity.occupation,
             portrayed = characterEntity.portrayed,
             status = characterEntity.status
+        )
+    }
+    
+    fun toRoomEntity(charactersEntityRemoteKeys: CharactersEntityRemoteKeys?): CharactersRemoteKeys? {
+        return if (charactersEntityRemoteKeys == null) null
+        else CharactersRemoteKeys(
+            characterId = charactersEntityRemoteKeys.characterId,
+            prevKey = charactersEntityRemoteKeys.prevKey,
+            nextKey = charactersEntityRemoteKeys.nextKey
         )
     }
     

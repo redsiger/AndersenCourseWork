@@ -1,62 +1,54 @@
 package com.example.androidschool.andersencoursework.ui.characters.list
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.*
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
+import androidx.paging.*
 import com.example.androidschool.andersencoursework.di.viewmodel.ViewModelDispatcher
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
-import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
-import com.example.androidschool.data.repositories.characters.LoadCharactersAction
+import com.example.androidschool.data.database.DatabaseMapper
+import com.example.androidschool.data.mediators.CharactersRemoteMediator
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
-import com.example.androidschool.domain.characters.model.CharacterAttr
 import com.example.androidschool.domain.characters.model.CharacterEntity
-import com.example.androidschool.domain.characters.model.PagingAttr
-import com.example.androidschool.util.Status
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 private val DEFAULT_CONFIG = PagingConfig(pageSize = 10, enablePlaceholders = false)
 
-class CharactersListViewModel @Inject constructor (
+class CharactersListViewModel constructor (
     private val charactersInteractor: CharactersInteractor,
+    private val context: Context,
     private val dispatcher: ViewModelDispatcher
 ): ViewModel() {
 
-    val charactersFlow: Flow<PagingData<CharacterUIEntity>>
+    private val mapper = UIMapper()
+
+    val charactersFlow: Flow<PagingData<CharacterEntity>>
 
     init {
         charactersFlow = getCharactersListPaging()
     }
 
-    private fun getCharactersListPaging(): Flow<PagingData<CharacterUIEntity>> {
-        val loadAction : LoadCharactersAction = { limit, offset ->
-            charactersInteractor.getCharactersPaging(PagingAttr(limit, offset))
-        }
-
+    private fun getCharactersListPaging(): Flow<PagingData<CharacterEntity>> {
+        @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = DEFAULT_CONFIG,
-            pagingSourceFactory = { CharactersPagingSource(loadAction, UIMapper()) }
+            remoteMediator = CharactersRemoteMediator(charactersInteractor, DatabaseMapper()),
+            pagingSourceFactory = { CharactersPagingSourceForMediator(charactersInteractor::getLocalCharactersPagingMediator, mapper) }
         ).flow
-    }
-
-    suspend fun getCharacter(id: Int): Status<CharacterEntity> {
-        val attr = CharacterAttr(id)
-        return charactersInteractor.getCharacter(attr)
+            .cachedIn(viewModelScope)
+            .flowOn(dispatcher.coroutineDispatcher)
     }
 
     class Factory @Inject constructor(
         private val charactersInteractor: CharactersInteractor,
+        private val context: Context,
         private val dispatcher: ViewModelDispatcher
     ): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             require(modelClass == CharactersListViewModel::class.java)
-            return CharactersListViewModel(charactersInteractor, dispatcher) as T
+            return CharactersListViewModel(charactersInteractor, context, dispatcher) as T
         }
     }
 }

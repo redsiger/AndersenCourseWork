@@ -7,6 +7,12 @@
 
     <include layout="@layout/merge_toolbar"/>
 
+    <View
+        android:id="@+id/activity_main_bottom_nav_decor"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorTertiary" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/fragment_characters_list_refresh"
         android:layout_width="match_parent"

@@ -3,16 +3,29 @@
 
     <!--  SplashTheme  -->
     <style name="Theme.SplashScreen" parent="Theme.AppTheme">
-
         <item name="android:windowBackground">@drawable/splashscreen</item>
-
     </style>
 
     <!--  MainTheme  -->
     <style name="Theme.MainTheme" parent="Theme.AppTheme">
+        <item name="bottomNavigationStyle">@style/bottom</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textColorTertiary">@color/white</item>
+    </style>
 
-        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView.Colored</item>
 
+    <!-- BottomNavigation  -->
+    <style name="bottom" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="materialThemeOverlay">@style/overlay</item>
+    </style>
+
+    <style name="overlay">
+        <item name="elevationOverlayEnabled">false</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorSecondary</item>
+        <item name="colorControlNormal">@color/teal_200</item>
+        <item name="colorControlHighlight">@color/colorSecondary</item>
+        <item name="colorControlActivated">@color/teal_700</item>
     </style>
 
     <!--  Toolbar  -->
@@ -22,18 +35,17 @@
         <item name="titleTextColor">?attr/colorOnPrimary</item>
         <item name="subtitleTextAppearance">@style/ToolbarSubtitle</item>
         <item name="subtitleTextColor">?attr/colorOnPrimary</item>
+        <item name="colorControlNormal">@color/teal_200</item>
     </style>
 
     <!--  Toolbar Title  -->
     <style name="ToolbarTitle" parent="TextAppearance.MaterialComponents.Headline6">
-<!--        <item name="android:fontFamily">@font/montserrat</item>-->
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
     <!--  Toolbar Subtitle  -->
     <style name="ToolbarSubtitle" parent="TextAppearance.MaterialComponents.Subtitle1">
-<!--        <item name="android:fontFamily">@font/montserrat</item>-->
     </style>
 
 </resources>

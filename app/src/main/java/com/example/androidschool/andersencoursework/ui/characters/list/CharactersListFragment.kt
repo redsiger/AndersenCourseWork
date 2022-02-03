@@ -8,11 +8,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentCharactersListBinding
 import com.example.androidschool.andersencoursework.databinding.MergeToolbarBinding
 import com.example.androidschool.andersencoursework.di.appComponent
+import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
+import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.DefaultLoadStateAdapter
 import com.example.androidschool.andersencoursework.ui.core.setupGridLayoutManager
@@ -30,6 +33,8 @@ class CharactersListFragment: BaseFragment(R.layout.fragment_characters_list) {
     private val viewBinding get() = _binding!!
     private var _toolbarBinding: MergeToolbarBinding? = null
     private val toolbarBinding get() = _toolbarBinding!!
+
+    private val mapper = UIMapper()
 
     @Inject
     lateinit var viewModelFactory: CharactersListViewModel.Factory
@@ -88,6 +93,7 @@ class CharactersListFragment: BaseFragment(R.layout.fragment_characters_list) {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.charactersFlow.collectLatest {
+                Log.e("Collected", "Collected")
                 mAdapter.submitData(it)
             }
         }

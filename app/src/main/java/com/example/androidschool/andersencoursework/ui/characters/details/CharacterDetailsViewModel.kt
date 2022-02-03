@@ -4,7 +4,6 @@ import androidx.lifecycle.*
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
-import com.example.androidschool.domain.characters.model.CharacterAttr
 import com.example.androidschool.util.Status
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -27,13 +26,8 @@ class CharacterDetailsViewModel @Inject constructor(
     fun getCharacter(id: Int) {
         characterId = id
         viewModelScope.launch(Dispatchers.IO) {
-            val response = charactersInteractor.getCharacter(CharacterAttr(characterId))
-            when (response) {
-                is Status.Success -> _character.postValue(
-                    response.proceed { mapper.mapCharacterEntity(it) })
-                is Status.Error -> _character.postValue(response.proceed())
-                is Status.InProgress -> _character.postValue(response.proceed())
-            }
+            val response = charactersInteractor.getCharacter(characterId)
+            _character.postValue(response.proceed(mapper::mapCharacterEntity))
         }
     }
 

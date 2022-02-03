@@ -1,58 +1,49 @@
-package com.example.androidschool.data.database.loaders
+package com.example.androidschool.data.loaders
 
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.characters.CharactersDao
-import com.example.androidschool.data.database.characters.model.toDomainList
 import com.example.androidschool.data.network.characters.CharactersService
 import com.example.androidschool.data.network.characters.model.CharacterNetworkEntity
 import com.example.androidschool.domain.characters.model.CharacterEntity
 import com.example.androidschool.util.DefaultInternetException
 import com.example.androidschool.util.Status
-import kotlinx.coroutines.flow.*
 
 class CharactersLoader(
     private val service: CharactersService,
     private val dao: CharactersDao,
-    private val mapper: DatabaseMapper,
-    private val onError: (message: String) -> Unit
+    private val mapper: DatabaseMapper
 ) {
 
     suspend fun getCharacterPaging(limit: Int, offset: Int): Status<List<CharacterEntity>>
-        =
-            when (val characters = getRemote(limit, offset)) {
+        = when (val characters = getRemote(limit, offset)) {
                 is Status.Success -> {
-                    dao.insertAll(characters.data.map(mapper::toRoomEntity))
-                    getLocal(limit, offset)
-                }
-                is Status.Error -> {
-                    onError(characters.exception.message ?: "DEFAULT_EXCEPTION")
-                    getLocal(limit, offset)
+                    dao.insertCharacters(characters.data.map(mapper::toRoomEntity))
+                    characters
                 }
                 else -> {
-                    onError("DEFAULT_EXCEPTION")
                     getLocal(limit, offset)
                 }
             }
 
 
 
-    private suspend fun getRemote(limit: Int, offset: Int): Status<List<CharacterEntity>> {
+    suspend fun getRemote(offset: Int, limit: Int): Status<List<CharacterEntity>> {
         return try {
-            val response = service.getCharactersPaginated(limit, offset)
+            val response = service.getCharactersPaginated(offset, limit)
             if (response.isSuccessful) {
                 val characters = (response.body()!! as List<CharacterNetworkEntity>)
                     .map(CharacterNetworkEntity::toDomainModel)
-                Status.Success(characters)
+                Status.Success.Remote(characters)
             } else {
                 val error = response.errorBody().toString()
                 Status.Error(DefaultInternetException(error))
             }
         } catch (e: Exception) {
-            Status.Error(DefaultInternetException(e.message!!))
+            Status.Error(e)
         }
     }
 
-    private suspend fun getLocal(limit: Int, offset: Int): Status<List<CharacterEntity>> {
-        return Status.Success(dao.getCharactersPaging(limit, offset).map{ it.toDomainModel() })
+    suspend fun getLocal(limit: Int, offset: Int): Status<List<CharacterEntity>> {
+        return Status.Success.Local(dao.getCharactersPaging(offset, limit).map{ it.toDomainModel() })
     }
 }

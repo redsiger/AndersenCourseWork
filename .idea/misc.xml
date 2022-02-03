@@ -10,8 +10,10 @@
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/drawable/ic_chemistry.xml" value="0.222" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/drawable/ic_launcher_background.xml" value="0.222" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.222" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/drawable/ic_search.xml" value="0.316" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/drawable/splashscreen.xml" value="0.1" />
-        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/activity_main.xml" value="0.20520833333333333" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/font/montserrat.xml" value="0.396875" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/activity_main.xml" value="0.43439584877687176" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_character_details.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_characters_list.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_episodes_list.xml" value="0.1" />

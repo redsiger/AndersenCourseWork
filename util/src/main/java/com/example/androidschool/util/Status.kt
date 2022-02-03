@@ -5,7 +5,10 @@ import java.lang.IllegalStateException
 typealias Mapper<Input, Output> = (Input) -> Output
 
 sealed class Status<out T> {
-    data class Success<out T>(val data: T): Status<T>()
+    sealed class Success<out T>(val data: T): Status<T>() {
+        data class Remote<out T>(val remoteData: T): Status.Success<T>(remoteData)
+        data class Local<out T>(val localData: T): Status.Success<T>(localData)
+    }
     data class Error(val exception: Throwable): Status<Nothing>()
     object InProgress: Status<Nothing>()
 
@@ -26,9 +29,13 @@ sealed class Status<out T> {
     fun <R> proceed(mapper: Mapper<T, R>? = null) = when(this) {
         is InProgress -> InProgress
         is Error -> Error(this.exception)
-        is Success -> {
-            if (mapper == null) throw IllegalStateException("Mapper should not be NULL for success status")
-            Success(mapper(this.data))
+        is Success.Local -> {
+            if (mapper == null) throw IllegalStateException("Mapper should not be NULL for success.local status")
+            Success.Local(mapper(this.data))
+        }
+        is Success.Remote -> {
+            if (mapper == null) throw IllegalStateException("Mapper should not be NULL for success.remote status")
+            Success.Local(mapper(this.data))
         }
     }
 }

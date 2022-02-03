@@ -10,8 +10,8 @@ interface CharactersService {
 
     @GET("characters")
     suspend fun getCharactersPaginated(
-        @Query("limit") limit: Int = 10,
-        @Query("offset") offset: Int = 0
+        @Query("offset") offset: Int = 0,
+        @Query("limit") limit: Int = 10
     ): Response<List<CharacterNetworkEntity>>
 
     @GET("characters/{id}")

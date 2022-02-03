@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 
 interface ViewModelDispatcher {
 
-    val dispatcher: CoroutineDispatcher
+    val coroutineDispatcher: CoroutineDispatcher
 
-    class Base(override val dispatcher: CoroutineDispatcher): ViewModelDispatcher
+    class Base(override val coroutineDispatcher: CoroutineDispatcher): ViewModelDispatcher
 }

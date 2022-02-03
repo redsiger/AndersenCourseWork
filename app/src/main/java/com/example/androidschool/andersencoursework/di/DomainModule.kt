@@ -35,7 +35,7 @@ class DomainModule {
         mapper: DatabaseMapper,
         context: Context
     ): CharactersRepository {
-        return CharactersRepositoryImpl(service, dao, mapper, context)
+        return CharactersRepositoryImpl(service, dao, mapper)
     }
 
     @Singleton

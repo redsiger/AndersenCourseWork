@@ -1,10 +1,9 @@
 package com.example.androidschool.data.database.characters
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.paging.PagingSource
+import androidx.room.*
 import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
+import com.example.androidschool.data.database.characters.model.CharactersRemoteKeys
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -14,10 +13,10 @@ interface CharactersDao {
     suspend fun insertCharacter(character: CharacterRoomEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(characters: List<CharacterRoomEntity>)
+    suspend fun insertCharacters(characters: List<CharacterRoomEntity>)
 
     @Query("SELECT * FROM characters WHERE charId > :offset AND charId <= (:offset + :limit)")
-    suspend fun getCharactersPaging(limit: Int, offset: Int): List<CharacterRoomEntity>
+    suspend fun getCharactersPaging(offset: Int, limit: Int): List<CharacterRoomEntity>
 
     @Query("SELECT * FROM characters")
     fun getAll(): Flow<List<CharacterRoomEntity>>
@@ -26,5 +25,20 @@ interface CharactersDao {
     fun searchCharactersByNameOrNickname(query: String): Flow<List<CharacterRoomEntity>>
 
     @Query("DELETE FROM characters")
-    suspend fun deleteAll()
+    suspend fun clearAllCharacters()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCharactersRemoteKeys(remoteKeys: List<CharactersRemoteKeys>)
+
+    @Query("SELECT * FROM characters_remote_keys WHERE characterId = :characterId")
+    suspend fun remoteKeysCharacters(characterId: Int): CharactersRemoteKeys?
+
+    @Query("DELETE FROM characters_remote_keys")
+    suspend fun clearAllRemoteKeys()
+
+    @Transaction
+    suspend fun clearCharactersWithRemoteKeys() {
+        clearAllCharacters()
+        clearAllRemoteKeys()
+    }
 }

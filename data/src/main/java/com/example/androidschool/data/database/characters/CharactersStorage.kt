@@ -18,7 +18,7 @@ class CharactersStorage(
     }
 
     suspend fun insertCharacters(characters: List<CharacterEntity>) {
-        dao.insertAll(characters.map { mapper.toRoomEntity(it) })
+        dao.insertCharacters(characters.map { mapper.toRoomEntity(it) })
     }
 
     suspend fun insertCharacter(character: CharacterEntity) {

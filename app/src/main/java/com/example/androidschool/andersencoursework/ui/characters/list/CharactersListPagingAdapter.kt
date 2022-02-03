@@ -1,32 +1,30 @@
 package com.example.androidschool.andersencoursework.ui.characters.list
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding
-import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
+import com.example.androidschool.domain.characters.model.CharacterEntity
 
 class CharactersListPagingAdapter(
     private val action: (characterId: Int) -> Unit
-): PagingDataAdapter<CharacterUIEntity, CharactersListPagingAdapter.Holder>(COMPARATOR) {
+): PagingDataAdapter<CharacterEntity, CharactersListPagingAdapter.Holder>(COMPARATOR) {
 
     companion object {
-        private val COMPARATOR = object : DiffUtil.ItemCallback<CharacterUIEntity>() {
+        private val COMPARATOR = object : DiffUtil.ItemCallback<CharacterEntity>() {
             override fun areItemsTheSame(
-                oldItem: CharacterUIEntity,
-                newItem: CharacterUIEntity
+                oldItem: CharacterEntity,
+                newItem: CharacterEntity
             ): Boolean {
                 return oldItem.charId == newItem.charId
             }
 
             override fun areContentsTheSame(
-                oldItem: CharacterUIEntity,
-                newItem: CharacterUIEntity
+                oldItem: CharacterEntity,
+                newItem: CharacterEntity
             ): Boolean {
                 return oldItem == newItem
             }
@@ -51,7 +49,7 @@ class CharactersListPagingAdapter(
         private val binding: ListItemCharacterBinding
         ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(character: CharacterUIEntity) {
+        fun bind(character: CharacterEntity) {
             with (binding) {
                 listItemCharacterName.text = character.name
                 Glide.with(binding.listItemCharacterImg.context)
