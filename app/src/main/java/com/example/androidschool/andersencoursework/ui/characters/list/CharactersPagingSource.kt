@@ -11,13 +11,16 @@ import com.example.androidschool.data.repositories.characters.LoadCharactersActi
 import com.example.androidschool.domain.DataPiece
 import com.example.androidschool.domain.characters.model.CharacterEntity
 import com.example.androidschool.util.Status
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import java.lang.Exception
 
 private const val START_OFFSET = 0
 private const val LIMIT = 10
 
 class CharactersPagingSourceForMediator(
-    private val daoAction: suspend (offset: Int, limit: Int) -> List<CharacterEntity>,
+    private val daoAction: (offset: Int, limit: Int) -> List<CharacterEntity>,
     private val mapper: UIMapper
 ): PagingSource<Int, CharacterEntity>() {
 
@@ -33,6 +36,8 @@ class CharactersPagingSourceForMediator(
 
             val prevOffset = if (offset == START_OFFSET) null
             else offset.minus(LIMIT)
+
+            Log.e("CharactersPagingSourceForMediator","local load offset:$offset nextOffset:$nextOffset, prevOffset:$prevOffset")
 
             LoadResult.Page(
                 data = charactersList,

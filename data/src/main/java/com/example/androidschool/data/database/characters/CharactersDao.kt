@@ -16,7 +16,7 @@ interface CharactersDao {
     suspend fun insertCharacters(characters: List<CharacterRoomEntity>)
 
     @Query("SELECT * FROM characters WHERE charId > :offset AND charId <= (:offset + :limit)")
-    suspend fun getCharactersPaging(offset: Int, limit: Int): List<CharacterRoomEntity>
+    fun getCharactersPaging(offset: Int, limit: Int): Flow<List<CharacterRoomEntity>>
 
     @Query("SELECT * FROM characters")
     fun getAll(): Flow<List<CharacterRoomEntity>>
@@ -41,4 +41,7 @@ interface CharactersDao {
         clearAllCharacters()
         clearAllRemoteKeys()
     }
+
+    @Query("SELECT * FROM characters")
+    fun getCharactersPagingForPagingSource(): PagingSource<Int, CharacterRoomEntity>
 }

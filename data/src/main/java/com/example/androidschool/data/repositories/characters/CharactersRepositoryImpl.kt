@@ -11,7 +11,9 @@ import com.example.androidschool.domain.characters.model.CharacterEntity
 import com.example.androidschool.domain.characters.model.CharactersEntityRemoteKeys
 import com.example.androidschool.util.Status
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import retrofit2.HttpException
 import kotlin.Exception
 
@@ -35,7 +37,7 @@ class CharactersRepositoryImpl(
         return loader.getRemote(offset, limit)
     }
 
-    override suspend fun getLocalCharactersPaging(offset: Int, limit: Int): Status<List<CharacterEntity>> {
+    override suspend fun getLocalCharactersPaging(offset: Int, limit: Int): Status<Flow<List<CharacterEntity>>> {
         return loader.getLocal(offset, limit)
     }
 
@@ -70,7 +72,9 @@ class CharactersRepositoryImpl(
     override suspend fun getLocalCharactersPagingMediator(
         offset: Int,
         limit: Int
-    ): List<CharacterEntity> {
-        return dao.getCharactersPaging(offset, limit).toDomainList()
+    ): Flow<List<CharacterEntity>> {
+        return dao.getCharactersPaging(offset, limit).mapLatest {
+            it.toDomainList()
+        }
     }
 }

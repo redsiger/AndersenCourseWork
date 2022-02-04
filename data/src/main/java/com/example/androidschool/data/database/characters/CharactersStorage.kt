@@ -2,9 +2,11 @@ package com.example.androidschool.data.database.characters
 
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
+import com.example.androidschool.data.database.characters.model.toDomainList
 import com.example.androidschool.domain.characters.model.CharacterEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 
 class CharactersStorage(
     private val dao: CharactersDao,
@@ -25,7 +27,7 @@ class CharactersStorage(
         dao.insertCharacter(mapper.toRoomEntity(character))
     }
 
-    suspend fun getCharactersPaging(limit: Int, offset: Int): List<CharacterEntity> {
-        return dao.getCharactersPaging(limit, offset).map(CharacterRoomEntity::toDomainModel)
+    suspend fun getCharactersPaging(limit: Int, offset: Int): Flow<List<CharacterEntity>> {
+        return dao.getCharactersPaging(limit, offset).mapLatest { it.toDomainList() }
     }
 }

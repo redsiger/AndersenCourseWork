@@ -2,11 +2,14 @@ package com.example.androidschool.data.loaders
 
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.characters.CharactersDao
+import com.example.androidschool.data.database.characters.model.toDomainList
 import com.example.androidschool.data.network.characters.CharactersService
 import com.example.androidschool.data.network.characters.model.CharacterNetworkEntity
 import com.example.androidschool.domain.characters.model.CharacterEntity
 import com.example.androidschool.util.DefaultInternetException
 import com.example.androidschool.util.Status
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class CharactersLoader(
     private val service: CharactersService,
@@ -14,16 +17,16 @@ class CharactersLoader(
     private val mapper: DatabaseMapper
 ) {
 
-    suspend fun getCharacterPaging(limit: Int, offset: Int): Status<List<CharacterEntity>>
-        = when (val characters = getRemote(limit, offset)) {
-                is Status.Success -> {
-                    dao.insertCharacters(characters.data.map(mapper::toRoomEntity))
-                    characters
-                }
-                else -> {
-                    getLocal(limit, offset)
-                }
-            }
+//    suspend fun getCharacterPaging(limit: Int, offset: Int): Status<List<CharacterEntity>>
+//        = when (val characters = getRemote(limit, offset)) {
+//                is Status.Success -> {
+//                    dao.insertCharacters(characters.data.map(mapper::toRoomEntity))
+//                    characters
+//                }
+//                else -> {
+//                    getLocal(limit, offset)
+//                }
+//            }
 
 
 
@@ -43,7 +46,7 @@ class CharactersLoader(
         }
     }
 
-    suspend fun getLocal(limit: Int, offset: Int): Status<List<CharacterEntity>> {
-        return Status.Success.Local(dao.getCharactersPaging(offset, limit).map{ it.toDomainModel() })
+    suspend fun getLocal(limit: Int, offset: Int): Status<Flow<List<CharacterEntity>>> {
+        return Status.Success.Local(dao.getCharactersPaging(offset, limit).map { it.toDomainList() })
     }
 }

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.paging.*
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.characters.CharactersDao
+import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
 import com.example.androidschool.data.database.characters.model.CharactersRemoteKeys
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
 import com.example.androidschool.domain.characters.model.CharacterEntity
@@ -18,11 +19,11 @@ private const val LIMIT = 10
 class CharactersRemoteMediator @Inject constructor (
     private val interactor: CharactersInteractor,
     private val mapper: DatabaseMapper
-): RemoteMediator<Int, CharacterEntity>() {
+): RemoteMediator<Int, CharacterRoomEntity>() {
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, CharacterEntity>
+        state: PagingState<Int, CharacterRoomEntity>
     ): MediatorResult {
         val offset: Int = when (loadType) {
             LoadType.APPEND -> {
@@ -57,11 +58,16 @@ class CharactersRemoteMediator @Inject constructor (
         }
 
         val response = interactor.getRemoteCharactersPaging(offset, state.config.pageSize)
-        Log.e("CharactersRemoteMediator","remote load offset:$offset size:${response.extractData?.size} endPagination:${response.extractData?.size!! < state.config.pageSize} response:$response")
+//        Log.e("CharactersRemoteMediator","remote load offset:$offset size:${response.extractData?.size} endPagination:${response.extractData?.size!! < state.config.pageSize} response:$response")
 
         return when (response) {
             is Status.Success -> {
                 val data = response.data
+
+                val dataRoom = data.map {
+                    mapper.toRoomEntity(it)
+                }
+
                 val endOfPagination = data.size < state.config.pageSize
 
                 if (loadType == LoadType.REFRESH) {
@@ -86,7 +92,7 @@ class CharactersRemoteMediator @Inject constructor (
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, CharacterEntity>): CharactersRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, CharacterRoomEntity>): CharactersRemoteKeys? {
         // Get the last page that was retrieved, that contained items.
         // From that last page, get the last item
         return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
@@ -96,7 +102,7 @@ class CharactersRemoteMediator @Inject constructor (
             }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, CharacterEntity>): CharactersRemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, CharacterRoomEntity>): CharactersRemoteKeys? {
         // Get the first page that was retrieved, that contained items.
         // From that first page, get the first item
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
@@ -107,7 +113,7 @@ class CharactersRemoteMediator @Inject constructor (
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, CharacterEntity>
+        state: PagingState<Int, CharacterRoomEntity>
     ): CharactersRemoteKeys? {
         // The paging library is trying to load data after the anchor position
         // Get the item closest to the anchor position

@@ -7,24 +7,25 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding
+import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
 import com.example.androidschool.domain.characters.model.CharacterEntity
 
 class CharactersListPagingAdapter(
     private val action: (characterId: Int) -> Unit
-): PagingDataAdapter<CharacterEntity, CharactersListPagingAdapter.Holder>(COMPARATOR) {
+): PagingDataAdapter<CharacterRoomEntity, CharactersListPagingAdapter.Holder>(COMPARATOR) {
 
     companion object {
-        private val COMPARATOR = object : DiffUtil.ItemCallback<CharacterEntity>() {
+        private val COMPARATOR = object : DiffUtil.ItemCallback<CharacterRoomEntity>() {
             override fun areItemsTheSame(
-                oldItem: CharacterEntity,
-                newItem: CharacterEntity
+                oldItem: CharacterRoomEntity,
+                newItem: CharacterRoomEntity
             ): Boolean {
                 return oldItem.charId == newItem.charId
             }
 
             override fun areContentsTheSame(
-                oldItem: CharacterEntity,
-                newItem: CharacterEntity
+                oldItem: CharacterRoomEntity,
+                newItem: CharacterRoomEntity
             ): Boolean {
                 return oldItem == newItem
             }
@@ -49,7 +50,7 @@ class CharactersListPagingAdapter(
         private val binding: ListItemCharacterBinding
         ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(character: CharacterEntity) {
+        fun bind(character: CharacterRoomEntity) {
             with (binding) {
                 listItemCharacterName.text = character.name
                 Glide.with(binding.listItemCharacterImg.context)

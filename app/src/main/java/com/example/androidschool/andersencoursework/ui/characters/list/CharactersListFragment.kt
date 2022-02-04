@@ -19,6 +19,7 @@ import com.example.androidschool.andersencoursework.ui.characters.models.UIMappe
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.DefaultLoadStateAdapter
 import com.example.androidschool.andersencoursework.ui.core.setupGridLayoutManager
+import com.example.androidschool.andersencoursework.util.TryAgainAction
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -77,7 +78,9 @@ class CharactersListFragment: BaseFragment(R.layout.fragment_characters_list) {
     }
 
     private fun initCharacterList() {
-        val footerAdapter = DefaultLoadStateAdapter()
+        val action: TryAgainAction = { mAdapter.retry() }
+
+        val footerAdapter = com.example.androidschool.andersencoursework.util.DefaultLoadStateAdapter(action)
 
         with(viewBinding.fragmentCharactersListRecycler) {
             val itemWidth = context.resources.getDimension(R.dimen.list_item_character_img_width)

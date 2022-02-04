@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 interface CharactersInteractor {
 
     suspend fun getRemoteCharactersPaging(offset: Int, limit: Int): Status<List<CharacterEntity>>
-    suspend fun getLocalCharactersPaging(offset: Int, limit: Int): Status<List<CharacterEntity>>
-    suspend fun getLocalCharactersPagingMediator(offset: Int, limit: Int): List<CharacterEntity>
+    suspend fun getLocalCharactersPaging(offset: Int, limit: Int): Status<Flow<List<CharacterEntity>>>
+    suspend fun getLocalCharactersPagingMediator(offset: Int, limit: Int): Flow<List<CharacterEntity>>
     suspend fun getCharacter(charId: Int): Status<CharacterEntity>
     fun searchCharactersByNameOrNickName(query: String): Flow<List<CharacterEntity>>
     suspend fun clearCharactersWithRemoteKeys()
@@ -23,10 +23,10 @@ interface CharactersInteractor {
         override suspend fun getRemoteCharactersPaging(offset: Int, limit: Int): Status<List<CharacterEntity>>
             = repository.getRemoteCharactersPaging(offset, limit)
 
-        override suspend fun getLocalCharactersPaging(offset: Int, limit: Int): Status<List<CharacterEntity>>
+        override suspend fun getLocalCharactersPaging(offset: Int, limit: Int): Status<Flow<List<CharacterEntity>>>
             = repository.getLocalCharactersPaging(offset, limit)
 
-        override suspend fun getLocalCharactersPagingMediator(offset: Int, limit: Int): List<CharacterEntity>
+        override suspend fun getLocalCharactersPagingMediator(offset: Int, limit: Int): Flow<List<CharacterEntity>>
             = repository.getLocalCharactersPagingMediator(offset, limit)
 
         override suspend fun getCharacter(charId: Int): Status<CharacterEntity>
