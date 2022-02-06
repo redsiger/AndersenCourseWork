@@ -15,4 +15,5 @@ interface CharactersRepository {
     suspend fun insertCharactersRemoteKeys(keys: List<CharactersEntityRemoteKeys>)
     suspend fun insertCharacters(characters: List<CharacterEntity>)
     suspend fun getLocalCharactersPagingMediator(offset: Int, limit: Int): Flow<List<CharacterEntity>>
+
 }

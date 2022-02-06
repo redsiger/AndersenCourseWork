@@ -3,21 +3,19 @@ package com.example.androidschool.andersencoursework.ui.characters.list
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagingData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentCharactersListBinding
 import com.example.androidschool.andersencoursework.databinding.MergeToolbarBinding
 import com.example.androidschool.andersencoursework.di.appComponent
-import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
-import com.example.androidschool.andersencoursework.ui.core.DefaultLoadStateAdapter
 import com.example.androidschool.andersencoursework.ui.core.setupGridLayoutManager
 import com.example.androidschool.andersencoursework.util.TryAgainAction
 import kotlinx.coroutines.flow.collectLatest
@@ -41,6 +39,8 @@ class CharactersListFragment: BaseFragment(R.layout.fragment_characters_list) {
     lateinit var viewModelFactory: CharactersListViewModel.Factory
     private val viewModel: CharactersListViewModel by viewModels { viewModelFactory }
 
+    private val mNavController: NavController by lazy { findNavController() }
+
     private val mAdapter: CharactersListPagingAdapter by lazy {
         CharactersListPagingAdapter { id: Int ->
             val action = CharactersListFragmentDirections.actionCharactersListToDetails(id)
@@ -58,23 +58,30 @@ class CharactersListFragment: BaseFragment(R.layout.fragment_characters_list) {
         _binding = FragmentCharactersListBinding.bind(view)
         _toolbarBinding = MergeToolbarBinding.bind(view)
 
-        setupToolbar(
-            toolbarBinding.toolbar,
-            getString(R.string.characters_fragment_title),
-            R.menu.search_menu
-        ) {
-            when (it.itemId) {
+        initToolbar()
+        initCharacterList()
+
+    }
+
+    private fun initToolbar() {
+
+        val onItemClick = { item: MenuItem ->
+            when(item.itemId) {
                 R.id.menu_item_search -> {
-                    Log.e("MENU ITEM", "$it CLICKED")
                     val action = CharactersListFragmentDirections.actionGlobalToSearch()
-                    findNavController().navigate(action)
+                    mNavController.navigate(action)
                     true
                 }
                 else -> false
             }
         }
 
-        initCharacterList()
+        setupMainToolbar(
+            toolbarBinding.toolbar,
+            getString(R.string.characters_fragment_title),
+            R.menu.search_menu,
+            onItemClick
+        )
     }
 
     private fun initCharacterList() {

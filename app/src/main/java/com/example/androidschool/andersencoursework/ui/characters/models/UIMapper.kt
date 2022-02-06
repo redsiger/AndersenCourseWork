@@ -21,6 +21,10 @@ class UIMapper {
         )
     }
 
+    fun mapCharacterEntityList(list: List<CharacterEntity>): List<CharacterUIEntity> {
+        return list.map(::mapCharacterEntity)
+    }
+
     fun mapCharacterEntity(domainEntity: CharacterEntity): CharacterUIEntity {
         return CharacterUIEntity(
             appearance = domainEntity.appearance,

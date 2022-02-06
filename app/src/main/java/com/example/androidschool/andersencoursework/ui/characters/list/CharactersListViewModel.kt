@@ -42,6 +42,7 @@ class CharactersListViewModel constructor (
             remoteMediator = CharactersRemoteMediator(charactersInteractor, DatabaseMapper()),
             pagingSourceFactory = pagingSourceFactory
         ).flow
+            .cachedIn(viewModelScope)
             .flowOn(dispatcher.coroutineDispatcher)
     }
 

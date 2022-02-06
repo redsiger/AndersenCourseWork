@@ -1,16 +1,18 @@
 package com.example.androidschool.andersencoursework.di
 
 import android.content.Context
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-@Module(includes = [GlideModule::class])
-class AppModule(val context: Context) {
+@Module
+class GlideModule {
 
     @Singleton
     @Provides
-    fun provideAppContext(): Context {
-        return context
+    fun provideGlide(context: Context): RequestManager {
+        return Glide.with(context)
     }
 }

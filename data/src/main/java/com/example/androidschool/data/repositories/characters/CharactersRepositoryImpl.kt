@@ -1,11 +1,13 @@
 package com.example.androidschool.data.repositories.characters
 
+import android.util.Log
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.characters.CharactersDao
 import com.example.androidschool.data.database.characters.model.toDomainList
 import com.example.androidschool.data.loaders.CharactersLoader
 import com.example.androidschool.data.network.characters.CharactersService
 import com.example.androidschool.data.network.characters.model.CharacterNetworkEntity
+import com.example.androidschool.data.network.characters.model.toDomainList
 import com.example.androidschool.domain.characters.CharactersRepository
 import com.example.androidschool.domain.characters.model.CharacterEntity
 import com.example.androidschool.domain.characters.model.CharactersEntityRemoteKeys

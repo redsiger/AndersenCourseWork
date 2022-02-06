@@ -46,3 +46,7 @@ data class CharacterNetworkEntity(
         )
     }
 }
+
+fun List<CharacterNetworkEntity>.toDomainList(): List<CharacterEntity> {
+    return this.map { it.toDomainModel() }
+}

@@ -3,12 +3,29 @@ package com.example.androidschool.data.database
 import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
 import com.example.androidschool.data.database.characters.model.CharactersRemoteKeys
 import com.example.androidschool.data.database.episodes.model.EpisodeRoomEntity
+import com.example.androidschool.data.network.characters.model.CharacterNetworkEntity
 import com.example.androidschool.domain.characters.model.CharacterEntity
 import com.example.androidschool.domain.characters.model.CharactersEntityRemoteKeys
 import com.example.androidschool.domain.episode.model.EpisodeEntity
 
 class DatabaseMapper {
-    
+
+    fun toRoomEntity(characterNetworkEntity: CharacterNetworkEntity): CharacterRoomEntity {
+        return CharacterRoomEntity(
+            appearance = characterNetworkEntity.appearance,
+            betterCallSaulAppearance = characterNetworkEntity.betterCallSaulAppearance,
+            birthday = characterNetworkEntity.birthday,
+            category = characterNetworkEntity.category,
+            charId = characterNetworkEntity.charId,
+            img = characterNetworkEntity.img,
+            name = characterNetworkEntity.name,
+            nickname = characterNetworkEntity.nickname,
+            occupation = characterNetworkEntity.occupation,
+            portrayed = characterNetworkEntity.portrayed,
+            status = characterNetworkEntity.status
+        )
+    }
+
     fun toRoomEntity(characterEntity: CharacterEntity): CharacterRoomEntity {
         return CharacterRoomEntity(
             appearance = characterEntity.appearance,

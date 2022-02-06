@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CharactersDao {
 
+    @Query("SELECT * FROM characters WHERE charId > :offset AND charId <= (:offset + :limit)")
+    fun getCharactersPagingTest(offset: Int, limit: Int): Flow<List<CharacterRoomEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacter(character: CharacterRoomEntity)
 

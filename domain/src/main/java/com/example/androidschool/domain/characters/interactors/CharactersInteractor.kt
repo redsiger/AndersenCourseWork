@@ -3,10 +3,13 @@ package com.example.androidschool.domain.characters.interactors
 import com.example.androidschool.domain.characters.CharactersRepository
 import com.example.androidschool.domain.characters.model.CharacterEntity
 import com.example.androidschool.domain.characters.model.CharactersEntityRemoteKeys
+import com.example.androidschool.util.PagingStatus
 import com.example.androidschool.util.Status
 import kotlinx.coroutines.flow.Flow
 
 interface CharactersInteractor {
+
+    suspend fun getCharactersPagingStatus(offset: Int, limit: Int): PagingStatus<List<CharacterEntity>>
 
     suspend fun getRemoteCharactersPaging(offset: Int, limit: Int): Status<List<CharacterEntity>>
     suspend fun getLocalCharactersPaging(offset: Int, limit: Int): Status<Flow<List<CharacterEntity>>>
@@ -19,6 +22,12 @@ interface CharactersInteractor {
     suspend fun remoteKeysCharacters(charId: Int): CharactersEntityRemoteKeys?
 
     class Base(private val repository: CharactersRepository): CharactersInteractor {
+        override suspend fun getCharactersPagingStatus(
+            offset: Int,
+            limit: Int
+        ): PagingStatus<List<CharacterEntity>> {
+            repository.getCharactersPagingStatus(offset, limit)
+        }
 
         override suspend fun getRemoteCharactersPaging(offset: Int, limit: Int): Status<List<CharacterEntity>>
             = repository.getRemoteCharactersPaging(offset, limit)
