@@ -12,6 +12,15 @@ class InfiniteScrollListener(val func: () -> Unit, private val layoutManager: Li
     private var firstVisibleItem = 0
     private var visibleItemCount = 0
     private var totalItemCount = 0
+    
+    fun reset() {
+        previousTotal = 0
+        loading = true
+        visibleThreshold = 2
+        firstVisibleItem = 0
+        visibleItemCount = 0
+        totalItemCount = 0
+    }
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)

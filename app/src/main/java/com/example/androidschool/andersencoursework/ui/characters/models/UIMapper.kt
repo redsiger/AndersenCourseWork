@@ -40,4 +40,22 @@ class UIMapper {
             status = domainEntity.status
         )
     }
+
+    fun mapCharacterEntityToListItem(domainEntity: CharacterEntity): ListItem.CharacterItem {
+        return ListItem.CharacterItem(
+            CharacterUIEntity(
+                appearance = domainEntity.appearance,
+                betterCallSaulAppearance = domainEntity.betterCallSaulAppearance,
+                birthday = domainEntity.birthday,
+                category = domainEntity.category,
+                charId = domainEntity.charId,
+                img = domainEntity.img,
+                name = domainEntity.name,
+                nickname = domainEntity.nickname,
+                occupation = domainEntity.occupation,
+                portrayed = domainEntity.portrayed,
+                status = domainEntity.status
+            )
+        )
+    }
 }

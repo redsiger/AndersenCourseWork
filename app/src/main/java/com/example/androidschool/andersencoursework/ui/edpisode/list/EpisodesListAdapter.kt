@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.example.androidschool.andersencoursework.databinding.IncludeDefaultLoadStateBinding
@@ -22,17 +23,21 @@ class EpisodesListAdapter @AssistedInject constructor (
     private val glide: RequestManager,
     @Assisted("onClick") private val onClick: (id: Int) -> Unit,
     @Assisted("refresh") private val refresh: () -> Unit
-): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+): ListAdapter<ListItem, RecyclerView.ViewHolder>(ListItemDiff) {
 
-    private var dataList: MutableList<ListItem> = mutableListOf()
-
-    fun setList(newList: List<ListItem>) {
-        val callback = Comparator(newList, dataList)
-        val diff = DiffUtil.calculateDiff(callback)
-        dataList = newList.toMutableList()
-        diff.dispatchUpdatesTo(this)
+    companion object ListItemDiff: DiffUtil.ItemCallback<ListItem>() {
+        override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
+            return if (oldItem is ListItem.CharacterItem && newItem is ListItem.CharacterItem) {
+                oldItem.character.charId == newItem.character.charId
+            } else false
+        }
+        override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
+            return if (oldItem is ListItem.CharacterItem && newItem is ListItem.CharacterItem) {
+                oldItem.character == newItem.character
+            } else false
+        }
     }
-
+    
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
@@ -45,16 +50,14 @@ class EpisodesListAdapter @AssistedInject constructor (
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = dataList[position]
+        val item = currentList[position]
         when (holder) {
             is ItemHolder -> holder.bind(item)
         }
     }
 
-    override fun getItemCount(): Int = dataList.size
-
     override fun getItemViewType(position: Int): Int {
-        return when (dataList[position]) {
+        return when (currentList[position]) {
             is ListItem.CharacterItem -> ITEM_HOLDER
             is ListItem.Loading -> LOADING_HOLDER
             is ListItem.Error -> ERROR_HOLDER
@@ -109,31 +112,6 @@ class EpisodesListAdapter @AssistedInject constructor (
 
                 tryAgainButton.setOnClickListener { refresh() }
             }
-        }
-    }
-
-    private class Comparator(
-        private val newList: List<ListItem>,
-        private val oldList: List<ListItem>
-    ): DiffUtil.Callback() {
-
-        override fun getOldListSize(): Int = oldList.size
-        override fun getNewListSize(): Int = newList.size
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldItem = oldList[oldItemPosition]
-            val newItem = newList[newItemPosition]
-
-            val areItems = oldItem is ListItem.CharacterItem && newItem is ListItem.CharacterItem
-            val areLoadings = oldItem is ListItem.Loading && newItem is ListItem.Loading
-            val areErrors = oldItem is ListItem.Error && newItem is ListItem.Error
-
-            return areItems || areLoadings || areErrors
-        }
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldItem = oldList[oldItemPosition]
-            val newItem = newList[newItemPosition]
-            return oldItem == newItem
         }
     }
 

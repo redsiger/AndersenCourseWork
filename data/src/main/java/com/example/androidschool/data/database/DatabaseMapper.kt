@@ -1,7 +1,6 @@
 package com.example.androidschool.data.database
 
 import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
-import com.example.androidschool.data.database.characters.model.CharactersRemoteKeys
 import com.example.androidschool.data.database.episodes.model.EpisodeRoomEntity
 import com.example.androidschool.data.network.characters.model.CharacterNetworkEntity
 import com.example.androidschool.domain.characters.model.CharacterEntity
@@ -41,16 +40,7 @@ class DatabaseMapper {
             status = characterEntity.status
         )
     }
-    
-    fun toRoomEntity(charactersEntityRemoteKeys: CharactersEntityRemoteKeys?): CharactersRemoteKeys? {
-        return if (charactersEntityRemoteKeys == null) null
-        else CharactersRemoteKeys(
-            characterId = charactersEntityRemoteKeys.characterId,
-            prevKey = charactersEntityRemoteKeys.prevKey,
-            nextKey = charactersEntityRemoteKeys.nextKey
-        )
-    }
-    
+
     fun toRoomEntity(episodeEntity: EpisodeEntity): EpisodeRoomEntity {
         return EpisodeRoomEntity(
             airDate = episodeEntity.airDate,

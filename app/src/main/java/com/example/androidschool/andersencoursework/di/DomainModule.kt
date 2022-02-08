@@ -3,10 +3,10 @@ package com.example.androidschool.andersencoursework.di
 import android.content.Context
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.characters.CharactersDao
-import com.example.androidschool.data.database.characters.CharactersStorage
 import com.example.androidschool.data.database.episodes.EpisodesDao
 import com.example.androidschool.data.network.characters.CharactersService
 import com.example.androidschool.data.network.episodes.EpisodesService
+import com.example.androidschool.data.repositories.characters.CharactersLocalStorage
 import com.example.androidschool.data.repositories.characters.CharactersRepositoryImpl
 import com.example.androidschool.data.repositories.episodes.EpisodesRepositoryImpl
 import com.example.androidschool.domain.characters.CharactersRepository
@@ -31,11 +31,9 @@ class DomainModule {
     @Provides
     fun provideCharactersRepository(
         service: CharactersService,
-        dao: CharactersDao,
-        mapper: DatabaseMapper,
-        context: Context
+        localStorage: CharactersLocalStorage
     ): CharactersRepository {
-        return CharactersRepositoryImpl(service, dao, mapper)
+        return CharactersRepositoryImpl(service, localStorage)
     }
 
     @Singleton

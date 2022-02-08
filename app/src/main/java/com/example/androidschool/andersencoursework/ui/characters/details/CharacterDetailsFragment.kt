@@ -13,7 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.androidschool.andersencoursework.databinding.FragmentCharacterDetailsBinding
 import com.example.androidschool.andersencoursework.di.appComponent
-import com.example.androidschool.util.Status
+import com.example.androidschool.util.NetworkResponse
 import javax.inject.Inject
 
 class CharacterDetailsFragment: Fragment() {
@@ -46,34 +46,34 @@ class CharacterDetailsFragment: Fragment() {
 
         initBackBtn()
         initRefreshContainer()
-        viewModel.getCharacter(characterId)
+//        viewModel.getCharacter(characterId)
 
-        viewModel.character.observe(viewLifecycleOwner) {
-            when (it) {
-                is Status.Success -> {
-                    viewBinding.characterDetailsRefreshContainer.isRefreshing = false
-                    viewBinding.characterName.text = it.data.name
-                    viewBinding.characterNickname.text = it.data.nickname
-                    Glide
-                        .with(requireActivity())
-                        .load(it.data.img)
-                        .centerCrop()
-                        .into(viewBinding.characterPhoto)
-                }
-                is Status.Error -> {
-                    Log.e("ERROR", it.toString())
-                    viewBinding.characterName.text = it.exception.message
-                }
-                else -> {
-                    viewBinding.characterDetailsRefreshContainer.isRefreshing = true
-                }
-            }
-        }
+//        viewModel.character.observe(viewLifecycleOwner) {
+//            when (it) {
+//                is NetworkResponse.Success -> {
+//                    viewBinding.characterDetailsRefreshContainer.isRefreshing = false
+//                    viewBinding.characterName.text = it.data.name
+//                    viewBinding.characterNickname.text = it.data.nickname
+//                    Glide
+//                        .with(requireActivity())
+//                        .load(it.data.img)
+//                        .centerCrop()
+//                        .into(viewBinding.characterPhoto)
+//                }
+//                is NetworkResponse.Error -> {
+//                    Log.e("ERROR", it.toString())
+//                    viewBinding.characterName.text = it.exception.message
+//                }
+//                else -> {
+//                    viewBinding.characterDetailsRefreshContainer.isRefreshing = true
+//                }
+//            }
+//        }
     }
 
     private fun initRefreshContainer() {
         viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
-            viewModel.getCharacter(characterId)
+//            viewModel.getCharacter(characterId)
         }
     }
 

@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import com.example.androidschool.andersencoursework.ui.characters.models.ListItem
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
-import com.example.androidschool.util.Status
+import com.example.androidschool.util.NetworkResponse
 import com.example.androidschool.util.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -69,14 +69,14 @@ class EpisodesListViewModel(
 
                 val response = interactor.getCharactersPagingState(_current_offset, limit)
                 when (response) {
-                    is Status.Success -> {
+                    is NetworkResponse.Success -> {
                         val data = response.data
 
                         newData(
                             data.map { ListItem.CharacterItem(mapper.mapCharacterEntity(it)) }
                         )
                     }
-                    is Status.Error -> fail(response.exception)
+                    is NetworkResponse.Error -> fail(response.exception)
                 }
             }
         }
@@ -117,13 +117,13 @@ class EpisodesListViewModel(
 
                 val response = interactor.getCharactersPagingState(_current_offset, limit)
                 when (response) {
-                    is Status.Success -> {
+                    is NetworkResponse.Success -> {
                         val data = response.data
                         newData(
                             data.map { ListItem.CharacterItem(mapper.mapCharacterEntity(it)) }
                         )
                     }
-                    is Status.Error -> fail(response.exception)
+                    is NetworkResponse.Error -> fail(response.exception)
                 }
             }
         }
@@ -141,12 +141,12 @@ class EpisodesListViewModel(
         override val data: List<ListItem> get() = _currentData
         init {
             viewModelScope.launch(dispatcher) {
-                val localData = interactor
-                    .getLocalCharactersPaging(_current_offset, limit)
+//                val localData = interactor
+//                    .getLocalCharactersPaging(_current_offset, limit)
 
-                _currentData.addAll(
-                    localData.map { ListItem.CharacterItem(mapper.mapCharacterEntity(it)) }
-                )
+//                _currentData.addAll(
+//                    localData.map { ListItem.CharacterItem(mapper.mapCharacterEntity(it)) }
+//                )
             }
         }
         override fun refresh() = setState(EmptyProgress())
@@ -175,13 +175,13 @@ class EpisodesListViewModel(
                 _currentData.removeLast()
 
                 when (response) {
-                    is Status.Success -> {
+                    is NetworkResponse.Success -> {
                         val data = response.data
                         newData(
                             data.map { ListItem.CharacterItem(mapper.mapCharacterEntity(it)) }
                         )
                     }
-                    is Status.Error -> fail(response.exception)
+                    is NetworkResponse.Error -> fail(response.exception)
                 }
             }
         }

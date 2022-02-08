@@ -7,9 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.androidschool.data.database.characters.CharactersDao
 import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
-import com.example.androidschool.data.database.characters.model.CharactersRemoteKeys
 
-@Database(entities = [CharacterRoomEntity::class, CharactersRemoteKeys::class], version = 1)
+@Database(entities = [CharacterRoomEntity::class], version = 1)
 @TypeConverters(RoomTypeConverters::class)
 abstract class AppDatabase: RoomDatabase() {
 

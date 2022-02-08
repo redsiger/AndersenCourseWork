@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/episodesList"
-        android:name="com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListFragment"
+        android:name="com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListStateFragment"
         android:label="@string/episodes_nav_graph_title" >
         <action
             android:id="@+id/action_episodesList_to_episodeDetails"

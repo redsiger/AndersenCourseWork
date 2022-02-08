@@ -6,7 +6,7 @@ import com.example.androidschool.data.network.episodes.EpisodesService
 import com.example.androidschool.domain.episode.EpisodesRepository
 import com.example.androidschool.domain.episode.model.EpisodeAttr
 import com.example.androidschool.domain.episode.model.EpisodeEntity
-import com.example.androidschool.util.Status
+import com.example.androidschool.util.NetworkResponse
 import kotlinx.coroutines.flow.Flow
 
 class EpisodesRepositoryImpl(
@@ -15,11 +15,11 @@ class EpisodesRepositoryImpl(
     private val mapper: DatabaseMapper
 ): EpisodesRepository {
 
-    override suspend fun getAllEpisodes(): Status<List<EpisodeEntity>> {
+    override suspend fun getAllEpisodes(): NetworkResponse<List<EpisodeEntity>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getEpisode(episodeAttr: EpisodeAttr): Status<EpisodeEntity> {
+    override suspend fun getEpisode(episodeAttr: EpisodeAttr): NetworkResponse<EpisodeEntity> {
         TODO("Not yet implemented")
     }
 

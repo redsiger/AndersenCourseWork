@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-@Module(includes = [GlideModule::class])
+@Module(includes = [GlideModule::class, UIMapperModule::class])
 class AppModule(val context: Context) {
 
     @Singleton

@@ -3,7 +3,7 @@ package com.example.androidschool.data.di
 import android.content.Context
 import com.example.androidschool.data.database.*
 import com.example.androidschool.data.database.characters.CharactersDao
-import com.example.androidschool.data.database.characters.CharactersStorage
+import com.example.androidschool.data.repositories.characters.CharactersLocalStorage
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -22,6 +22,13 @@ class DatabaseModule {
     fun provideRoomTypeConverters(moshi: Moshi): RoomTypeConverters {
         return RoomTypeConverters(moshi)
     }
+
+    @Singleton
+    @Provides
+    fun provideCharactersLocalStorage(
+        dao: CharactersDao,
+        mapper: DatabaseMapper
+    ): CharactersLocalStorage = CharactersLocalStorage.Base(dao, mapper)
 
     @Singleton
     @Provides

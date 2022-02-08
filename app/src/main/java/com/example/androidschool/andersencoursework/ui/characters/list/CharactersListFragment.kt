@@ -101,12 +101,12 @@ class CharactersListFragment: BaseFragment(R.layout.fragment_characters_list) {
             setOnRefreshListener { updateList(this) }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.charactersFlow.collectLatest {
-                Log.e("Collected", "Collected")
-                mAdapter.submitData(it)
-            }
-        }
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewModel.charactersFlow.collectLatest {
+//                Log.e("Collected", "Collected")
+//                mAdapter.submitData(it)
+//            }
+//        }
     }
 
     private fun updateList(list: SwipeRefreshLayout) {

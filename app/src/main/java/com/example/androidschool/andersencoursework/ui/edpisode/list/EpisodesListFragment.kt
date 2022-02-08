@@ -54,7 +54,7 @@ class EpisodesListFragment: BaseFragment(R.layout.fragment_episodes_list) {
 
         initToolbar()
         initList()
-        setListRefresh()
+        submitListRefresh()
     }
 
     private fun initToolbar() {
@@ -62,7 +62,7 @@ class EpisodesListFragment: BaseFragment(R.layout.fragment_episodes_list) {
         val onItemClick = { item: MenuItem ->
             when(item.itemId) {
                 R.id.menu_item_search -> {
-                    val action = EpisodesListFragmentDirections.actionGlobalToSearch()
+                    val action = EpisodesListStateFragmentDirections.actionGlobalToSearch()
                     mNavController.navigate(action)
                     true
                 }
@@ -94,7 +94,7 @@ class EpisodesListFragment: BaseFragment(R.layout.fragment_episodes_list) {
             render(it)
         }
 
-        setListListener()
+        submitListListener()
     }
 
     private fun render(state: UIState<List<ListItem>>) {
@@ -133,7 +133,7 @@ class EpisodesListFragment: BaseFragment(R.layout.fragment_episodes_list) {
 
     private fun showData(data: List<ListItem>) {
         viewBinding.fragmentEpisodesListRecycler.visibility = View.VISIBLE
-        mAdapter.setList(data)
+        mAdapter.submitList(data)
     }
 
     private fun showEmptyError() {
@@ -160,7 +160,7 @@ class EpisodesListFragment: BaseFragment(R.layout.fragment_episodes_list) {
         viewBinding.fragmentEpisodesListRefresh.isRefreshing = false
     }
 
-    private fun setListListener() {
+    private fun submitListListener() {
         with(viewBinding.fragmentEpisodesListRecycler) {
             addOnScrollListener(
                 InfiniteScrollListener({ viewModel.loadNewPage() }, layoutManager as LinearLayoutManager)
@@ -170,7 +170,7 @@ class EpisodesListFragment: BaseFragment(R.layout.fragment_episodes_list) {
 
     }
 
-    private fun setListRefresh() {
+    private fun submitListRefresh() {
         viewBinding.fragmentEpisodesListRefresh.setOnRefreshListener {
             viewModel.refresh()
         }
