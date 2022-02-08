@@ -41,8 +41,7 @@ data class CharacterRoomEntity(
             nickname = nickname,
             occupation = occupation,
             portrayed = portrayed,
-            status = status,
-            fromLocalStorage = true
+            status = status
         )
     }
 }

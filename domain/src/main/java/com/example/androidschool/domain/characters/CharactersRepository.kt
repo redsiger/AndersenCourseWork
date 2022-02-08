@@ -6,9 +6,12 @@ import com.example.androidschool.util.Status
 import kotlinx.coroutines.flow.Flow
 
 interface CharactersRepository {
+
+    suspend fun getCharactersPagingState(offset: Int, limit: Int): Status<List<CharacterEntity>>
+    suspend fun getLocalCharactersPaging(offset: Int, limit: Int): List<CharacterEntity>
+
     fun searchCharactersByNameOrNickName(query: String): Flow<List<CharacterEntity>>
     suspend fun getRemoteCharactersPaging(offset: Int, limit: Int): Status<List<CharacterEntity>>
-    suspend fun getLocalCharactersPaging(offset: Int, limit: Int): Status<Flow<List<CharacterEntity>>>
     suspend fun getCharacter(charId: Int): Status<CharacterEntity>
     suspend fun remoteKeysCharacters(charId: Int): CharactersEntityRemoteKeys?
     suspend fun clearCharactersWithRemoteKeys()

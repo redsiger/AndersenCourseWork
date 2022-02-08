@@ -3,17 +3,8 @@ package com.example.androidschool.andersencoursework.ui.characters.list
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
-import com.example.androidschool.data.database.characters.CharactersDao
-import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
-import com.example.androidschool.data.repositories.characters.LoadCharactersAction
-import com.example.androidschool.domain.DataPiece
 import com.example.androidschool.domain.characters.model.CharacterEntity
-import com.example.androidschool.util.Status
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import java.lang.Exception
 
 private const val START_OFFSET = 0
@@ -58,50 +49,50 @@ class CharactersPagingSourceForMediator(
 
 }
 
-class CharactersPagingSource(
-    private val loader: LoadCharactersAction,
-    private val mapper: UIMapper,
-    private val onLocal: () -> Unit
-): PagingSource<Int, CharacterUIEntity>() {
-
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CharacterUIEntity> {
-        val offset = params.key ?: START_OFFSET
-        return when (val result = loader(LIMIT, offset)) {
-            is Status.Success.Remote -> {
-                val nextOffset = if (result.data.size < LIMIT) null
-                else offset.plus(LIMIT)
-
-                LoadResult.Page(
-                    data = result.data.map(mapper::mapCharacterEntity),
-                    prevKey = if (offset == START_OFFSET) null else offset.minus(LIMIT),
-                    nextKey = nextOffset
-                )
-            }
-            is Status.Success.Local -> {
-                onLocal()
-                val nextOffset = if (result.data.size < LIMIT) null
-                else offset.plus(LIMIT)
-
-                LoadResult.Page(
-                    data = result.data.map(mapper::mapCharacterEntity),
-                    prevKey = if (offset == START_OFFSET) null else offset.minus(LIMIT),
-                    nextKey = nextOffset
-                )
-            }
-            is Status.Error -> {
-                LoadResult.Error(result.exception)
-            }
-            else -> {
-                Log.e("PAGING",result.toString())
-                LoadResult.Error(Exception(result.toString()))
-            }
-        }
-    }
-
-    override fun getRefreshKey(state: PagingState<Int, CharacterUIEntity>): Int? {
-        return state.anchorPosition?.let {
-            state.closestPageToPosition(it)?.prevKey?.plus(LIMIT)
-                ?: state.closestPageToPosition(it)?.nextKey?.minus(LIMIT)
-        }
-    }
-}
+//class CharactersPagingSource(
+//    private val loader: LoadCharactersAction,
+//    private val mapper: UIMapper,
+//    private val onLocal: () -> Unit
+//): PagingSource<Int, CharacterUIEntity>() {
+//
+//    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CharacterUIEntity> {
+//        val offset = params.key ?: START_OFFSET
+//        return when (val result = loader(LIMIT, offset)) {
+//            is Status.Success -> {
+//                val nextOffset = if (result.data.size < LIMIT) null
+//                else offset.plus(LIMIT)
+//
+//                LoadResult.Page(
+//                    data = result.data.map(mapper::mapCharacterEntity),
+//                    prevKey = if (offset == START_OFFSET) null else offset.minus(LIMIT),
+//                    nextKey = nextOffset
+//                )
+//            }
+//            is Status.Success -> {
+//                onLocal()
+//                val nextOffset = if (result.data.size < LIMIT) null
+//                else offset.plus(LIMIT)
+//
+//                LoadResult.Page(
+//                    data = result.data.map(mapper::mapCharacterEntity),
+//                    prevKey = if (offset == START_OFFSET) null else offset.minus(LIMIT),
+//                    nextKey = nextOffset
+//                )
+//            }
+//            is Status.Error -> {
+//                LoadResult.Error(result.exception)
+//            }
+//            else -> {
+//                Log.e("PAGING",result.toString())
+//                LoadResult.Error(Exception(result.toString()))
+//            }
+//        }
+//    }
+//
+//    override fun getRefreshKey(state: PagingState<Int, CharacterUIEntity>): Int? {
+//        return state.anchorPosition?.let {
+//            state.closestPageToPosition(it)?.prevKey?.plus(LIMIT)
+//                ?: state.closestPageToPosition(it)?.nextKey?.minus(LIMIT)
+//        }
+//    }
+//}

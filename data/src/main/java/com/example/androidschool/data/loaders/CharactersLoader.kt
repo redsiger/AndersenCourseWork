@@ -2,6 +2,7 @@ package com.example.androidschool.data.loaders
 
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.characters.CharactersDao
+import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
 import com.example.androidschool.data.database.characters.model.toDomainList
 import com.example.androidschool.data.network.characters.CharactersService
 import com.example.androidschool.data.network.characters.model.CharacterNetworkEntity
@@ -36,7 +37,7 @@ class CharactersLoader(
             if (response.isSuccessful) {
                 val characters = (response.body()!! as List<CharacterNetworkEntity>)
                     .map(CharacterNetworkEntity::toDomainModel)
-                Status.Success.Remote(characters)
+                Status.Success(characters)
             } else {
                 val error = response.errorBody().toString()
                 Status.Error(DefaultInternetException(error))
@@ -46,7 +47,7 @@ class CharactersLoader(
         }
     }
 
-    suspend fun getLocal(limit: Int, offset: Int): Status<Flow<List<CharacterEntity>>> {
-        return Status.Success.Local(dao.getCharactersPaging(offset, limit).map { it.toDomainList() })
+    suspend fun getLocal(limit: Int, offset: Int): List<CharacterEntity> {
+        return dao.getCharactersPaging(offset, limit).toDomainList()
     }
 }

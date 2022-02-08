@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding
-import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.andersencoursework.ui.seacrh.models.CharacterSearchEntity
 
 class SearchAdapter: RecyclerView.Adapter<SearchAdapter.SearchResultViewHolder>() {

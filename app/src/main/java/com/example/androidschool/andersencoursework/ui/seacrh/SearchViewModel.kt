@@ -2,8 +2,6 @@ package com.example.androidschool.andersencoursework.ui.seacrh
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
-import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.andersencoursework.ui.seacrh.models.CharacterSearchEntity
 import com.example.androidschool.andersencoursework.ui.seacrh.models.SearchMapper
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor

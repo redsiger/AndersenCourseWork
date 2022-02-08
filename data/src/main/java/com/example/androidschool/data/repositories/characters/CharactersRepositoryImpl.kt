@@ -3,6 +3,7 @@ package com.example.androidschool.data.repositories.characters
 import android.util.Log
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.characters.CharactersDao
+import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
 import com.example.androidschool.data.database.characters.model.toDomainList
 import com.example.androidschool.data.loaders.CharactersLoader
 import com.example.androidschool.data.network.characters.CharactersService
@@ -28,7 +29,6 @@ class CharactersRepositoryImpl(
     ): CharactersRepository {
 
     private val loader = CharactersLoader(service, dao, mapper)
-
     override fun searchCharactersByNameOrNickName(query: String): Flow<List<CharacterEntity>> {
         return dao.searchCharactersByNameOrNickname(query).map { list ->
             list.map { it.toDomainModel() }
@@ -39,7 +39,7 @@ class CharactersRepositoryImpl(
         return loader.getRemote(offset, limit)
     }
 
-    override suspend fun getLocalCharactersPaging(offset: Int, limit: Int): Status<Flow<List<CharacterEntity>>> {
+    override suspend fun getLocalCharactersPaging(offset: Int, limit: Int): List<CharacterEntity> {
         return loader.getLocal(offset, limit)
     }
 
@@ -47,7 +47,7 @@ class CharactersRepositoryImpl(
         return try {
             val response = service.getCharacter(charId)
             if (response.isSuccessful) {
-                Status.Success.Remote(response.body()!!.map(CharacterNetworkEntity::toDomainModel).first())
+                Status.Success(response.body()!!.map(CharacterNetworkEntity::toDomainModel).first())
             } else {
                 Status.Error(response.errorBody() as HttpException)
             }
@@ -75,8 +75,28 @@ class CharactersRepositoryImpl(
         offset: Int,
         limit: Int
     ): Flow<List<CharacterEntity>> {
-        return dao.getCharactersPaging(offset, limit).mapLatest {
+        return dao.getCharactersPagingFlow(offset, limit).mapLatest {
             it.toDomainList()
+        }
+    }
+
+
+    override suspend fun getCharactersPagingState(
+        offset: Int,
+        limit: Int
+    ): Status<List<CharacterEntity>> {
+        return try {
+            val response = service.getCharactersPaginated(offset, limit)
+            if (response.isSuccessful) {
+                val listRemote = response.body() as List<CharacterNetworkEntity>
+                dao.insertCharacters(listRemote.map(mapper::toRoomEntity))
+                Status.Success(listRemote.map(CharacterNetworkEntity::toDomainModel))
+            }
+            else {
+                Status.Error(Exception())
+            }
+        } catch (e: Exception) {
+            Status.Error(e)
         }
     }
 }

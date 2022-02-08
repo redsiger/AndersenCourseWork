@@ -1,13 +1,11 @@
 package com.example.androidschool.andersencoursework.ui.characters.details
 
 import androidx.lifecycle.*
-import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
+import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
+import com.example.androidschool.andersencoursework.ui.characters.models.ListItem
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
 import com.example.androidschool.util.Status
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,7 +17,7 @@ class CharacterDetailsViewModel @Inject constructor(
 ): ViewModel() {
 
     private val mapper = UIMapper()
-    private var _character = MutableLiveData<Status<CharacterUIEntity>>(Status.InProgress)
+    private var _character = MutableLiveData<Status<CharacterUIEntity>>()
     val character: LiveData<Status<CharacterUIEntity>> get() = _character
     private var characterId = DEFAULT_CHARACTER_ID
 

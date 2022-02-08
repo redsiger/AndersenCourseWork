@@ -5,23 +5,21 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.children
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentEpisodesListBinding
 import com.example.androidschool.andersencoursework.databinding.MergeToolbarBinding
 import com.example.androidschool.andersencoursework.di.appComponent
-import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragmentDirections
+import com.example.androidschool.andersencoursework.ui.characters.models.ListItem
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
-import com.example.androidschool.andersencoursework.ui.core.setupGridLayoutManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import com.example.androidschool.andersencoursework.util.InfiniteScrollListener
+import com.example.androidschool.util.UIState
 import javax.inject.Inject
 
 class EpisodesListFragment: BaseFragment(R.layout.fragment_episodes_list) {
@@ -38,7 +36,10 @@ class EpisodesListFragment: BaseFragment(R.layout.fragment_episodes_list) {
 
     @Inject lateinit var adapterFactory: EpisodesListAdapter.Factory
     private val mAdapter: EpisodesListAdapter by lazy {
-        adapterFactory.create {}
+        adapterFactory.create(
+            { id: Int -> Log.e("onClick", "$id") },
+            { Log.e("refresh", "refresh") }
+        )
     }
 
     override fun onAttach(context: Context) {
@@ -53,11 +54,7 @@ class EpisodesListFragment: BaseFragment(R.layout.fragment_episodes_list) {
 
         initToolbar()
         initList()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        setListListener()
+        setListRefresh()
     }
 
     private fun initToolbar() {
@@ -84,41 +81,101 @@ class EpisodesListFragment: BaseFragment(R.layout.fragment_episodes_list) {
     private fun initList() {
         val list = viewBinding.fragmentEpisodesListRecycler
 
-        context?.resources?.let {
-            setupGridLayoutManager(
-                list,
-                mAdapter,
-                it.getDimension(R.dimen.list_item_character_img_width)
+        with(list) {
+            adapter = mAdapter
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
             )
         }
 
-        lifecycleScope.launch{
-            viewModel.listData.collectLatest {
-                Log.e("EpisodesFragment", "collect: ${it.size}")
-                mAdapter.setList(it)
+        viewModel.uiState.observe(viewLifecycleOwner) {
+            render(it)
+        }
+
+        setListListener()
+    }
+
+    private fun render(state: UIState<List<ListItem>>) {
+        when (state.TAG) {
+            "EMPTY_PROGRESS" -> {
+                hideAll()
+                showLoading()
+                Log.e("EMPTY_PROGRESS", "${state.data}")
             }
+            "EMPTY_DATA" -> {
+                hideAll()
+                showEmptyData()
+                Log.e("EMPTY_DATA", "${state.data}")
+            }
+            "EMPTY_ERROR" -> {
+                hideAll()
+                showEmptyError()
+                Log.e("EMPTY_ERROR", "${state.data}")
+            }
+            "DATA" -> {
+                hideAll()
+                showData(state.data)
+                Log.e("DATA", "${state.data}")
+            }
+            "PAGE_PROGRESS" -> { Log.e("$this", "PAGE_PROGRESS") }
+            "ALL_DATA" -> { Log.e("$this", "ALL_DATA") }
+            "PAGE_ERROR" -> {
+                Log.e("$this", "PAGE_ERROR")
+            }
+            "REFRESH" -> {
+
+            }
+            else -> Log.e("$this", "unexpected state: $state")
         }
     }
 
-    private fun setListListener() {
-        val list = viewBinding.fragmentEpisodesListRecycler
+    private fun showData(data: List<ListItem>) {
+        viewBinding.fragmentEpisodesListRecycler.visibility = View.VISIBLE
+        mAdapter.setList(data)
+    }
 
-        if (list.layoutManager != null) {
-            viewBinding.fragmentEpisodesListRecycler.addOnScrollListener(object:
-                RecyclerView.OnScrollListener() {
-                val layoutManager = list.layoutManager as LinearLayoutManager
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val totalItemsCount = layoutManager.itemCount
-                    val visibleItemCount = layoutManager.childCount
-                    val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+    private fun showEmptyError() {
+        viewBinding.fragmentEpisodesEmptyError.visibility = View.VISIBLE
+    }
 
-                    viewModel.onScrollLoad(totalItemsCount, visibleItemCount, lastVisibleItem)
-                }
-            })
-        } else {
-
+    private fun hideAll() {
+        hideLoading()
+        viewBinding.fragmentEpisodesListRefreshContainer.children.forEach {
+            it.visibility = View.GONE
         }
+    }
+
+    private fun showEmptyData() {
+        viewBinding.fragmentEpisodesEmptyData.visibility = View.VISIBLE
+    }
+
+
+    private fun showLoading() {
+        viewBinding.fragmentEpisodesListRefresh.isRefreshing = true
+    }
+
+    private fun hideLoading() {
+        viewBinding.fragmentEpisodesListRefresh.isRefreshing = false
+    }
+
+    private fun setListListener() {
+        with(viewBinding.fragmentEpisodesListRecycler) {
+            addOnScrollListener(
+                InfiniteScrollListener({ viewModel.loadNewPage() }, layoutManager as LinearLayoutManager)
+            )
+        }
+
+
+    }
+
+    private fun setListRefresh() {
+        viewBinding.fragmentEpisodesListRefresh.setOnRefreshListener {
+            viewModel.refresh()
+        }
+
+        viewBinding.fragmentEpisodesEmptyErrorRetryBtn.setOnClickListener { viewModel.refresh() }
     }
 
     override fun onDestroyView() {

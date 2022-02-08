@@ -4,6 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/activity_main.xml" value="0.20520833333333333" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_characters_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_episodes_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/include_default_load_state.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/list_item_character.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/feature_characters/src/main/res/layout/fragment_characters_list.xml" value="0.5" />
         <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_characters_list.xml" value="0.25416666666666665" />
         <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_episodes_list.xml" value="0.264" />

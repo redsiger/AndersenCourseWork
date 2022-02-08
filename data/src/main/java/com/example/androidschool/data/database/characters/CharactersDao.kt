@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface CharactersDao {
 
     @Query("SELECT * FROM characters WHERE charId > :offset AND charId <= (:offset + :limit)")
-    fun getCharactersPagingTest(offset: Int, limit: Int): Flow<List<CharacterRoomEntity>>
+    fun getCharactersPagingStatus(offset: Int, limit: Int): List<CharacterRoomEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacter(character: CharacterRoomEntity)
@@ -19,7 +19,10 @@ interface CharactersDao {
     suspend fun insertCharacters(characters: List<CharacterRoomEntity>)
 
     @Query("SELECT * FROM characters WHERE charId > :offset AND charId <= (:offset + :limit)")
-    fun getCharactersPaging(offset: Int, limit: Int): Flow<List<CharacterRoomEntity>>
+    fun getCharactersPagingFlow(offset: Int, limit: Int): Flow<List<CharacterRoomEntity>>
+
+    @Query("SELECT * FROM characters WHERE charId > :offset AND charId <= (:offset + :limit)")
+    fun getCharactersPaging(offset: Int, limit: Int): List<CharacterRoomEntity>
 
     @Query("SELECT * FROM characters")
     fun getAll(): Flow<List<CharacterRoomEntity>>

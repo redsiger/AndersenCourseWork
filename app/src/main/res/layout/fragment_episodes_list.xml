@@ -13,10 +13,50 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_episodes_list_recycler"
+        <FrameLayout
+            android:id="@+id/fragment_episodes_list_refresh_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_episodes_list_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:id="@+id/fragment_episodes_empty_data"
+                android:text="Empty data"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:id="@+id/fragment_episodes_empty_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/fragment_episodes_empty_error_title"
+                    android:text="Empty error"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/fragment_episodes_empty_error_retry_btn"
+                    android:text="try again"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

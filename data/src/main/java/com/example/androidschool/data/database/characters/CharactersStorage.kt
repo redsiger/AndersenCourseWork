@@ -28,6 +28,6 @@ class CharactersStorage(
     }
 
     suspend fun getCharactersPaging(limit: Int, offset: Int): Flow<List<CharacterEntity>> {
-        return dao.getCharactersPaging(limit, offset).mapLatest { it.toDomainList() }
+        return dao.getCharactersPagingFlow(limit, offset).mapLatest { it.toDomainList() }
     }
 }

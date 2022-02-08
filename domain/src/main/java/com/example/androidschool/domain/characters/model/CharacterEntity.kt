@@ -12,5 +12,4 @@ data class CharacterEntity(
     val occupation: List<String>,
     val portrayed: String,
     val status: String,
-    val fromLocalStorage: Boolean = false
 )

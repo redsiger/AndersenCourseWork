@@ -16,7 +16,8 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/fragment_characters_list_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fragment_characters_list_recycler"
