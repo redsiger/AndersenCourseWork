@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/episodes_nav_graph"
-    app:startDestination="@id/episodesList">
+    app:startDestination="@id/charactersListFragment">
 
     <include app:graph="@navigation/search_nav_graph" />
 
@@ -12,17 +12,27 @@
     </action>
 
     <fragment
-        android:id="@+id/episodesList"
-        android:name="com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListStateFragment"
-        android:label="@string/episodes_nav_graph_title" >
+        android:id="@+id/charactersListFragment"
+        android:name="com.example.androidschool.andersencoursework.ui.characters.list.CharactersListStateFragment"
+        android:label="@string/episodes_fragment_title">
         <action
-            android:id="@+id/action_episodesList_to_episodeDetails"
-            app:destination="@id/episodeDetails" />
+            android:id="@+id/fromListToDetails"
+            app:destination="@id/characterDetailsFragment">
+            <argument
+                android:name="characterId"
+                app:argType="integer"
+                app:nullable="false"/>
+        </action>
     </fragment>
 
-
     <fragment
-        android:id="@+id/episodeDetails"
-        android:name="com.example.androidschool.andersencoursework.ui.edpisode.details.EpisodeDetails"
-        android:label="EpisodeDetails" />
+        android:id="@+id/characterDetailsFragment"
+        android:name="com.example.androidschool.andersencoursework.ui.characters.details.CharacterDetailsFragment"
+        android:label="CharacterDetailsFragment" >
+        <argument
+            android:name="characterId"
+            app:argType="integer"
+            app:nullable="false"/>
+    </fragment>
+
 </navigation>

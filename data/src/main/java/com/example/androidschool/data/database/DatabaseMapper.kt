@@ -4,7 +4,6 @@ import com.example.androidschool.data.database.characters.model.CharacterRoomEnt
 import com.example.androidschool.data.database.episodes.model.EpisodeRoomEntity
 import com.example.androidschool.data.network.characters.model.CharacterNetworkEntity
 import com.example.androidschool.domain.characters.model.CharacterEntity
-import com.example.androidschool.domain.characters.model.CharactersEntityRemoteKeys
 import com.example.androidschool.domain.episode.model.EpisodeEntity
 
 class DatabaseMapper {

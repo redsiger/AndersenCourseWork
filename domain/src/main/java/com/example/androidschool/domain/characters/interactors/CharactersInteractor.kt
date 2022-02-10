@@ -2,7 +2,6 @@ package com.example.androidschool.domain.characters.interactors
 
 import com.example.androidschool.domain.characters.CharactersRepository
 import com.example.androidschool.domain.characters.model.CharacterEntity
-import com.example.androidschool.domain.characters.model.CharactersEntityRemoteKeys
 import com.example.androidschool.util.NetworkResponse
 import kotlinx.coroutines.flow.Flow
 

@@ -1,9 +1,7 @@
 package com.example.androidschool.andersencoursework.di
 
 import com.example.androidschool.andersencoursework.ui.characters.details.CharacterDetailsFragment
-import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragment
-import com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListFragment
-import com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListStateFragment
+import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListStateFragment
 import com.example.androidschool.andersencoursework.ui.favorites.FavoritesFragment
 import com.example.androidschool.andersencoursework.ui.seacrh.SearchFragment
 import com.example.androidschool.data.di.DataComponent
@@ -25,9 +23,7 @@ interface AppComponent {
     fun dataComponent(): DataComponent.Factory
 
     fun inject(fragment: CharacterDetailsFragment)
-    fun inject(fragment: CharactersListFragment)
-    fun inject(fragment: EpisodesListFragment)
-    fun inject(fragment: EpisodesListStateFragment)
+    fun inject(fragment: CharactersListStateFragment)
     fun inject(fragment: FavoritesFragment)
     fun inject(fragment: SearchFragment)
 }

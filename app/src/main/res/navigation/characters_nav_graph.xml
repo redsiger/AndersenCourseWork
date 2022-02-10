@@ -13,10 +13,10 @@
 
     <fragment
         android:id="@+id/charactersListFragment"
-        android:name="com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragment"
+        android:name="com.example.androidschool.andersencoursework.ui.characters.list.CharactersListStateFragment"
         android:label="@string/characters_fragment_title">
         <action
-            android:id="@+id/action_characters_list_to_details"
+            android:id="@+id/fromListToDetails"
             app:destination="@id/characterDetailsFragment">
             <argument
                 android:name="characterId"

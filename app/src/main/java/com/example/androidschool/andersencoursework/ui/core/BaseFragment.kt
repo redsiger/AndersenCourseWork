@@ -1,18 +1,14 @@
 package com.example.androidschool.andersencoursework.ui.core
 
+import android.content.Context
 import android.view.MenuItem
-import android.view.ViewTreeObserver
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListPagingAdapter
-import com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListAdapter
-import com.example.androidschool.andersencoursework.ui.seacrh.SearchAdapter
+import com.example.androidschool.andersencoursework.util.InfiniteScrollListener
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
 
 private const val DEFAULT_FRAGMENT_TITLE = ""
@@ -74,105 +70,31 @@ open class BaseFragment(resId: Int): Fragment(resId) {
     }
 }
 
-fun BaseFragment.setupGridLayoutManager(recyclerView: RecyclerView, recyclerAdapter: ConcatAdapter, itemWidth: Float) {
+fun RecyclerView.initRecyclerPaging(
+    itemWidthResId: Int,
+    context: Context,
+    actionLoadMore: () -> Unit
+    ) {
+    val displayMetrics = context.resources.displayMetrics
+    val itemWidthPx = context.resources.getDimension(itemWidthResId)
 
-    recyclerView.viewTreeObserver.addOnGlobalLayoutListener(
-        object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val width = recyclerView.width
-                val count = recyclerView.childCount
-                if (width > 0 && itemWidth > 0) {
-                    recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    val spanCountWithOffset = width / itemWidth
-                    val spanCount = spanCountWithOffset.toInt()
+    val screenWidthPx = displayMetrics.widthPixels
+    val columnsCount = (screenWidthPx / itemWidthPx).toInt()
+    val itemsWidthPx = columnsCount * itemWidthPx
 
-                    val itemsWidth = spanCount * itemWidth
-                    val rest = width - itemsWidth
-                    val offset = rest / (spanCount * 2)
+    val rest = screenWidthPx - itemsWidthPx
+    val offset = rest / (columnsCount * 2)
 
-                    recyclerView.adapter = recyclerAdapter
-                    val gridLayoutManager = GridLayoutManager(requireContext(), spanCount)
-                    recyclerView.layoutManager = gridLayoutManager
-                    recyclerView.addItemDecoration(OffsetRecyclerDecorator(offset.toInt(), gridLayoutManager, false))
-                }
-            }
-        }
-    )
+    val linearLayoutManager = GridLayoutManager(context, columnsCount)
+
+    this.apply {
+        layoutManager = linearLayoutManager
+        addItemDecoration(
+            OffsetRecyclerDecorator(offset.toInt(), linearLayoutManager, false)
+        )
+        addOnScrollListener(
+            InfiniteScrollListener(actionLoadMore, linearLayoutManager)
+        )
+    }
 }
 
-fun BaseFragment.setupGridLayoutManager(recyclerView: RecyclerView, recyclerAdapter: CharactersListPagingAdapter, itemWidth: Float) {
-
-    recyclerView.viewTreeObserver.addOnGlobalLayoutListener(
-        object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val width = recyclerView.width
-                val count = recyclerView.childCount
-                if (width > 0 && itemWidth > 0) {
-                    recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    val spanCountWithOffset = width / itemWidth
-                    val spanCount = spanCountWithOffset.toInt()
-
-                    val itemsWidth = spanCount * itemWidth
-                    val rest = width - itemsWidth
-                    val offset = rest / (spanCount * 2)
-
-                    recyclerView.adapter = recyclerAdapter
-                    val gridLayoutManager = GridLayoutManager(requireContext(), spanCount)
-                    recyclerView.layoutManager = gridLayoutManager
-                    recyclerView.addItemDecoration(OffsetRecyclerDecorator(offset.toInt(), gridLayoutManager, false))
-                }
-            }
-        }
-    )
-}
-
-fun BaseFragment.setupGridLayoutManager(recyclerView: RecyclerView, recyclerAdapter: SearchAdapter, itemWidth: Float) {
-
-    recyclerView.viewTreeObserver.addOnGlobalLayoutListener(
-        object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val width = recyclerView.width
-                val count = recyclerView.childCount
-                if (width > 0 && itemWidth > 0) {
-                    recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    val spanCountWithOffset = width / itemWidth
-                    val spanCount = spanCountWithOffset.toInt()
-
-                    val itemsWidth = spanCount * itemWidth
-                    val rest = width - itemsWidth
-                    val offset = rest / (spanCount * 2)
-
-                    recyclerView.adapter = recyclerAdapter
-                    val gridLayoutManager = GridLayoutManager(requireContext(), spanCount)
-                    recyclerView.layoutManager = gridLayoutManager
-                    recyclerView.addItemDecoration(OffsetRecyclerDecorator(offset.toInt(), gridLayoutManager, false))
-                }
-            }
-        }
-    )
-}
-
-fun BaseFragment.setupGridLayoutManager(recyclerView: RecyclerView, recyclerAdapter: EpisodesListAdapter, itemWidth: Float) {
-
-    recyclerView.viewTreeObserver.addOnGlobalLayoutListener(
-        object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val width = recyclerView.width
-                if (width > 0 && itemWidth > 0) {
-                    recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    val spanCountWithOffset = width / itemWidth
-                    val spanCount = spanCountWithOffset.toInt()
-
-                    val itemsWidth = spanCount * itemWidth
-                    val rest = width - itemsWidth
-                    val offset = rest / (spanCount * 2)
-
-                    recyclerView.adapter = recyclerAdapter
-                    val gridLayoutManager = GridLayoutManager(requireContext(), spanCount)
-                    recyclerView.layoutManager = gridLayoutManager
-                    recyclerView.addItemDecoration(OffsetRecyclerDecorator(offset.toInt(), gridLayoutManager, false))
-                }
-            }
-        }
-    )
-}

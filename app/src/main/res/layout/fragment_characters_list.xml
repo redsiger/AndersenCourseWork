@@ -2,27 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <include layout="@layout/merge_toolbar"/>
-
-    <View
-        android:id="@+id/activity_main_bottom_nav_decor"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorTertiary" />
+    <include layout="@layout/merge_decor_line"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/fragment_characters_list_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="?attr/colorSurface">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_characters_list_recycler"
+        <FrameLayout
+            android:id="@+id/fragment_characters_list_refresh_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_characters_list_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <include
+                android:id="@+id/errorBlock"
+                layout="@layout/include_default_empty_error" />
+
+        </FrameLayout>
+
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

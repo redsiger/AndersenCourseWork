@@ -14,7 +14,6 @@ import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentSearchBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
-import com.example.androidschool.andersencoursework.ui.core.setupGridLayoutManager
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,11 +60,11 @@ class SearchFragment : BaseFragment(R.layout.fragment_search), CoroutineScope {
     }
 
     private fun initSearchResultList() {
-        setupGridLayoutManager(
-            viewBinding.fragmentSearchResultsList,
-            mAdapter,
-            requireContext().resources.getDimension(R.dimen.list_item_character_img_width)
-        )
+//        setupGridLayoutManager(
+//            viewBinding.fragmentSearchResultsList,
+//            mAdapter,
+//            requireContext().resources.getDimension(R.dimen.list_item_character_img_width)
+//        )
     }
 
     private fun search(query: String) {

@@ -1,8 +1,7 @@
-package com.example.androidschool.andersencoursework.ui.edpisode.list
+package com.example.androidschool.andersencoursework.ui.characters.list
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.children
@@ -12,17 +11,18 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidschool.andersencoursework.R
-import com.example.androidschool.andersencoursework.databinding.FragmentEpisodesListBinding
+import com.example.androidschool.andersencoursework.databinding.FragmentCharactersListBinding
 import com.example.androidschool.andersencoursework.databinding.MergeToolbarBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.ui.characters.models.ListItem
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
+import com.example.androidschool.andersencoursework.ui.core.initRecyclerPaging
 import com.example.androidschool.andersencoursework.util.InfiniteScrollListener
 import javax.inject.Inject
 
-class EpisodesListStateFragment: BaseFragment(R.layout.fragment_episodes_list) {
+class CharactersListStateFragment: BaseFragment(R.layout.fragment_characters_list) {
 
-    private var _binding: FragmentEpisodesListBinding? = null
+    private var _binding: FragmentCharactersListBinding? = null
     private val viewBinding get() = _binding!!
     private var _toolbarBinding: MergeToolbarBinding? = null
     private val toolbarBinding get() = _toolbarBinding!!
@@ -30,18 +30,21 @@ class EpisodesListStateFragment: BaseFragment(R.layout.fragment_episodes_list) {
     private val mNavController: NavController by lazy { findNavController() }
 
     private val mScrollListener: InfiniteScrollListener by lazy {
-        InfiniteScrollListener({ viewModel.loadNewPage() }, viewBinding.fragmentEpisodesListRecycler.layoutManager as LinearLayoutManager)
+        InfiniteScrollListener({ viewModel.loadNewPage() }, viewBinding.fragmentCharactersListRecycler.layoutManager as LinearLayoutManager)
     }
 
     @Inject
-    lateinit var viewModelFactory: EpisodesListStateViewModel.Factory
-    private val viewModel: EpisodesListStateViewModel by viewModels { viewModelFactory }
+    lateinit var viewModelFactory: CharactersListStateViewModel.Factory
+    private val viewModel: CharactersListStateViewModel by viewModels { viewModelFactory }
 
-    @Inject lateinit var adapterFactory: EpisodesListAdapter.Factory
-    private val mAdapter: EpisodesListAdapter by lazy {
-        adapterFactory.create(
-            { id: Int -> Log.e("onClick", "$id") },
-            { Log.e("refresh", "refresh") }
+    @Inject lateinit var pagingAdapterFactory: CharactersListPagingAdapter.Factory
+    private val mPagingAdapter: CharactersListPagingAdapter by lazy {
+        pagingAdapterFactory.create(
+            { id: Int ->
+                val action = CharactersListStateFragmentDirections.fromListToDetails(id)
+                mNavController.navigate(action)
+            },
+            { viewModel.loadNewPage() }
         )
     }
 
@@ -52,71 +55,61 @@ class EpisodesListStateFragment: BaseFragment(R.layout.fragment_episodes_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentEpisodesListBinding.bind(view)
+        _binding = FragmentCharactersListBinding.bind(view)
         _toolbarBinding = MergeToolbarBinding.bind(viewBinding.root)
 
         initToolbar()
         initList()
-        submitListRefresh()
+        addListRefresher()
+        hideAll()
     }
 
     private fun initToolbar() {
 
-        val onItemClick = { item: MenuItem ->
-            when(item.itemId) {
-                R.id.menu_item_search -> {
-                    val action = EpisodesListStateFragmentDirections.actionGlobalToSearch()
-                    mNavController.navigate(action)
-                    true
-                }
-                else -> false
-            }
-        }
-
         setupMainToolbar(
-            toolbarBinding.toolbar,
-            getString(R.string.episodes_fragment_title),
-            R.menu.search_menu,
-            onItemClick
+            toolbar = toolbarBinding.toolbar,
+            title = getString(R.string.characters_fragment_title),
+            menuId = R.menu.search_menu,
+            onItemClick = { item: MenuItem ->
+                when(item.itemId) {
+                    R.id.menu_item_search -> {
+                        val action =
+                            CharactersListStateFragmentDirections.actionGlobalToSearch()
+                        mNavController.navigate(action)
+                        true
+                    }
+                    else -> false
+                }
+            }
         )
     }
 
     private fun initList() {
-        val list = viewBinding.fragmentEpisodesListRecycler
-
-        with(list) {
-            adapter = mAdapter
-            layoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.VERTICAL,
-                false
-            )
+        with(viewBinding.fragmentCharactersListRecycler) {
+            adapter = mPagingAdapter
+            initRecyclerPaging(R.dimen.list_item_character_img_width, requireContext()
+            ) { viewModel.loadNewPage() }
         }
 
-        submitListListener()
+        addScrollListener()
         collectStates()
     }
 
     private fun collectStates() {
         lifecycleScope.launchWhenStarted {
-            viewModel.uiState.collect { state ->
-                handleState(state)
-            }
+            viewModel.uiState.collect { state -> handleState(state) }
         }
     }
 
-    private fun submitListListener() {
-        with(viewBinding.fragmentEpisodesListRecycler) {
+    private fun addScrollListener() {
+        with(viewBinding.fragmentCharactersListRecycler) {
             addOnScrollListener(mScrollListener)
         }
     }
 
-    private fun submitListRefresh() {
-        viewBinding.fragmentEpisodesListRefresh.setOnRefreshListener {
-            viewModel.refresh()
-        }
-
-        viewBinding.fragmentEpisodesEmptyErrorRetryBtn.setOnClickListener { viewModel.refresh() }
+    private fun addListRefresher() {
+        viewBinding.fragmentCharactersListRefresh.setOnRefreshListener { viewModel.refresh() }
+        viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener { viewModel.refresh() }
     }
 
     private fun handleState(state: UIStatePaging) {
@@ -135,95 +128,87 @@ class EpisodesListStateFragment: BaseFragment(R.layout.fragment_episodes_list) {
     private fun handleEmptyLoading(state: UIStatePaging.EmptyLoading) {
         hideAll()
         showLoading()
-        Log.e("UIStatePaging.EmptyLoading", "state: ${state.data.size},  offset: ${state.offset}, ${state.data}")
         viewModel.refresh()
     }
 
     private fun handleEmptyError(state: UIStatePaging.EmptyError) {
         hideLoading()
         showEmptyError()
-        Log.e("UIStatePaging.EmptyError", "state:  offset: ${state.offset}, ${state.data}")
     }
 
     private fun handleEmptyData(state: UIStatePaging.EmptyData) {
         hideLoading()
         showEmptyData()
-        Log.e("UIStatePaging.EmptyData", "state: ${state.data.size},  offset: ${state.offset}, ${state.data}")
     }
 
     private fun handlePartialData(state: UIStatePaging.PartialData) {
         hideLoading()
         showPartialData(state.data)
-        Log.e("UIStatePaging.PartialData", "state: ${state.data.size},  offset: ${state.offset}, ${state.data}")
     }
 
     private fun handleLoadingPartialData(state: UIStatePaging.LoadingPartialData) {
         hideLoading()
         showPartialDataLoading(state.data)
-        Log.e("UIStatePaging.LoadingPartialData", "state: ${state.data.size},  offset: ${state.offset}, ${state.data}")
     }
 
     private fun handleLoadingPartialDataError(state: UIStatePaging.LoadingPartialDataError) {
         hideLoading()
         showPartialDataError(state.data)
-        Log.e("UIStatePaging.LoadingPartialDataError", "state: ${state.data.size},  offset: ${state.offset}, ${state.data}")
     }
 
     private fun handleAllData(state: UIStatePaging.AllData) {
         hideLoading()
         showAllData(state.data)
-        Log.e("UIStatePaging.AllData", "state: ${state.data.size},  offset: ${state.offset}, ${state.data}")
     }
 
     private fun handleRefresh(state: UIStatePaging.Refresh) {
         hideAll()
-        mAdapter.submitList(state.data)
+        mPagingAdapter.submitList(state.data)
         showLoading()
         mScrollListener.reset()
-        Log.e("UIStatePaging.Refresh", "state: ${state.data.size},  offset: ${state.offset}, ${state.data}")
     }
 
     private fun hideAll() {
         hideLoading()
-        viewBinding.fragmentEpisodesListRefreshContainer.children.forEach {
+        viewBinding.fragmentCharactersListRefreshContainer.children.forEach {
             it.visibility = View.GONE
         }
     }
 
     private fun showLoading() {
-        viewBinding.fragmentEpisodesListRefresh.isRefreshing = true
+        viewBinding.fragmentCharactersListRefresh.isRefreshing = true
     }
 
     private fun hideLoading() {
-        viewBinding.fragmentEpisodesListRefresh.isRefreshing = false
+        viewBinding.fragmentCharactersListRefresh.isRefreshing = false
     }
 
     private fun showEmptyData() {
-        viewBinding.fragmentEpisodesEmptyData.visibility = View.VISIBLE
+        viewBinding.errorBlock.fragmentEmptyData.visibility = View.VISIBLE
     }
 
     private fun showEmptyError() {
-        viewBinding.fragmentEpisodesEmptyError.visibility = View.VISIBLE
+        viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE
     }
 
     private fun showPartialData(data: List<ListItem>) {
-        viewBinding.fragmentEpisodesListRecycler.visibility = View.VISIBLE
-        mAdapter.submitList(data)
+        viewBinding.fragmentCharactersListRecycler.visibility = View.VISIBLE
+        mPagingAdapter.submitList(data)
     }
 
     private fun showPartialDataLoading(data: List<ListItem>) {
-        viewBinding.fragmentEpisodesListRecycler.visibility = View.VISIBLE
-        mAdapter.submitList(data)
+        viewBinding.fragmentCharactersListRecycler.visibility = View.VISIBLE
+        mPagingAdapter.submitList(data)
     }
 
     private fun showPartialDataError(data: List<ListItem>) {
-        viewBinding.fragmentEpisodesListRecycler.visibility = View.VISIBLE
-        mAdapter.submitList(data)
+        viewBinding.fragmentCharactersListRecycler.visibility = View.VISIBLE
+        mPagingAdapter.submitList(data)
     }
 
     private fun showAllData(data: List<ListItem>) {
-        viewBinding.fragmentEpisodesListRecycler.visibility = View.VISIBLE
-        mAdapter.submitList(data)
+        viewBinding.fragmentCharactersListRecycler.visibility = View.VISIBLE
+        mPagingAdapter.submitList(data)
     }
 
     override fun onDestroyView() {
