@@ -18,5 +18,7 @@
     <string name="fragment_search_hint">Search for characters/episodes…</string>
     <string name="load_error">Oops</string>
     <string name="try_again">Try again</string>
+    <string name="default_error_message">Something went wrong</string>
+    <string name="default_emptyData_message">Nothing to show here</string>
 
 </resources>

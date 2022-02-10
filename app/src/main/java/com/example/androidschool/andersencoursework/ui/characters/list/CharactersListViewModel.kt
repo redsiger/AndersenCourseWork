@@ -2,14 +2,17 @@ package com.example.androidschool.andersencoursework.ui.characters.list
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.andersencoursework.ui.characters.models.ListItem
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
+import com.example.androidschool.andersencoursework.util.UIStatePaging
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
 import com.example.androidschool.util.NetworkResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,14 +24,22 @@ class CharactersListStateViewModel(
     private val mapper: UIMapper
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow<UIStatePaging>(UIStatePaging.EmptyLoading())
-    val uiState: StateFlow<UIStatePaging> get() = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UIStatePaging<CharacterUIEntity>>(UIStatePaging.EmptyLoading())
+    val uiState: StateFlow<UIStatePaging<CharacterUIEntity>> get() = _uiState.asStateFlow()
+
+
+    init {
+        viewModelScope.launch {
+            val state = uiState.collectLatest {
+                Log.e("CURRENT STATE", "$it")
+            }
+        }
+    }
 
     private val currentOffset get() = uiState.value.offset
     private val currentData get() = uiState.value.data
 
     fun refresh() {
-        Log.e("refresh", "start: ${uiState.value}")
         _uiState.value = UIStatePaging.Refresh(currentData)
         viewModelScope.launch(Dispatchers.IO) {
             val response = interactor.getCharactersPagingState(currentOffset, LIMIT)
@@ -44,7 +55,8 @@ class CharactersListStateViewModel(
                 // check for local data
                 is NetworkResponse.Error -> {
                     val data = response.data.map(mapper::mapCharacterEntityToListItem)
-                    _uiState.value = UIStatePaging.LoadingPartialDataError(
+                    if (data.isEmpty()) _uiState.value = UIStatePaging.EmptyError(currentData, currentOffset, response.exception)
+                    else _uiState.value = UIStatePaging.LoadingPartialDataError(
                         data,
                         currentOffset,
                         response.exception
@@ -52,7 +64,6 @@ class CharactersListStateViewModel(
                 }
             }
         }
-        Log.e("refresh", "end: ${uiState.value}")
     }
 
     fun loadNewPage() {
@@ -61,29 +72,31 @@ class CharactersListStateViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             if (_uiState.value is UIStatePaging.PartialData || _uiState.value is UIStatePaging.LoadingPartialDataError) {
                 _uiState.value = UIStatePaging.LoadingPartialData(
-                    currentData
-                        .filter { it is ListItem.CharacterItem } + ListItem.Loading,
-                    currentOffset)
+                    data = currentData.filter { it is ListItem.Item } + ListItem.Loading(),
+                    offset = currentOffset
+                )
                 val response = interactor.getCharactersPagingState(currentOffset + LIMIT, LIMIT)
                 when (response) {
                     // check for remote data
                     is NetworkResponse.Success -> {
                         val data = response.data.map(mapper::mapCharacterEntityToListItem)
                         // check for end of data
-                        if (data.size < LIMIT) _uiState.value = UIStatePaging.AllData(currentData
-                            .filter { it is ListItem.CharacterItem } + data,
-                            currentOffset + LIMIT
+                        if (data.size < LIMIT) _uiState.value = UIStatePaging.AllData(
+                            data = currentData.filter { it is ListItem.Item } + data,
+                            offset = currentOffset + LIMIT
                         )
                         else _uiState.value = UIStatePaging.PartialData(currentData
-                            .filter { it is ListItem.CharacterItem } + data,
+                            .filter { it is ListItem.Item } + data,
                             currentOffset + LIMIT)
                     }
                     // check for local data
                     is NetworkResponse.Error -> {
                         val error = response.exception
-                        _uiState.value = UIStatePaging.LoadingPartialDataError(currentData
-                            .filter { it is ListItem.CharacterItem } + ListItem.Error(error),
-                            currentOffset, error)
+                        _uiState.value = UIStatePaging.LoadingPartialDataError(
+                            data = currentData.filter { it is ListItem.Item } + ListItem.Error(error),
+                            offset = currentOffset,
+                            error = error
+                        )
                     }
                 }
 
@@ -99,63 +112,5 @@ class CharactersListStateViewModel(
             require(modelClass == CharactersListStateViewModel::class.java)
             return CharactersListStateViewModel(charactersInteractor, mapper) as T
         }
-    }
-}
-
-sealed class UIStatePaging {
-
-    abstract val data: List<ListItem>
-    abstract val offset: Int
-    abstract fun copy(): UIStatePaging
-
-    data class EmptyLoading(
-        override val data: List<ListItem> = emptyList(),
-        override val offset: Int = START_OFFSET
-    ): UIStatePaging() {
-        override fun copy(): UIStatePaging = copy()
-    }
-    data class EmptyData(
-        override val data: List<ListItem> = emptyList(),
-        override val offset: Int = START_OFFSET
-    ): UIStatePaging() {
-        override fun copy(): UIStatePaging = copy()
-    }
-    data class EmptyError(
-        override val data: List<ListItem>,
-        override val offset: Int = START_OFFSET,
-        val error: Exception
-    ): UIStatePaging() {
-        override fun copy(): UIStatePaging = copy()
-    }
-    data class PartialData(
-        override val data: List<ListItem>,
-        override val offset: Int
-    ): UIStatePaging() {
-        override fun copy(): UIStatePaging = copy()
-    }
-    data class LoadingPartialData(
-        override val data: List<ListItem>,
-        override val offset: Int
-    ): UIStatePaging() {
-        override fun copy(): UIStatePaging = copy()
-    }
-    data class LoadingPartialDataError(
-        override val data: List<ListItem>,
-        override val offset: Int,
-        val error: Exception
-    ): UIStatePaging() {
-        override fun copy(): UIStatePaging = copy()
-    }
-    data class AllData(
-        override val data: List<ListItem>,
-        override val offset: Int
-    ): UIStatePaging() {
-        override fun copy(): UIStatePaging = copy()
-    }
-    data class Refresh(
-        override val data: List<ListItem>,
-        override val offset: Int = START_OFFSET
-    ): UIStatePaging() {
-        override fun copy(): UIStatePaging = copy()
     }
 }

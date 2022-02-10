@@ -1,8 +1,8 @@
 package com.example.androidschool.andersencoursework.ui.characters.models
 
-sealed class ListItem {
+sealed class ListItem<T> {
 
-    data class CharacterItem(val character: CharacterUIEntity): ListItem()
-    data class Error(val error: Exception): ListItem()
-    object Loading: ListItem()
+    data class Item<T>(val character: T): ListItem<T>()
+    data class Error<T>(val error: Exception): ListItem<T>()
+    class Loading<T>: ListItem<T>()
 }

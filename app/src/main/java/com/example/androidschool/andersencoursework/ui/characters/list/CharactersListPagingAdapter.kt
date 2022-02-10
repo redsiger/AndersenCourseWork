@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.example.androidschool.andersencoursework.databinding.IncludeDefaultLoadStateBinding
 import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding
+import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.andersencoursework.ui.characters.models.ListItem
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -22,16 +23,16 @@ class CharactersListPagingAdapter @AssistedInject constructor (
     private val glide: RequestManager,
     @Assisted("onClick") private val onClick: (id: Int) -> Unit,
     @Assisted("refresh") private val refresh: () -> Unit
-): ListAdapter<ListItem, RecyclerView.ViewHolder>(ListItemDiff) {
+): ListAdapter<ListItem<CharacterUIEntity>, RecyclerView.ViewHolder>(ListItemDiff) {
 
-    companion object ListItemDiff: DiffUtil.ItemCallback<ListItem>() {
-        override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
-            return if (oldItem is ListItem.CharacterItem && newItem is ListItem.CharacterItem) {
+    companion object ListItemDiff: DiffUtil.ItemCallback<ListItem<CharacterUIEntity>>() {
+        override fun areItemsTheSame(oldItem: ListItem<CharacterUIEntity>, newItem: ListItem<CharacterUIEntity>): Boolean {
+            return if (oldItem is ListItem.Item && newItem is ListItem.Item) {
                 oldItem.character.charId == newItem.character.charId
             } else false
         }
-        override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
-            return if (oldItem is ListItem.CharacterItem && newItem is ListItem.CharacterItem) {
+        override fun areContentsTheSame(oldItem: ListItem<CharacterUIEntity>, newItem: ListItem<CharacterUIEntity>): Boolean {
+            return if (oldItem is ListItem.Item && newItem is ListItem.Item) {
                 oldItem.character == newItem.character
             } else false
         }
@@ -57,7 +58,7 @@ class CharactersListPagingAdapter @AssistedInject constructor (
 
     override fun getItemViewType(position: Int): Int {
         return when (currentList[position]) {
-            is ListItem.CharacterItem -> ITEM_HOLDER
+            is ListItem.Item -> ITEM_HOLDER
             is ListItem.Loading -> LOADING_HOLDER
             is ListItem.Error -> ERROR_HOLDER
         }
@@ -68,15 +69,15 @@ class CharactersListPagingAdapter @AssistedInject constructor (
         private val glide: RequestManager
         ): RecyclerView.ViewHolder(view) {
 
-        fun bind(item: ListItem) {
+        fun bind(item: ListItem<CharacterUIEntity>) {
             when(item) {
-                is ListItem.CharacterItem -> bindItem(item)
+                is ListItem.Item -> bindItem(item)
                 is ListItem.Loading -> bindLoading(item)
                 is ListItem.Error -> bindError(item)
             }
         }
 
-        private fun bindItem(item: ListItem.CharacterItem) {
+        private fun bindItem(item: ListItem.Item<CharacterUIEntity>) {
             val binding = ListItemCharacterBinding.bind(view)
 
             with(binding) {
@@ -90,7 +91,7 @@ class CharactersListPagingAdapter @AssistedInject constructor (
             view.setOnClickListener { onClick(item.character.charId) }
         }
 
-        private fun bindLoading(item: ListItem.Loading) {
+        private fun bindLoading(item: ListItem.Loading<CharacterUIEntity>) {
             val binding = IncludeDefaultLoadStateBinding.bind(view)
 
             with(binding) {
@@ -100,7 +101,7 @@ class CharactersListPagingAdapter @AssistedInject constructor (
             }
         }
 
-        private fun bindError(item: ListItem.Error) {
+        private fun bindError(item: ListItem.Error<CharacterUIEntity>) {
             val binding = IncludeDefaultLoadStateBinding.bind(view)
 
             with(binding) {

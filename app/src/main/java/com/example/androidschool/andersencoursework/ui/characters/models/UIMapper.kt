@@ -41,8 +41,8 @@ class UIMapper {
         )
     }
 
-    fun mapCharacterEntityToListItem(domainEntity: CharacterEntity): ListItem.CharacterItem {
-        return ListItem.CharacterItem(
+    fun mapCharacterEntityToListItem(domainEntity: CharacterEntity): ListItem.Item<CharacterUIEntity> {
+        return ListItem.Item(
             CharacterUIEntity(
                 appearance = domainEntity.appearance,
                 betterCallSaulAppearance = domainEntity.betterCallSaulAppearance,

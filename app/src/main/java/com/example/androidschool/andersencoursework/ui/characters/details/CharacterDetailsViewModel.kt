@@ -3,41 +3,34 @@ package com.example.androidschool.andersencoursework.ui.characters.details
 import androidx.lifecycle.*
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
+import com.example.androidschool.andersencoursework.util.UIState
 import com.example.androidschool.domain.characters.interactors.CharactersInteractor
-import com.example.androidschool.util.NetworkResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 private const val DEFAULT_CHARACTER_ID = -1
 
 class CharacterDetailsViewModel @Inject constructor(
-    private val charactersInteractor: CharactersInteractor
+    private val charactersInteractor: CharactersInteractor,
+    private val mapper: UIMapper
 ): ViewModel() {
 
-    private val mapper = UIMapper()
-    private var _character = MutableLiveData<NetworkResponse<CharacterUIEntity?>>()
-    val character: LiveData<NetworkResponse<CharacterUIEntity?>> get() = _character
+    private var _character = MutableStateFlow<UIState<CharacterUIEntity>>(UIState.InitialLoading)
+    val character: StateFlow<UIState<CharacterUIEntity>> get() = _character
     private var characterId = DEFAULT_CHARACTER_ID
 
-//    fun getCharacter(id: Int) {
-//        characterId = id
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val response = charactersInteractor.getCharacter(characterId)
-//
-//            _character.postValue(mapper.mapCharacterEntity(response.data))
-//        }
-//    }
 
 
     class Factory @Inject constructor(
-        private val charactersInteractor: CharactersInteractor
+        private val charactersInteractor: CharactersInteractor,
+        private val mapper: UIMapper
     ): ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             require(modelClass == CharacterDetailsViewModel::class.java)
-            return CharacterDetailsViewModel(charactersInteractor) as T
+            return CharacterDetailsViewModel(charactersInteractor, mapper) as T
         }
     }
 }

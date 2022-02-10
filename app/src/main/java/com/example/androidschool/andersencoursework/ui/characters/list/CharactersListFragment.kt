@@ -2,6 +2,7 @@ package com.example.androidschool.andersencoursework.ui.characters.list
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.children
@@ -14,13 +15,15 @@ import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentCharactersListBinding
 import com.example.androidschool.andersencoursework.databinding.MergeToolbarBinding
 import com.example.androidschool.andersencoursework.di.appComponent
+import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
 import com.example.androidschool.andersencoursework.ui.characters.models.ListItem
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.initRecyclerPaging
 import com.example.androidschool.andersencoursework.util.InfiniteScrollListener
+import com.example.androidschool.andersencoursework.util.UIStatePaging
 import javax.inject.Inject
 
-class CharactersListStateFragment: BaseFragment(R.layout.fragment_characters_list) {
+class CharactersListFragment: BaseFragment(R.layout.fragment_characters_list) {
 
     private var _binding: FragmentCharactersListBinding? = null
     private val viewBinding get() = _binding!!
@@ -41,7 +44,7 @@ class CharactersListStateFragment: BaseFragment(R.layout.fragment_characters_lis
     private val mPagingAdapter: CharactersListPagingAdapter by lazy {
         pagingAdapterFactory.create(
             { id: Int ->
-                val action = CharactersListStateFragmentDirections.fromListToDetails(id)
+                val action = CharactersListFragmentDirections.fromListToDetails(id)
                 mNavController.navigate(action)
             },
             { viewModel.loadNewPage() }
@@ -74,7 +77,7 @@ class CharactersListStateFragment: BaseFragment(R.layout.fragment_characters_lis
                 when(item.itemId) {
                     R.id.menu_item_search -> {
                         val action =
-                            CharactersListStateFragmentDirections.actionGlobalToSearch()
+                            CharactersListFragmentDirections.actionGlobalToSearch()
                         mNavController.navigate(action)
                         true
                     }
@@ -112,7 +115,7 @@ class CharactersListStateFragment: BaseFragment(R.layout.fragment_characters_lis
         viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener { viewModel.refresh() }
     }
 
-    private fun handleState(state: UIStatePaging) {
+    private fun handleState(state: UIStatePaging<CharacterUIEntity>) {
         when (state) {
             is UIStatePaging.EmptyLoading -> handleEmptyLoading(state)
             is UIStatePaging.EmptyData -> handleEmptyData(state)
@@ -125,43 +128,43 @@ class CharactersListStateFragment: BaseFragment(R.layout.fragment_characters_lis
         }
     }
 
-    private fun handleEmptyLoading(state: UIStatePaging.EmptyLoading) {
+    private fun handleEmptyLoading(state: UIStatePaging.EmptyLoading<CharacterUIEntity>) {
         hideAll()
         showLoading()
         viewModel.refresh()
     }
 
-    private fun handleEmptyError(state: UIStatePaging.EmptyError) {
-        hideLoading()
-        showEmptyError()
+    private fun handleEmptyError(state: UIStatePaging.EmptyError<CharacterUIEntity>) {
+        hideAll()
+        showEmptyError(state.error)
     }
 
-    private fun handleEmptyData(state: UIStatePaging.EmptyData) {
-        hideLoading()
+    private fun handleEmptyData(state: UIStatePaging.EmptyData<CharacterUIEntity>) {
+        hideAll()
         showEmptyData()
     }
 
-    private fun handlePartialData(state: UIStatePaging.PartialData) {
+    private fun handlePartialData(state: UIStatePaging.PartialData<CharacterUIEntity>) {
         hideLoading()
         showPartialData(state.data)
     }
 
-    private fun handleLoadingPartialData(state: UIStatePaging.LoadingPartialData) {
+    private fun handleLoadingPartialData(state: UIStatePaging.LoadingPartialData<CharacterUIEntity>) {
         hideLoading()
         showPartialDataLoading(state.data)
     }
 
-    private fun handleLoadingPartialDataError(state: UIStatePaging.LoadingPartialDataError) {
+    private fun handleLoadingPartialDataError(state: UIStatePaging.LoadingPartialDataError<CharacterUIEntity>) {
         hideLoading()
         showPartialDataError(state.data)
     }
 
-    private fun handleAllData(state: UIStatePaging.AllData) {
+    private fun handleAllData(state: UIStatePaging.AllData<CharacterUIEntity>) {
         hideLoading()
         showAllData(state.data)
     }
 
-    private fun handleRefresh(state: UIStatePaging.Refresh) {
+    private fun handleRefresh(state: UIStatePaging.Refresh<CharacterUIEntity>) {
         hideAll()
         mPagingAdapter.submitList(state.data)
         showLoading()
@@ -184,29 +187,35 @@ class CharactersListStateFragment: BaseFragment(R.layout.fragment_characters_lis
     }
 
     private fun showEmptyData() {
-        viewBinding.errorBlock.fragmentEmptyData.visibility = View.VISIBLE
+        viewBinding.errorBlock.root.visibility = View.VISIBLE
+        viewBinding.errorBlock.fragmentEmptyError.visibility = View.GONE
+        viewBinding.errorBlock.fragmentEmptyDataMessage.visibility = View.VISIBLE
+        viewBinding.errorBlock.fragmentEmptyDataMessage.text = getString(R.string.default_emptyData_message)
     }
 
-    private fun showEmptyError() {
+    private fun showEmptyError(error: Exception) {
+        viewBinding.errorBlock.root.visibility = View.VISIBLE
+        viewBinding.errorBlock.fragmentEmptyDataMessage.visibility = View.GONE
         viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE
+        viewBinding.errorBlock.fragmentEmptyErrorTitle.text = getString(R.string.default_error_message)
     }
 
-    private fun showPartialData(data: List<ListItem>) {
+    private fun showPartialData(data: List<ListItem<CharacterUIEntity>>) {
         viewBinding.fragmentCharactersListRecycler.visibility = View.VISIBLE
         mPagingAdapter.submitList(data)
     }
 
-    private fun showPartialDataLoading(data: List<ListItem>) {
+    private fun showPartialDataLoading(data: List<ListItem<CharacterUIEntity>>) {
         viewBinding.fragmentCharactersListRecycler.visibility = View.VISIBLE
         mPagingAdapter.submitList(data)
     }
 
-    private fun showPartialDataError(data: List<ListItem>) {
+    private fun showPartialDataError(data: List<ListItem<CharacterUIEntity>>) {
         viewBinding.fragmentCharactersListRecycler.visibility = View.VISIBLE
         mPagingAdapter.submitList(data)
     }
 
-    private fun showAllData(data: List<ListItem>) {
+    private fun showAllData(data: List<ListItem<CharacterUIEntity>>) {
         viewBinding.fragmentCharactersListRecycler.visibility = View.VISIBLE
         mPagingAdapter.submitList(data)
     }

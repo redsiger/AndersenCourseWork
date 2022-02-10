@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/charactersListFragment"
-        android:name="com.example.androidschool.andersencoursework.ui.characters.list.CharactersListStateFragment"
+        android:name="com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragment"
         android:label="@string/characters_fragment_title">
         <action
             android:id="@+id/fromListToDetails"
