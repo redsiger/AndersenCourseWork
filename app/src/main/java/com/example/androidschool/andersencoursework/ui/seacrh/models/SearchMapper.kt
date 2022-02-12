@@ -1,10 +1,10 @@
 package com.example.androidschool.andersencoursework.ui.seacrh.models
 
-import com.example.androidschool.domain.characters.model.CharacterEntity
+import com.example.androidschool.domain.characters.model.CharacterListItem
 
 class SearchMapper {
 
-    fun mapCharacterEntity(domainEntity: CharacterEntity): CharacterSearchEntity {
+    fun mapCharacterEntity(domainEntity: CharacterListItem): CharacterSearchEntity {
         return CharacterSearchEntity(
             appearance = domainEntity.appearance,
             betterCallSaulAppearance = domainEntity.betterCallSaulAppearance,

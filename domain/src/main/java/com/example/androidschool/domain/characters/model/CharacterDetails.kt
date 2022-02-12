@@ -1,6 +1,6 @@
 package com.example.androidschool.domain.characters.model
 
-data class CharacterEntity(
+data class CharacterDetails(
     val appearance: List<Int> = emptyList(),
     val betterCallSaulAppearance: List<Int> = emptyList(),
     val birthday: String = "",

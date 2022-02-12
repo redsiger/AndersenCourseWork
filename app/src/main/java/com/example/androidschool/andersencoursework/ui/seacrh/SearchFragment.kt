@@ -14,7 +14,7 @@ import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentSearchBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
-import com.example.androidschool.domain.characters.interactors.CharactersInteractor
+import com.example.androidschool.domain.characters.interactors.CharactersListInteractor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -32,10 +32,10 @@ class SearchFragment : BaseFragment(R.layout.fragment_search), CoroutineScope {
 
     private val mAdapter: SearchAdapter by lazy { SearchAdapter() }
 
-    @Inject lateinit var charactersInteractor: CharactersInteractor
+    @Inject lateinit var charactersListInteractor: CharactersListInteractor
 
     private val viewModel: SearchViewModel by viewModels {
-        SearchViewModel.Factory(charactersInteractor)
+        SearchViewModel.Factory(charactersListInteractor)
     }
 
     override fun onAttach(context: Context) {

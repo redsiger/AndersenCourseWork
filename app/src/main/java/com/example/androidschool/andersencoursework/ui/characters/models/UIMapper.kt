@@ -1,60 +1,56 @@
 package com.example.androidschool.andersencoursework.ui.characters.models
 
-import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
-import com.example.androidschool.domain.characters.model.CharacterEntity
+import com.example.androidschool.domain.characters.model.CharacterDetails
+import com.example.androidschool.domain.characters.model.CharacterListItem
 
 class UIMapper {
-
-    fun mapCharacterRoomEntity(roomEntity: CharacterRoomEntity): CharacterUIEntity {
-        return CharacterUIEntity(
-            appearance = roomEntity.appearance,
-            betterCallSaulAppearance = roomEntity.betterCallSaulAppearance,
-            birthday = roomEntity.birthday,
-            category = roomEntity.category,
-            charId = roomEntity.charId,
-            img = roomEntity.img,
-            name = roomEntity.name,
-            nickname = roomEntity.nickname,
-            occupation = roomEntity.occupation,
-            portrayed = roomEntity.portrayed,
-            status = roomEntity.status
+    
+    fun mapCharacterDetailEntity(entity: CharacterDetails): CharacterDetailsUI {
+        return CharacterDetailsUI(
+            appearance = entity.appearance,
+            betterCallSaulAppearance = entity.betterCallSaulAppearance,
+            birthday = entity.birthday,
+            category = entity.category,
+            charId = entity.charId,
+            img = entity.img,
+            name = entity.name,
+            nickname = entity.nickname,
+            occupation = entity.occupation,
+            portrayed = entity.portrayed,
+            status = entity.status
         )
     }
 
-    fun mapCharacterEntityList(list: List<CharacterEntity>): List<CharacterUIEntity> {
-        return list.map(::mapCharacterEntity)
-    }
-
-    fun mapCharacterEntity(domainEntity: CharacterEntity): CharacterUIEntity {
-        return CharacterUIEntity(
-            appearance = domainEntity.appearance,
-            betterCallSaulAppearance = domainEntity.betterCallSaulAppearance,
-            birthday = domainEntity.birthday,
-            category = domainEntity.category,
-            charId = domainEntity.charId,
-            img = domainEntity.img,
-            name = domainEntity.name,
-            nickname = domainEntity.nickname,
-            occupation = domainEntity.occupation,
-            portrayed = domainEntity.portrayed,
-            status = domainEntity.status
+    fun mapCharacterEntity(entity: CharacterListItem): CharacterListItemUI {
+        return CharacterListItemUI(
+            appearance = entity.appearance,
+            betterCallSaulAppearance = entity.betterCallSaulAppearance,
+            birthday = entity.birthday,
+            category = entity.category,
+            charId = entity.charId,
+            img = entity.img,
+            name = entity.name,
+            nickname = entity.nickname,
+            occupation = entity.occupation,
+            portrayed = entity.portrayed,
+            status = entity.status
         )
     }
 
-    fun mapCharacterEntityToListItem(domainEntity: CharacterEntity): ListItem.Item<CharacterUIEntity> {
+    fun mapCharacterEntityToListItem(entity: CharacterListItem): ListItem.Item<CharacterListItemUI> {
         return ListItem.Item(
-            CharacterUIEntity(
-                appearance = domainEntity.appearance,
-                betterCallSaulAppearance = domainEntity.betterCallSaulAppearance,
-                birthday = domainEntity.birthday,
-                category = domainEntity.category,
-                charId = domainEntity.charId,
-                img = domainEntity.img,
-                name = domainEntity.name,
-                nickname = domainEntity.nickname,
-                occupation = domainEntity.occupation,
-                portrayed = domainEntity.portrayed,
-                status = domainEntity.status
+            CharacterListItemUI(
+                appearance = entity.appearance,
+                betterCallSaulAppearance = entity.betterCallSaulAppearance,
+                birthday = entity.birthday,
+                category = entity.category,
+                charId = entity.charId,
+                img = entity.img,
+                name = entity.name,
+                nickname = entity.nickname,
+                occupation = entity.occupation,
+                portrayed = entity.portrayed,
+                status = entity.status
             )
         )
     }

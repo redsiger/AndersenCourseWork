@@ -2,11 +2,11 @@ package com.example.androidschool.andersencoursework.ui.characters.list
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
+import com.example.androidschool.andersencoursework.ui.characters.models.CharacterListItemUI
 import com.example.androidschool.andersencoursework.ui.characters.models.ListItem
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.util.UIStatePaging
-import com.example.androidschool.domain.characters.interactors.CharactersInteractor
+import com.example.androidschool.domain.characters.interactors.CharactersListInteractor
 import com.example.androidschool.util.NetworkResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,24 +20,23 @@ const val LIMIT = 10
 const val START_OFFSET = 0
 
 class CharactersListStateViewModel(
-    private  val interactor: CharactersInteractor,
+    private  val interactor: CharactersListInteractor,
     private val mapper: UIMapper
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow<UIStatePaging<CharacterUIEntity>>(UIStatePaging.EmptyLoading())
-    val uiState: StateFlow<UIStatePaging<CharacterUIEntity>> get() = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UIStatePaging<CharacterListItemUI>>(UIStatePaging.EmptyLoading())
+    val uiState: StateFlow<UIStatePaging<CharacterListItemUI>> get() = _uiState.asStateFlow()
 
+    private val currentOffset get() = uiState.value.offset
+    private val currentData get() = uiState.value.data
 
     init {
         viewModelScope.launch {
             val state = uiState.collectLatest {
-                Log.e("CURRENT STATE", "$it")
+                Log.e("CURRENT STATE", "dataSize:${it.data.size}, offset:${it.offset} $it")
             }
         }
     }
-
-    private val currentOffset get() = uiState.value.offset
-    private val currentData get() = uiState.value.data
 
     fun refresh() {
         _uiState.value = UIStatePaging.Refresh(currentData)
@@ -105,12 +104,12 @@ class CharactersListStateViewModel(
     }
 
     class Factory @Inject constructor(
-        private val charactersInteractor: CharactersInteractor,
+        private val charactersListInteractor: CharactersListInteractor,
         private val mapper: UIMapper
     ): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             require(modelClass == CharactersListStateViewModel::class.java)
-            return CharactersListStateViewModel(charactersInteractor, mapper) as T
+            return CharactersListStateViewModel(charactersListInteractor, mapper) as T
         }
     }
 }

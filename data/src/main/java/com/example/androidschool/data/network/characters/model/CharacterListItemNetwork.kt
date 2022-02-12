@@ -1,7 +1,8 @@
 package com.example.androidschool.data.network.characters.model
 
 
-import com.example.androidschool.domain.characters.model.CharacterEntity
+import com.example.androidschool.domain.characters.model.CharacterDetails
+import com.example.androidschool.domain.characters.model.CharacterListItem
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -30,8 +31,24 @@ data class CharacterNetworkEntity(
     @Json(name = "status")
     val status: String
 ) {
-    fun toDomainModel(): CharacterEntity {
-        return CharacterEntity(
+    fun toDomainModel(): CharacterListItem {
+        return CharacterListItem(
+            appearance = appearance,
+            betterCallSaulAppearance = betterCallSaulAppearance,
+            birthday = birthday,
+            category = category,
+            charId = charId,
+            img = img,
+            name = name,
+            nickname = nickname,
+            occupation = occupation,
+            portrayed = portrayed,
+            status = status
+        )
+    }
+
+    fun toDomainDetailsModel(): CharacterDetails {
+        return CharacterDetails(
             appearance = appearance,
             betterCallSaulAppearance = betterCallSaulAppearance,
             birthday = birthday,
@@ -47,6 +64,6 @@ data class CharacterNetworkEntity(
     }
 }
 
-fun List<CharacterNetworkEntity>.toDomainList(): List<CharacterEntity> {
+fun List<CharacterNetworkEntity>.toDomainList(): List<CharacterListItem> {
     return this.map { it.toDomainModel() }
 }

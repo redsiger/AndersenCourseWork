@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentCharacterDetailsBinding
 import com.example.androidschool.andersencoursework.di.appComponent
-import com.example.androidschool.andersencoursework.ui.characters.models.CharacterUIEntity
+import com.example.androidschool.andersencoursework.ui.characters.models.CharacterDetailsUI
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.util.UIState
 import kotlinx.coroutines.flow.collectLatest
@@ -50,7 +50,7 @@ class CharacterDetailsFragment: BaseFragment(R.layout.fragment_character_details
         }
     }
 
-    private fun handleState(state: UIState<CharacterUIEntity>) {
+    private fun handleState(state: UIState<CharacterDetailsUI>) {
         when (state) {
             is UIState.Success -> handleSuccess(state)
             is UIState.Error -> handleError(state)
@@ -62,25 +62,32 @@ class CharacterDetailsFragment: BaseFragment(R.layout.fragment_character_details
     private fun handleInitialLoading(state: UIState.InitialLoading) {
         hideAll()
         showLoading()
+        viewModel.loadCharacter(characterId)
     }
 
-    private fun handleRefresh(state: UIState.Refresh<CharacterUIEntity>) {
+    private fun handleRefresh(state: UIState.Refresh<CharacterDetailsUI>) {
         showLoading()
         showContent(state.currentData)
     }
 
-    private fun handleSuccess(state: UIState.Success<CharacterUIEntity>) {
+    private fun handleSuccess(state: UIState.Success<CharacterDetailsUI>) {
         hideLoading()
         showContent(state.data)
     }
 
-    private fun handleError(state: UIState.Error<CharacterUIEntity>) {
+    private fun handleError(state: UIState.Error<CharacterDetailsUI>) {
         hideLoading()
         showError(state.error, state.localData)
     }
 
     private fun hideAll() {
+        hideErrorBlock()
         viewBinding.characterDetailsMainContent.visibility = View.GONE
+    }
+
+    private fun hideErrorBlock() {
+        viewBinding.errorBlock.fragmentEmptyDataMessage.visibility = View.GONE
+        viewBinding.errorBlock.fragmentEmptyError.visibility = View.GONE
     }
 
     private fun showLoading() {
@@ -91,26 +98,35 @@ class CharacterDetailsFragment: BaseFragment(R.layout.fragment_character_details
         viewBinding.characterDetailsRefreshContainer.isRefreshing = false
     }
 
-    private fun showContent(data: CharacterUIEntity) {
+    private fun showContent(data: CharacterDetailsUI) {
+        hideErrorBlock()
         viewBinding.characterDetailsMainContent.visibility = View.VISIBLE
         with(viewBinding) {
             Glide.with(requireContext())
                 .load(data.img)
+                .centerCrop()
                 .into(characterPhoto)
             characterNickname.text = data.nickname
             characterName.text = data.name
         }
     }
 
-    private fun showError(error: Exception, localData: CharacterUIEntity) {
+    private fun showError(error: Exception, localData: CharacterDetailsUI) {
         hideAll()
-
+        showErrorBlock(error)
     }
 
+    private fun showErrorBlock(error: Exception) {
+        viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE
+        viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener { refresh() }
+    }
+
+    private fun refresh() {
+        showLoading()
+        viewModel.loadCharacter(characterId)
+    }
 
     private fun initBackBtn() {
         viewBinding.fragmentCharacterDetailsBackBtn.setOnClickListener { mNavController.navigateUp() }
     }
-
-
 }

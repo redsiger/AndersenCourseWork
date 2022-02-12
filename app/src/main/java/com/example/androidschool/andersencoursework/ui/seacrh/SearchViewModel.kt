@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.androidschool.andersencoursework.ui.seacrh.models.CharacterSearchEntity
 import com.example.androidschool.andersencoursework.ui.seacrh.models.SearchMapper
-import com.example.androidschool.domain.characters.interactors.CharactersInteractor
+import com.example.androidschool.domain.characters.interactors.CharactersListInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -12,14 +12,14 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SearchViewModel(
-    private val charactersInteractor: CharactersInteractor
+    private val charactersListInteractor: CharactersListInteractor
 ): ViewModel() {
 
     private val mapper = SearchMapper()
     private val coroutineContext = Dispatchers.IO
 
     fun getSearchResults(query: String): Flow<List<CharacterSearchEntity>> {
-        return charactersInteractor
+        return charactersListInteractor
             .searchCharactersByNameOrNickName(query)
             .map { list ->
                 list.map { mapper.mapCharacterEntity(it) }
@@ -28,11 +28,11 @@ class SearchViewModel(
     }
 
     class Factory @Inject constructor(
-        private val charactersInteractor: CharactersInteractor
+        private val charactersListInteractor: CharactersListInteractor
     ): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             require(modelClass == SearchViewModel::class.java)
-            return SearchViewModel(charactersInteractor) as T
+            return SearchViewModel(charactersListInteractor) as T
         }
 
     }

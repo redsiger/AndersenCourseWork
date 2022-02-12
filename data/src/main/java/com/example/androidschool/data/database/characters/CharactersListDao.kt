@@ -5,16 +5,20 @@ import com.example.androidschool.data.database.characters.model.CharacterRoomEnt
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface CharactersDao {
+interface CharactersListDao {
+
+    @Transaction
+    suspend fun insertAndReturnPage(
+        characters: List<CharacterRoomEntity>,
+        offset: Int,
+        limit: Int
+    ): List<CharacterRoomEntity> {
+        insertCharacters(characters)
+        return getCharactersPaging(offset)
+    }
 
     @Query("SELECT * FROM characters WHERE charId > :offset AND charId <= (:offset + :limit)")
     fun getCharactersPagingStatus(offset: Int, limit: Int): List<CharacterRoomEntity>
-
-    @Query("SELECT * FROM characters WHERE charId = :charId")
-    suspend fun getCharacter(charId: Int): List<CharacterRoomEntity>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCharacter(character: CharacterRoomEntity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCharacterWith(character: CharacterRoomEntity)
@@ -22,8 +26,8 @@ interface CharactersDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacters(characters: List<CharacterRoomEntity>)
 
-    @Query("SELECT * FROM characters WHERE charId > :offset AND charId <= (:offset + :limit)")
-    fun getCharactersPaging(offset: Int, limit: Int): List<CharacterRoomEntity>
+    @Query("SELECT * FROM characters WHERE character_offset = :offset")
+    fun getCharactersPaging(offset: Int): List<CharacterRoomEntity>
 
     @Query("SELECT * FROM characters")
     fun getAll(): Flow<List<CharacterRoomEntity>>

@@ -1,14 +1,17 @@
 package com.example.androidschool.data.database
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import com.example.androidschool.data.database.characters.CharactersDao
+import androidx.room.*
+import com.example.androidschool.data.database.characters.CharacterDetailsDao
+import com.example.androidschool.data.database.characters.CharactersListDao
+import com.example.androidschool.data.database.characters.model.CharacterDetailsRoom
 import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
 
-@Database(entities = [CharacterRoomEntity::class], version = 1)
+@Database(
+    entities = [CharacterRoomEntity::class, CharacterDetailsRoom::class],
+    version = 1,
+    exportSchema = true
+)
 @TypeConverters(RoomTypeConverters::class)
 abstract class AppDatabase: RoomDatabase() {
 
@@ -32,5 +35,6 @@ abstract class AppDatabase: RoomDatabase() {
         }
     }
 
-    abstract fun getCharactersDao(): CharactersDao
+    abstract fun getCharactersDao(): CharactersListDao
+    abstract fun getCharacterDetailsDao(): CharacterDetailsDao
 }

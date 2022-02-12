@@ -1,10 +1,12 @@
 package com.example.androidschool.data.database.characters.model
 
-import androidx.room.*
-import com.example.androidschool.domain.characters.model.CharacterEntity
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.example.androidschool.domain.characters.model.CharacterDetails
 
-@Entity(tableName = "characters")
-data class CharacterRoomEntity(
+@Entity(tableName = "characters_details")
+data class CharacterDetailsRoom(
     @PrimaryKey
     @ColumnInfo(name = "charId")
     val charId: Int,
@@ -29,13 +31,14 @@ data class CharacterRoomEntity(
     @ColumnInfo(name = "status")
     val status: String
 ) {
-    fun toDomainModel(): CharacterEntity {
-        return CharacterEntity(
+
+    fun toDomainModel(): CharacterDetails {
+        return CharacterDetails(
+            charId = charId,
             appearance = appearance,
             betterCallSaulAppearance = betterCallSaulAppearance,
             birthday = birthday,
             category = category,
-            charId = charId,
             img = img,
             name = name,
             nickname = nickname,
@@ -44,8 +47,4 @@ data class CharacterRoomEntity(
             status = status
         )
     }
-}
-
-fun List<CharacterRoomEntity>.toDomainList(): List<CharacterEntity> {
-    return this.map { it.toDomainModel() }
 }

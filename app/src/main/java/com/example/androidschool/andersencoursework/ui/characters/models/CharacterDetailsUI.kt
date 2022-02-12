@@ -1,6 +1,6 @@
 package com.example.androidschool.andersencoursework.ui.characters.models
 
-data class CharacterUIEntity(
+data class CharacterDetailsUI(
     val charId: Int,
     val appearance: List<Int>,
     val betterCallSaulAppearance: List<Int>,
