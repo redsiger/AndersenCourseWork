@@ -1,9 +1,10 @@
 package com.example.androidschool.andersencoursework.util
 
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class InfiniteScrollListener(val func: () -> Unit, private val layoutManager: LinearLayoutManager) :
+class InfiniteScrollListener(val action: () -> Unit, private val layoutManager: LinearLayoutManager) :
     RecyclerView.OnScrollListener() {
 
     private var previousTotal = 0
@@ -20,6 +21,7 @@ class InfiniteScrollListener(val func: () -> Unit, private val layoutManager: Li
         firstVisibleItem = 0
         visibleItemCount = 0
         totalItemCount = 0
+        Log.e("scrollListener", "reset")
     }
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -30,6 +32,8 @@ class InfiniteScrollListener(val func: () -> Unit, private val layoutManager: Li
             totalItemCount = layoutManager.itemCount
             firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
 
+            Log.e("scrollListener${this.hashCode()}", "scroll: total:$totalItemCount, previous:$previousTotal, loading:$loading")
+
             if (loading) {
                 if (totalItemCount > previousTotal) {
                     loading = false
@@ -38,7 +42,7 @@ class InfiniteScrollListener(val func: () -> Unit, private val layoutManager: Li
             }
             if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
                 // End has been reached
-                func()
+                action()
                 loading = true
             }
         }

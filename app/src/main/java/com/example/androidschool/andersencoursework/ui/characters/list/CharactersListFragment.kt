@@ -1,7 +1,6 @@
 package com.example.androidschool.andersencoursework.ui.characters.list
 
 import android.content.Context
-import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.children
@@ -31,12 +30,18 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
 
     private val mNavController: NavController by lazy { findNavController() }
 
+    private val mScrollListener: InfiniteScrollListener by lazy {
+        InfiniteScrollListener(
+            action = viewModel::loadNewPage,
+            layoutManager = viewBinding.fragmentCharactersListRecycler.layoutManager as LinearLayoutManager
+        )
+    }
+
     @Inject
     lateinit var viewModelFactory: CharactersListStateViewModel.Factory
-
     private val viewModel: CharactersListStateViewModel by viewModels { viewModelFactory }
-    @Inject lateinit var pagingAdapterFactory: CharactersListPagingAdapter.Factory
 
+    @Inject lateinit var pagingAdapterFactory: CharactersListPagingAdapter.Factory
     private val mPagingAdapter: CharactersListPagingAdapter by lazy {
         pagingAdapterFactory.create(
             { id: Int ->
@@ -45,10 +50,6 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
             },
             { viewModel.loadNewPage() }
         )
-    }
-
-    private val mScrollListener: InfiniteScrollListener by lazy {
-        InfiniteScrollListener({ viewModel.loadNewPage() }, viewBinding.fragmentCharactersListRecycler.layoutManager as LinearLayoutManager)
     }
 
     override fun initFragment() {
@@ -108,6 +109,16 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
         }
     }
 
+    private fun resetScrollListener() {
+        mScrollListener.reset()
+    }
+
+
+    private fun removeScrollListener() {
+        viewBinding.fragmentCharactersListRecycler.removeOnScrollListener(mScrollListener)
+        mScrollListener.reset()
+    }
+
     private fun addListRefresher() {
         viewBinding.fragmentCharactersListRefresh.setOnRefreshListener { viewModel.refresh() }
         viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener { viewModel.refresh() }
@@ -150,6 +161,7 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
     private fun handleLoadingPartialData(state: UIStatePaging.LoadingPartialData<CharacterListItemUI>) {
         hideLoading()
         showPartialDataLoading(state.data)
+        resetScrollListener()
     }
 
     private fun handleLoadingPartialDataError(state: UIStatePaging.LoadingPartialDataError<CharacterListItemUI>) {
@@ -164,9 +176,9 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
 
     private fun handleRefresh(state: UIStatePaging.Refresh<CharacterListItemUI>) {
         hideAll()
+        resetScrollListener()
         mPagingAdapter.submitList(state.data)
         showLoading()
-        mScrollListener.reset()
     }
 
     private fun hideAll() {
@@ -219,6 +231,7 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
     }
 
     override fun onDestroyView() {
+        removeScrollListener()
         super.onDestroyView()
         _toolbarBinding = null
     }
