@@ -1,4 +1,4 @@
-package com.example.androidschool.andersencoursework.di
+package com.example.androidschool.andersencoursework.di.util
 
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import dagger.Module

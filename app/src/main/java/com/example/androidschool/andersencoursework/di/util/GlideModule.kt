@@ -1,4 +1,4 @@
-package com.example.androidschool.andersencoursework.di
+package com.example.androidschool.andersencoursework.di.util
 
 import android.content.Context
 import com.bumptech.glide.Glide

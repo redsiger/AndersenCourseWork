@@ -3,6 +3,7 @@ package com.example.androidschool.data.repositories.characters.detail
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.characters.CharacterDetailsDao
 import com.example.androidschool.domain.characters.model.CharacterDetails
+import kotlin.Exception
 
 interface CharacterDetailsLocalStorage {
 
@@ -18,7 +19,11 @@ interface CharacterDetailsLocalStorage {
     ): CharacterDetailsLocalStorage {
 
         override suspend fun getCharacterDetails(id: Int): CharacterDetails {
-            return dao.getCharacterDetails(id).toDomainModel()
+            return try {
+                dao.getCharacterDetails(id).toDomainModel()
+            } catch (e: Exception) {
+                CharacterDetails()
+            }
         }
 
         override suspend fun insertCharacterDetails(character: CharacterDetails) {

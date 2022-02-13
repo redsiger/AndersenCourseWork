@@ -8,6 +8,7 @@ import com.example.androidschool.andersencoursework.ui.characters.models.UIMappe
 import com.example.androidschool.andersencoursework.util.UIStatePaging
 import com.example.androidschool.domain.characters.interactors.CharactersListInteractor
 import com.example.androidschool.util.NetworkResponse
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,13 +16,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 const val LIMIT = 10
 const val START_OFFSET = 0
 
 class CharactersListStateViewModel(
     private  val interactor: CharactersListInteractor,
-    private val mapper: UIMapper
+    private val mapper: UIMapper,
+    private val defaultDispatcher: CoroutineDispatcher
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow<UIStatePaging<CharacterListItemUI>>(UIStatePaging.EmptyLoading())
@@ -32,15 +35,16 @@ class CharactersListStateViewModel(
 
     init {
         viewModelScope.launch {
-            val state = uiState.collectLatest {
-                Log.e("CURRENT STATE", "dataSize:${it.data.size}, offset:${it.offset} $it")
+            uiState.collectLatest{
+                Log.e("CharactersListStateViewModel", "state:$it")
             }
         }
     }
 
     fun refresh() {
         _uiState.value = UIStatePaging.Refresh(currentData)
-        viewModelScope.launch(Dispatchers.IO) {
+
+        viewModelScope.launch(defaultDispatcher) {
             val response = interactor.getCharactersPagingState(currentOffset, LIMIT)
             when (response) {
                 // check for remote data
@@ -66,14 +70,14 @@ class CharactersListStateViewModel(
     }
 
     fun loadNewPage() {
-        Log.e("loadNewPage", "start: ${uiState.value}")
+        if (_uiState.value is UIStatePaging.PartialData || _uiState.value is UIStatePaging.LoadingPartialDataError) {
 
-        viewModelScope.launch(Dispatchers.IO) {
-            if (_uiState.value is UIStatePaging.PartialData || _uiState.value is UIStatePaging.LoadingPartialDataError) {
-                _uiState.value = UIStatePaging.LoadingPartialData(
-                    data = currentData.filter { it is ListItem.Item } + ListItem.Loading(),
-                    offset = currentOffset
-                )
+            _uiState.value = UIStatePaging.LoadingPartialData(
+                data = currentData.filter { it is ListItem.Item } + ListItem.Loading(),
+                offset = currentOffset
+            )
+
+            viewModelScope.launch(defaultDispatcher) {
                 val response = interactor.getCharactersPagingState(currentOffset + LIMIT, LIMIT)
                 when (response) {
                     // check for remote data
@@ -105,11 +109,14 @@ class CharactersListStateViewModel(
 
     class Factory @Inject constructor(
         private val charactersListInteractor: CharactersListInteractor,
-        private val mapper: UIMapper
+        private val mapper: UIMapper,
+        @Named("Dispatchers.IO") private val defaultDispatcher: CoroutineDispatcher
     ): ViewModelProvider.Factory {
+        
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             require(modelClass == CharactersListStateViewModel::class.java)
-            return CharactersListStateViewModel(charactersListInteractor, mapper) as T
+            return CharactersListStateViewModel(charactersListInteractor, mapper, defaultDispatcher) as T
         }
     }
 }

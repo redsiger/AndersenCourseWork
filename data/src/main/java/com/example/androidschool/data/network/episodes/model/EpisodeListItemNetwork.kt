@@ -1,11 +1,11 @@
 package com.example.androidschool.data.network.episodes.model
 
-import com.example.androidschool.domain.episode.model.EpisodeEntity
+import com.example.androidschool.domain.episode.model.EpisodeListItem
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class EpisodeNetworkEntity(
+data class EpisodeListItemNetwork(
     @Json(name = "air_date")
     val airDate: String,
     @Json(name = "characters")
@@ -21,8 +21,8 @@ data class EpisodeNetworkEntity(
     @Json(name = "title")
     val title: String
 ) {
-    fun toDomainModel(): EpisodeEntity {
-        return EpisodeEntity(
+    fun toDomainModel(): EpisodeListItem {
+        return EpisodeListItem(
             airDate = airDate,
             characters = characters,
             episode = episode,

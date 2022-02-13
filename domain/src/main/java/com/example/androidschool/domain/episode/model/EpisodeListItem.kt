@@ -1,6 +1,6 @@
 package com.example.androidschool.domain.episode.model
 
-data class EpisodeEntity(
+data class EpisodeListItem(
     val airDate: String,
     val characters: List<String>,
     val episode: String,

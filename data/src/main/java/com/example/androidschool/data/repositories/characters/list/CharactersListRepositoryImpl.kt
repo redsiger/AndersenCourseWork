@@ -24,8 +24,6 @@ class CharactersListRepositoryImpl(
             if (response.isSuccessful) {
                 val remoteData = response.body() as List<CharacterNetworkEntity>
                 // insert new data in local storage
-//                localStorage.insertCharacters(remoteData.map(CharacterNetworkEntity::toDomainModel), offset)
-//                NetworkResponse.Success(remoteData.map(CharacterNetworkEntity::toDomainModel))
                 val data = localStorage.insertAndReturnPage(
                     remoteData.map(CharacterNetworkEntity::toDomainModel),
                     offset, limit
@@ -35,7 +33,7 @@ class CharactersListRepositoryImpl(
             else {
                 val localData = localStorage.getCharactersPaging(offset, limit)
                 val exception = response.errorBody() as HttpException
-                NetworkResponse.Error(localData, Exception(exception))
+                NetworkResponse.Error(localData, exception)
             }
         } catch (e: Exception) {
             val localData = localStorage.getCharactersPaging(offset, limit)

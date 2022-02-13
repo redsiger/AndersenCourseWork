@@ -1,19 +1,48 @@
 package com.example.androidschool.andersencoursework.ui.core
 
 import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
+import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding.bind
 import com.example.androidschool.andersencoursework.util.InfiniteScrollListener
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
 
 private const val DEFAULT_FRAGMENT_TITLE = ""
 
-open class BaseFragment(resId: Int): Fragment(resId) {
+abstract class BaseFragment<B: ViewBinding>(resId: Int): Fragment(resId) {
+
+    private var _viewBinding: B? = null
+    protected val viewBinding: B get() = checkNotNull(_viewBinding)
+
+    protected abstract fun initBinding(view: View): B
+    protected abstract fun initFragment()
+
+    /**
+     * Base viewBinding binder
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _viewBinding = initBinding(view)
+        initFragment()
+    }
+
+    /**
+     * Base viewBinding eraser
+     */
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
+    }
 
     fun setupToolbarTitle(toolbar: Toolbar, title: String) {
         toolbar.title = title

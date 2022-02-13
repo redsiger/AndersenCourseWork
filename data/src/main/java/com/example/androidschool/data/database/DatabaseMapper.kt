@@ -2,14 +2,14 @@ package com.example.androidschool.data.database
 
 import com.example.androidschool.data.database.characters.model.CharacterDetailsRoom
 import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
-import com.example.androidschool.data.database.episodes.model.EpisodeRoomEntity
+import com.example.androidschool.data.database.episodes.model.EpisodeListItemRoom
 import com.example.androidschool.data.network.characters.model.CharacterNetworkEntity
 import com.example.androidschool.domain.characters.model.CharacterDetails
 import com.example.androidschool.domain.characters.model.CharacterListItem
-import com.example.androidschool.domain.episode.model.EpisodeEntity
+import com.example.androidschool.domain.episode.model.EpisodeListItem
 
 class DatabaseMapper {
-    
+
     fun toRoomEntity(characterDetailEntity: CharacterDetails): CharacterDetailsRoom {
         return CharacterDetailsRoom(
             appearance = characterDetailEntity.appearance,
@@ -60,8 +60,8 @@ class DatabaseMapper {
         )
     }
 
-    fun toRoomEntity(episodeEntity: EpisodeEntity): EpisodeRoomEntity {
-        return EpisodeRoomEntity(
+    fun toRoomEntity(episodeEntity: EpisodeListItem): EpisodeListItemRoom {
+        return EpisodeListItemRoom(
             airDate = episodeEntity.airDate,
             characters = episodeEntity.characters,
             episode = episodeEntity.episode,

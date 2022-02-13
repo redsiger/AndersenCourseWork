@@ -23,30 +23,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class SearchFragment : BaseFragment(R.layout.fragment_search), CoroutineScope {
+class SearchFragment: BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
 
-    override val coroutineContext: CoroutineContext = Dispatchers.IO
-
-    private var _binding: FragmentSearchBinding? = null
-    private val viewBinding get() = _binding!!
+    @Inject lateinit var viewModelFactory: SearchViewModel.Factory
+    private val viewModel: SearchViewModel by viewModels { viewModelFactory }
 
     private val mAdapter: SearchAdapter by lazy { SearchAdapter() }
 
-    @Inject lateinit var charactersListInteractor: CharactersListInteractor
-
-    private val viewModel: SearchViewModel by viewModels {
-        SearchViewModel.Factory(charactersListInteractor)
-    }
-
-    override fun onAttach(context: Context) {
-        requireActivity().appComponent.inject(this)
-        super.onAttach(context)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentSearchBinding.bind(view)
-
+    override fun initBinding(view: View): FragmentSearchBinding = FragmentSearchBinding.bind(view)
+    override fun initFragment() {
         setupToolbar(viewBinding.fragmentSearchToolbar)
         initSearchResultList()
 
@@ -57,6 +42,11 @@ class SearchFragment : BaseFragment(R.layout.fragment_search), CoroutineScope {
                 this@SearchFragment::search
             )
         }
+    }
+
+    override fun onAttach(context: Context) {
+        requireActivity().appComponent.inject(this)
+        super.onAttach(context)
     }
 
     private fun initSearchResultList() {
@@ -92,7 +82,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search), CoroutineScope {
 
                     _query = query
 
-                    launch {
+                    lifecycleScope.launch {
                         delay(1000)
                         if (_query != query) return@launch
                         actionSearch(_query)
@@ -122,10 +112,5 @@ class SearchFragment : BaseFragment(R.layout.fragment_search), CoroutineScope {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

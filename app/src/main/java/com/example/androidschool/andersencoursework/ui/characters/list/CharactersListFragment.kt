@@ -22,24 +22,21 @@ import com.example.androidschool.andersencoursework.util.InfiniteScrollListener
 import com.example.androidschool.andersencoursework.util.UIStatePaging
 import javax.inject.Inject
 
-class CharactersListFragment: BaseFragment(R.layout.fragment_characters_list) {
+class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layout.fragment_characters_list) {
 
-    private var _binding: FragmentCharactersListBinding? = null
-    private val viewBinding get() = _binding!!
+    override fun initBinding(view: View): FragmentCharactersListBinding = FragmentCharactersListBinding.bind(view)
+
     private var _toolbarBinding: MergeToolbarBinding? = null
     private val toolbarBinding get() = _toolbarBinding!!
 
     private val mNavController: NavController by lazy { findNavController() }
 
-    private val mScrollListener: InfiniteScrollListener by lazy {
-        InfiniteScrollListener({ viewModel.loadNewPage() }, viewBinding.fragmentCharactersListRecycler.layoutManager as LinearLayoutManager)
-    }
-
     @Inject
     lateinit var viewModelFactory: CharactersListStateViewModel.Factory
-    private val viewModel: CharactersListStateViewModel by viewModels { viewModelFactory }
 
+    private val viewModel: CharactersListStateViewModel by viewModels { viewModelFactory }
     @Inject lateinit var pagingAdapterFactory: CharactersListPagingAdapter.Factory
+
     private val mPagingAdapter: CharactersListPagingAdapter by lazy {
         pagingAdapterFactory.create(
             { id: Int ->
@@ -50,20 +47,22 @@ class CharactersListFragment: BaseFragment(R.layout.fragment_characters_list) {
         )
     }
 
-    override fun onAttach(context: Context) {
-        requireActivity().appComponent.inject(this)
-        super.onAttach(context)
+    private val mScrollListener: InfiniteScrollListener by lazy {
+        InfiniteScrollListener({ viewModel.loadNewPage() }, viewBinding.fragmentCharactersListRecycler.layoutManager as LinearLayoutManager)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentCharactersListBinding.bind(view)
+    override fun initFragment() {
         _toolbarBinding = MergeToolbarBinding.bind(viewBinding.root)
 
         initToolbar()
         initList()
         addListRefresher()
         hideAll()
+    }
+
+    override fun onAttach(context: Context) {
+        requireActivity().appComponent.inject(this)
+        super.onAttach(context)
     }
 
     private fun initToolbar() {
@@ -221,7 +220,6 @@ class CharactersListFragment: BaseFragment(R.layout.fragment_characters_list) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
         _toolbarBinding = null
     }
 }

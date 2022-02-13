@@ -27,8 +27,6 @@ class CharacterDetailsRepositoryImpl(
         } catch (e: Exception) {
             val localCharacter = localStorage.getCharacterDetails(id)
             NetworkResponse.Error(localCharacter, e)
-        } catch (e: Exception) {
-            NetworkResponse.Error(CharacterDetails(), e)
         }
     }
 }

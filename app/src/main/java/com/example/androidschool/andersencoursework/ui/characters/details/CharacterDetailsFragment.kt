@@ -12,16 +12,18 @@ import com.bumptech.glide.Glide
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentCharacterDetailsBinding
 import com.example.androidschool.andersencoursework.di.appComponent
+import com.example.androidschool.andersencoursework.di.util.ResourceProvider
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterDetailsUI
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.util.UIState
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
-class CharacterDetailsFragment: BaseFragment(R.layout.fragment_character_details) {
+class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.layout.fragment_character_details) {
 
-    private var _binding: FragmentCharacterDetailsBinding? = null
-    private val viewBinding get() = _binding!!
+    @Inject lateinit var resources: ResourceProvider
+    @Inject lateinit var mContext: Context
 
     private val args: CharacterDetailsFragmentArgs by navArgs()
     private val characterId by lazy { args.characterId }
@@ -31,17 +33,16 @@ class CharacterDetailsFragment: BaseFragment(R.layout.fragment_character_details
     @Inject lateinit var viewModelFactory: CharacterDetailsViewModel.Factory
     private val viewModel: CharacterDetailsViewModel by viewModels { viewModelFactory }
 
+    override fun initBinding(view: View): FragmentCharacterDetailsBinding = FragmentCharacterDetailsBinding.bind(view)
+
+    override fun initFragment() {
+        initBackBtn()
+        initPage()
+    }
+
     override fun onAttach(context: Context) {
         requireActivity().appComponent.inject(this)
         super.onAttach(context)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentCharacterDetailsBinding.bind(view)
-
-        initBackBtn()
-        initPage()
     }
 
     private fun initPage() {
@@ -54,9 +55,15 @@ class CharacterDetailsFragment: BaseFragment(R.layout.fragment_character_details
         when (state) {
             is UIState.Success -> handleSuccess(state)
             is UIState.Error -> handleError(state)
+            is UIState.EmptyError -> handleEmptyError(state)
             is UIState.InitialLoading -> handleInitialLoading(state)
             is UIState.Refresh -> handleRefresh(state)
         }
+    }
+
+    private fun handleEmptyError(state: UIState.EmptyError) {
+        hideAll()
+        showError(state.error)
     }
 
     private fun handleInitialLoading(state: UIState.InitialLoading) {
@@ -67,17 +74,41 @@ class CharacterDetailsFragment: BaseFragment(R.layout.fragment_character_details
 
     private fun handleRefresh(state: UIState.Refresh<CharacterDetailsUI>) {
         showLoading()
-        showContent(state.currentData)
+        showContent(state.data)
+        viewModel.loadCharacter(characterId)
     }
 
     private fun handleSuccess(state: UIState.Success<CharacterDetailsUI>) {
         hideLoading()
         showContent(state.data)
+        viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
+            viewModel.refresh(state.data, characterId)
+        }
     }
 
     private fun handleError(state: UIState.Error<CharacterDetailsUI>) {
         hideLoading()
-        showError(state.error, state.localData)
+        hideAll()
+        showContent(state.data)
+        showErrorMessage(state.data)
+        viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
+            viewModel.refresh(state.data, characterId)
+        }
+    }
+
+    private fun showErrorMessage(data: CharacterDetailsUI) {
+        Snackbar.make(
+            viewBinding.root,
+            resources.getString(R.string.default_error_message),
+            Snackbar.LENGTH_LONG)
+            .setAction(
+                R.string.refresh_btn_title,
+                object: View.OnClickListener {
+                    override fun onClick(p0: View?) {
+                        viewModel.refresh(data, characterId)
+                    }
+                })
+            .show()
     }
 
     private fun hideAll() {
@@ -111,19 +142,20 @@ class CharacterDetailsFragment: BaseFragment(R.layout.fragment_character_details
         }
     }
 
-    private fun showError(error: Exception, localData: CharacterDetailsUI) {
+    private fun showError(error: Exception) {
         hideAll()
         showErrorBlock(error)
     }
 
     private fun showErrorBlock(error: Exception) {
+        hideLoading()
         viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE
-        viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener { refresh() }
-    }
-
-    private fun refresh() {
-        showLoading()
-        viewModel.loadCharacter(characterId)
+        viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
+            viewModel.retry(characterId)
+        }
+        viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener {
+            viewModel.retry(characterId)
+        }
     }
 
     private fun initBackBtn() {

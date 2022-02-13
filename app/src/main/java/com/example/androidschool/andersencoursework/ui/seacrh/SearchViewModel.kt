@@ -30,6 +30,8 @@ class SearchViewModel(
     class Factory @Inject constructor(
         private val charactersListInteractor: CharactersListInteractor
     ): ViewModelProvider.Factory {
+
+        @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             require(modelClass == SearchViewModel::class.java)
             return SearchViewModel(charactersListInteractor) as T

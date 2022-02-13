@@ -4,10 +4,10 @@ package com.example.androidschool.data.database.episodes.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.androidschool.domain.episode.model.EpisodeEntity
+import com.example.androidschool.domain.episode.model.EpisodeListItem
 
-@Entity
-data class EpisodeRoomEntity(
+@Entity(tableName = "episodes_list_items")
+data class EpisodeListItemRoom(
     @PrimaryKey
     @ColumnInfo(name = "episode_id")
     val episodeId: Int,
@@ -23,16 +23,16 @@ data class EpisodeRoomEntity(
     val series: String,
     @ColumnInfo(name = "title")
     val title: String
-)
-
-fun EpisodeRoomEntity.toDomainModel(): EpisodeEntity {
-    return EpisodeEntity(
-        airDate = this.airDate,
-        characters = this.characters,
-        episode = this.episode,
-        episodeId = this.episodeId,
-        season = this.season,
-        series = this.series,
-        title = this.title
-    )
+) {
+    fun toDomainModel(): EpisodeListItem {
+        return EpisodeListItem(
+            airDate = this.airDate,
+            characters = this.characters,
+            episode = this.episode,
+            episodeId = this.episodeId,
+            season = this.season,
+            series = this.series,
+            title = this.title
+        )
+    }
 }

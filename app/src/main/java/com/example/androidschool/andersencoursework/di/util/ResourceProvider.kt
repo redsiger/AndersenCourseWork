@@ -5,10 +5,10 @@ import javax.inject.Inject
 
 interface ResourceProvider {
 
-    fun string(resId: Int): String
+    fun getString(resId: Int): String
 
     class Base @Inject constructor(private val context: Context): ResourceProvider {
 
-        override fun string(resId: Int) = context.resources.getString(resId)
+        override fun getString(resId: Int) = context.resources.getString(resId)
     }
 }

@@ -8,18 +8,14 @@ import com.example.androidschool.andersencoursework.databinding.FragmentFavorite
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 
-class FavoritesFragment: BaseFragment(R.layout.fragment_favorites) {
+class FavoritesFragment: BaseFragment<FragmentFavoritesBinding>(R.layout.fragment_favorites) {
 
-    private var _binding: FragmentFavoritesBinding? = null
-    private val viewBinding get() = _binding!!
+    override fun initBinding(view: View): FragmentFavoritesBinding = FragmentFavoritesBinding.bind(view)
+
+    override fun initFragment() { }
 
     override fun onAttach(context: Context) {
         requireActivity().appComponent.inject(this)
         super.onAttach(context)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentFavoritesBinding.bind(view)
     }
 }

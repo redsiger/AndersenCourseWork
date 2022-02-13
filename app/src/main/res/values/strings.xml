@@ -2,6 +2,7 @@
 
     <!--  App  -->
     <string name="app_name">Breaking Bad Api</string>
+    <string name="refresh_btn_title">Refresh</string>
 
     <!--  MenuItems  -->
     <string name="menu_item_search_title">Search</string>

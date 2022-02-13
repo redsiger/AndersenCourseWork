@@ -1,5 +1,6 @@
 package com.example.androidschool.andersencoursework.di
 
+import com.example.androidschool.andersencoursework.di.domain.DomainModule
 import com.example.androidschool.andersencoursework.ui.characters.details.CharacterDetailsFragment
 import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragment
 import com.example.androidschool.andersencoursework.ui.favorites.FavoritesFragment
