@@ -1,7 +1,8 @@
 package com.example.androidschool.andersencoursework.util
 
-import com.example.androidschool.andersencoursework.ui.characters.list.START_OFFSET
 import com.example.androidschool.andersencoursework.ui.characters.models.ListItem
+
+const val START_OFFSET = 0
 
 sealed class UIStatePaging<T> {
 

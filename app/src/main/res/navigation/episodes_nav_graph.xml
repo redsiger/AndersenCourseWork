@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/episodes_nav_graph"
-    app:startDestination="@id/charactersListFragment">
+    app:startDestination="@id/episodesListFragment">
 
     <include app:graph="@navigation/search_nav_graph" />
 
@@ -12,27 +12,17 @@
     </action>
 
     <fragment
-        android:id="@+id/charactersListFragment"
-        android:name="com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragment"
+        android:id="@+id/episodesListFragment"
+        android:name="com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListFragment"
         android:label="@string/episodes_fragment_title">
-        <action
-            android:id="@+id/fromListToDetails"
-            app:destination="@id/characterDetailsFragment">
-            <argument
-                android:name="characterId"
-                app:argType="integer"
-                app:nullable="false"/>
-        </action>
-    </fragment>
-
-    <fragment
-        android:id="@+id/characterDetailsFragment"
-        android:name="com.example.androidschool.andersencoursework.ui.characters.details.CharacterDetailsFragment"
-        android:label="CharacterDetailsFragment" >
-        <argument
-            android:name="characterId"
-            app:argType="integer"
-            app:nullable="false"/>
+<!--        <action-->
+<!--            android:id="@+id/fromListToDetails"-->
+<!--            app:destination="@id/episodeDetailsFragment">-->
+<!--            <argument-->
+<!--                android:name="episodeId"-->
+<!--                app:argType="integer"-->
+<!--                app:nullable="false"/>-->
+<!--        </action>-->
     </fragment>
 
 </navigation>

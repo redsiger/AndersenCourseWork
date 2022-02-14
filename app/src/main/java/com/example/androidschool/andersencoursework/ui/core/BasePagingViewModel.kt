@@ -4,23 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidschool.andersencoursework.ui.characters.models.ListItem
 import com.example.androidschool.andersencoursework.util.UIStatePaging
-import com.example.androidschool.domain.characters.interactors.BasePagingInteractor
+import com.example.androidschool.domain.BasePagingInteractor
 import com.example.androidschool.util.NetworkResponse
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 const val LIMIT = 10
-const val START_OFFSET = 0
 
 abstract class BasePagingViewModel<T, R>: ViewModel() {
 
     abstract val mapToListItemUI: (T) -> ListItem<R>
     abstract val defaultDispatcher: CoroutineDispatcher
-    abstract val coroutineScope: CoroutineScope
     abstract val interactor: BasePagingInteractor<T>
 
     private val _uiState = MutableStateFlow<UIStatePaging<R>>(UIStatePaging.EmptyLoading())

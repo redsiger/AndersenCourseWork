@@ -1,27 +1,16 @@
 package com.example.androidschool.domain.characters.interactors
 
+import com.example.androidschool.domain.BasePagingInteractor
 import com.example.androidschool.domain.characters.repository.CharactersListRepository
 import com.example.androidschool.domain.characters.model.CharacterListItem
 import com.example.androidschool.util.NetworkResponse
 import kotlinx.coroutines.flow.Flow
 
-interface BasePagingInteractor<T> {
+interface CharactersListInteractor: BasePagingInteractor<CharacterListItem> {
 
-    suspend fun getItemsPaging(offset: Int, limit: Int): NetworkResponse<List<T>>
-}
-
-interface CharactersListInteractor {
-
-    suspend fun getCharactersPagingState(offset: Int, limit: Int): NetworkResponse<List<CharacterListItem>>
     fun searchCharactersByNameOrNickName(query: String): Flow<List<CharacterListItem>>
 
     class Base(private val repository: CharactersListRepository): CharactersListInteractor, BasePagingInteractor<CharacterListItem> {
-
-        override suspend fun getCharactersPagingState(
-            offset: Int,
-            limit: Int
-        ): NetworkResponse<List<CharacterListItem>>
-            = repository.getCharactersPagingState(offset, limit)
 
         override fun searchCharactersByNameOrNickName(query: String): Flow<List<CharacterListItem>>
             = repository.searchCharactersByNameOrNickName(query)
@@ -29,7 +18,7 @@ interface CharactersListInteractor {
         override suspend fun getItemsPaging(
             offset: Int,
             limit: Int
-        ): NetworkResponse<List<CharacterListItem>> = getCharactersPagingState(offset, limit)
+        ): NetworkResponse<List<CharacterListItem>> = repository.getCharactersPagingState(offset, limit)
     }
 
 }
