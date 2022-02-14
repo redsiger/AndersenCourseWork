@@ -24,7 +24,7 @@ class EpisodesRepositoryImpl(
                 val remoteData = response.body() as List<EpisodeListItemNetwork>
                 // imitation of paging because API service don't support paging
                 val partialData = remoteData.subList(
-                    fromIndex = offset, toIndex =  (offset + limit)
+                    fromIndex = offset, toIndex = (offset + limit)
                 ).map(EpisodeListItemNetwork::toDomainModel)
                 val data = localStorage.insertAndReturn(partialData, offset, limit)
                 NetworkResponse.Success(data)
@@ -40,3 +40,5 @@ class EpisodesRepositoryImpl(
         }
     }
 }
+
+

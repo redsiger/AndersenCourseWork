@@ -37,7 +37,7 @@ class UIMapper {
         )
     }
 
-    fun mapCharacterEntityToListItem(entity: CharacterListItem): ListItem.Item<CharacterListItemUI> {
+    fun mapCharacterListItemToListItemUI(entity: CharacterListItem): ListItem.Item<CharacterListItemUI> {
         return ListItem.Item(
             CharacterListItemUI(
                 appearance = entity.appearance,
