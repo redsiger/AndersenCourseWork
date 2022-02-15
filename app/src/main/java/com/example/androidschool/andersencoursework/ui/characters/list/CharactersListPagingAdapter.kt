@@ -6,120 +6,112 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
+import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.IncludeDefaultLoadStateBinding
 import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterListItemUI
-import com.example.androidschool.andersencoursework.ui.characters.models.ListItem
+import com.example.androidschool.andersencoursework.ui.core.recycler.ListItem
+import com.example.androidschool.andersencoursework.ui.core.recycler.DiffComparable
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
 private const val ITEM_HOLDER = 0
-private const val LOADING_HOLDER = 1
-private const val ERROR_HOLDER = 2
+private const val LOADING_AND_ERROR_HOLDER = 1
 
-class CharactersListPagingAdapter @AssistedInject constructor (
-    private val glide: RequestManager,
+interface Binder<T: DiffComparable> {
+    fun bind(item: ListItem<T>)
+}
+
+object ViewHolderFactory {
+    fun create(view: View, layoutId: Int): RecyclerView.ViewHolder {
+        return when (layoutId) {
+            R.layout.include_default_load_state -> DefaultErrorAndLoadingHolder(view)
+            R.layout.list_item_character -> CharacterListItemHolder(view)
+            else -> throw Exception("No specific viewHolder")
+        }
+    }
+}
+
+class DefaultErrorAndLoadingHolder(view: View): RecyclerView.ViewHolder(view), Binder<CharacterListItemUI> {
+    private val viewBinding = IncludeDefaultLoadStateBinding.bind(view)
+    override fun bind(item: ListItem<CharacterListItemUI>) {
+        when(item) {
+            is ListItem.Loading -> {}
+            is ListItem.Error -> {}
+            else -> throw Exception("Wrong listItem type for loading or error")
+        }
+    }
+
+}
+
+class CharacterListItemHolder(view: View): RecyclerView.ViewHolder(view), Binder<CharacterListItemUI> {
+    private val viewBinding = ListItemCharacterBinding.bind(itemView)
+    override fun bind(item: ListItem<CharacterListItemUI>) {
+        when (item) {
+            is ListItem.Item -> {
+                viewBinding.listItemCharacterName.text = item.item.name
+                Glide.with(itemView.context)
+                    .load(item.item.img)
+                    .centerCrop()
+                    .into(viewBinding.listItemCharacterImg)
+            }
+            else -> throw Exception("Wrong listItemType for item")
+        }
+    }
+}
+
+class GenericListAdapter<T: DiffComparable> @AssistedInject constructor(
+    @Assisted("layoutId") private val layoutId: Int,
+    @Assisted("errorAndLoadingLayoutId") private val errorAndLoadingLayoutId: Int,
     @Assisted("onClick") private val onClick: (id: Int) -> Unit,
     @Assisted("refresh") private val refresh: () -> Unit
-): ListAdapter<ListItem<CharacterListItemUI>, RecyclerView.ViewHolder>(ListItemDiff) {
+): ListAdapter<ListItem<T>, RecyclerView.ViewHolder>(ListItemDiff()) {
 
-    companion object ListItemDiff: DiffUtil.ItemCallback<ListItem<CharacterListItemUI>>() {
-        override fun areItemsTheSame(oldItem: ListItem<CharacterListItemUI>, newItem: ListItem<CharacterListItemUI>): Boolean {
+    class ListItemDiff<T: DiffComparable>: DiffUtil.ItemCallback<ListItem<T>>() {
+        override fun areItemsTheSame(oldItem: ListItem<T>, newItem: ListItem<T>): Boolean {
             return if (oldItem is ListItem.Item && newItem is ListItem.Item) {
-                oldItem.character.charId == newItem.character.charId
+                oldItem.item.areItemsTheSame(newItem.item)
             } else false
         }
-        override fun areContentsTheSame(oldItem: ListItem<CharacterListItemUI>, newItem: ListItem<CharacterListItemUI>): Boolean {
+        override fun areContentsTheSame(oldItem: ListItem<T>, newItem: ListItem<T>): Boolean {
             return if (oldItem is ListItem.Item && newItem is ListItem.Item) {
-                oldItem.character == newItem.character
+                oldItem.item.areContentsTheSame(newItem.item)
             } else false
-        }
-    }
-    
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-
-        val layout = when (viewType) {
-            ITEM_HOLDER -> ListItemCharacterBinding.inflate(inflater, parent, false)
-            else -> IncludeDefaultLoadStateBinding.inflate(inflater, parent, false)
-        }
-
-        return ItemHolder(layout.root , glide)
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = currentList[position]
-        when (holder) {
-            is ItemHolder -> holder.bind(item)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return when (currentList[position]) {
             is ListItem.Item -> ITEM_HOLDER
-            is ListItem.Loading -> LOADING_HOLDER
-            is ListItem.Error -> ERROR_HOLDER
+            else -> LOADING_AND_ERROR_HOLDER
         }
     }
 
-    inner class ItemHolder(
-        private val view: View,
-        private val glide: RequestManager
-        ): RecyclerView.ViewHolder(view) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
 
-        fun bind(item: ListItem<CharacterListItemUI>) {
-            when(item) {
-                is ListItem.Item -> bindItem(item)
-                is ListItem.Loading -> bindLoading(item)
-                is ListItem.Error -> bindError(item)
-            }
+        val view = when (viewType) {
+            ITEM_HOLDER -> inflater.inflate(layoutId, parent, false)
+            else -> inflater.inflate(errorAndLoadingLayoutId, parent, false)
         }
 
-        private fun bindItem(item: ListItem.Item<CharacterListItemUI>) {
-            val binding = ListItemCharacterBinding.bind(view)
+        return ViewHolderFactory.create(view, layoutId)
+    }
 
-            with(binding) {
-                listItemCharacterName.text = item.character.name
-                glide
-                    .load(item.character.img)
-                    .centerCrop()
-                    .into((listItemCharacterImg))
-            }
-
-            view.setOnClickListener { onClick(item.character.charId) }
-        }
-
-        private fun bindLoading(item: ListItem.Loading<CharacterListItemUI>) {
-            val binding = IncludeDefaultLoadStateBinding.bind(view)
-
-            with(binding) {
-                progressBar.visibility = View.VISIBLE
-                messageTextView.visibility = View.GONE
-                tryAgainButton.visibility = View.GONE
-            }
-        }
-
-        private fun bindError(item: ListItem.Error<CharacterListItemUI>) {
-            val binding = IncludeDefaultLoadStateBinding.bind(view)
-
-            with(binding) {
-                progressBar.visibility = View.GONE
-                messageTextView.visibility = View.VISIBLE
-                messageTextView.text = item.error.toString()
-                tryAgainButton.visibility = View.VISIBLE
-
-                tryAgainButton.setOnClickListener { refresh() }
-            }
-        }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = currentList[position]
+        (holder as Binder<T>).bind(item)
     }
 
     @AssistedFactory
-    interface Factory {
+    interface Factory<T: DiffComparable> {
         fun create(
+            @Assisted("layoutId") layoutId: Int,
+            @Assisted("errorAndLoadingLayoutId") errorAndLoadingLayoutId: Int,
             @Assisted("onClick") onClick: (id: Int) -> Unit,
             @Assisted("refresh") refresh: () -> Unit
-        ): CharactersListPagingAdapter
+        ): GenericListAdapter<T>
     }
 }

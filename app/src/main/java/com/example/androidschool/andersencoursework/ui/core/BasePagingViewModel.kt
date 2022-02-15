@@ -2,7 +2,10 @@ package com.example.androidschool.andersencoursework.ui.core
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.androidschool.andersencoursework.ui.characters.models.ListItem
+import com.example.androidschool.andersencoursework.ui.core.recycler.DefaultRecyclerError
+import com.example.androidschool.andersencoursework.ui.core.recycler.DefaultRecyclerLoading
+import com.example.androidschool.andersencoursework.ui.core.recycler.ListItem
+import com.example.androidschool.andersencoursework.ui.core.recycler.DiffComparable
 import com.example.androidschool.andersencoursework.util.UIStatePaging
 import com.example.androidschool.domain.BasePagingInteractor
 import com.example.androidschool.util.NetworkResponse
@@ -14,17 +17,20 @@ import kotlinx.coroutines.launch
 
 const val LIMIT = 10
 
-abstract class BasePagingViewModel<T, R>: ViewModel() {
+abstract class BasePagingViewModel<T, R: DiffComparable>: ViewModel() {
 
-    abstract val mapToListItemUI: (T) -> ListItem<R>
+    abstract val itemClass: Class<R>
+    abstract val mapToListItemUI: (T) -> R
     abstract val defaultDispatcher: CoroutineDispatcher
     abstract val interactor: BasePagingInteractor<T>
 
-    private val _uiState = MutableStateFlow<UIStatePaging<R>>(UIStatePaging.EmptyLoading())
-    val uiState: StateFlow<UIStatePaging<R>> get() = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UIStatePaging<DiffComparable>>(UIStatePaging.EmptyLoading())
+    val uiState: StateFlow<UIStatePaging<DiffComparable>> get() = _uiState.asStateFlow()
 
     private val currentOffset get() = uiState.value.offset
     private val currentData get() = uiState.value.data
+
+    private fun isItem(item: DiffComparable) = item::class.java == itemClass
 
     fun refresh() {
         _uiState.value = UIStatePaging.Refresh(currentData)
@@ -60,7 +66,7 @@ abstract class BasePagingViewModel<T, R>: ViewModel() {
         if (_uiState.value is UIStatePaging.PartialData || _uiState.value is UIStatePaging.LoadingPartialDataError) {
 
             _uiState.value = UIStatePaging.LoadingPartialData(
-                data = currentData.filter { it is ListItem.Item } + ListItem.Loading(),
+                data = currentData.filter { isItem(it) } + DefaultRecyclerLoading(),
                 offset = currentOffset
             )
 
@@ -72,18 +78,18 @@ abstract class BasePagingViewModel<T, R>: ViewModel() {
                         val data = response.data.map(mapToListItemUI)
                         // check for end of data
                         if (data.size < LIMIT) _uiState.value = UIStatePaging.AllData(
-                            data = currentData.filter { it is ListItem.Item } + data,
+                            data = currentData.filter { isItem(it) } + data,
                             offset = currentOffset + LIMIT
                         )
                         else _uiState.value = UIStatePaging.PartialData(currentData
-                            .filter { it is ListItem.Item } + data,
+                            .filter { isItem(it) } + data,
                             currentOffset + LIMIT)
                     }
                     // check for local data
                     is NetworkResponse.Error -> {
                         val error = response.exception
                         _uiState.value = UIStatePaging.LoadingPartialDataError(
-                            data = currentData.filter { it is ListItem.Item } + ListItem.Error(error),
+                            data = currentData.filter { isItem(it) } + DefaultRecyclerError(error = error),
                             offset = currentOffset,
                             error = error
                         )

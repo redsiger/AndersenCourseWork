@@ -1,5 +1,6 @@
 package com.example.androidschool.andersencoursework.ui.characters.models
 
+import com.example.androidschool.andersencoursework.ui.core.recycler.ListItem
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
 import com.example.androidschool.domain.characters.model.CharacterDetails
 import com.example.androidschool.domain.characters.model.CharacterListItem
@@ -8,10 +9,10 @@ import com.example.androidschool.domain.episode.model.EpisodeListItem
 class UIMapper {
 
     fun mapEpisodeListItemToListItemUI(entity: EpisodeListItem): ListItem.Item<EpisodeListItemUI> {
-        return ListItem.Item(mapEpisodeListITem(entity))
+        return ListItem.Item(mapEpisodeListItem(entity))
     }
 
-    fun mapEpisodeListITem(entity: EpisodeListItem): EpisodeListItemUI {
+    fun mapEpisodeListItem(entity: EpisodeListItem): EpisodeListItemUI {
         return  EpisodeListItemUI(
             airDate = entity.airDate,
             characters = entity.characters,
