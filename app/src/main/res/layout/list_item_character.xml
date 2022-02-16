@@ -14,9 +14,9 @@
 
             <ImageView
                 android:id="@+id/list_item_character_img"
-                android:src="@drawable/ic_person"
                 android:layout_width="@dimen/list_item_character_img_width"
-                android:layout_height="@dimen/list_item_character_img_height"/>
+                android:layout_height="@dimen/list_item_character_img_height"
+                android:src="@drawable/ic_person" />
 
             <View
                 android:layout_width="@dimen/list_item_character_img_width"
@@ -25,52 +25,13 @@
                 android:layout_gravity="bottom" />
 
             <TextView
-                android:layout_gravity="bottom"
                 android:id="@+id/list_item_character_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/app_offset_small"
+                android:layout_gravity="bottom"
                 tools:text="Name"
-                style="@style/ListItemCharacter.Name"/>
-
-<!--            <FrameLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent">-->
-
-<!--                <ProgressBar-->
-<!--                    android:id="@+id/progressBar"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:visibility="gone"-->
-<!--                    tools:visibility="visible" />-->
-
-<!--                <LinearLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:orientation="vertical">-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/messageTextView"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:text="@string/load_error"-->
-<!--                        android:visibility="gone"-->
-<!--                        tools:visibility="visible" />-->
-
-<!--                    <Button-->
-<!--                        android:id="@+id/tryAgainButton"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="@string/try_again"-->
-<!--                        android:layout_marginTop="2dp"-->
-<!--                        android:visibility="gone"-->
-<!--                        tools:visibility="visible" />-->
-
-<!--                </LinearLayout>-->
-
-<!--            </FrameLayout>-->
+                style="@style/ListItemCharacter"/>
 
         </FrameLayout>
 

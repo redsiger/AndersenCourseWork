@@ -42,16 +42,9 @@ class OffsetRecyclerDecorator(private val marginTop: Int = 0,
             outRect.right = marginRight
         }
 
-        if (layoutManager is LinearLayoutManager && layoutManager !is GridLayoutManager) {
-//            view.layoutParams.width = -2
-            val position = parent.getChildAdapterPosition(view)
-                .let { if (it == RecyclerView.NO_POSITION) return else it }
-            if (position == 0) outRect.left = getPx(0, view.context)
-        }
-
-        if (layoutManager is GridLayoutManager) {
-            view.layoutParams.width = -1
-        }
+//        if (layoutManager is GridLayoutManager) {
+//            view.layoutParams.width = -1
+//        }
     }
 
     private fun getPx(dp: Int, context: Context): Int {

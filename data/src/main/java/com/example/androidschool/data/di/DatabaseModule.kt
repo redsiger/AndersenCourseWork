@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.androidschool.data.database.*
 import com.example.androidschool.data.database.characters.CharacterDetailsDao
 import com.example.androidschool.data.database.characters.CharactersListDao
+import com.example.androidschool.data.database.episodes.EpisodesListDao
 import com.example.androidschool.data.repositories.characters.detail.CharacterDetailsLocalStorage
 import com.example.androidschool.data.repositories.characters.list.CharactersLocalStorage
 import com.squareup.moshi.Moshi
@@ -48,6 +49,11 @@ class DatabaseModule {
     @Provides
     fun provideCharactersDao(database: AppDatabase): CharactersListDao
         = database.getCharactersDao()
+
+    @Singleton
+    @Provides
+    fun provideEpisodesDao(database: AppDatabase): EpisodesListDao
+        = database.getEpisodesDao()
 
     @Singleton
     @Provides

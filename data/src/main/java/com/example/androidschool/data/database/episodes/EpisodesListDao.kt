@@ -1,9 +1,6 @@
 package com.example.androidschool.data.database.episodes
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import com.example.androidschool.data.database.episodes.model.EpisodeListItemRoom
 
 @Dao
@@ -16,12 +13,16 @@ interface EpisodesListDao {
         limit: Int
     ): List<EpisodeListItemRoom> {
         insertEpisodes(episodes)
-        return getEpisodesPaging(offset, limit)
+        return getEpisodesPaging(offset, limit, "Breaking Bad")
     }
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEpisodes(episodes: List<EpisodeListItemRoom>)
 
-    @Query("SELECT * FROM episodes_list_items WHERE episode_id > :offset AND episode_id <= (:offset + :limit) ")
-    suspend fun getEpisodesPaging(offset: Int, limit: Int): List<EpisodeListItemRoom>
+    @Query(
+        value = "SELECT * FROM episodes_list_items " +
+            "WHERE episode_id > :offset " +
+            "AND episode_id <= (:offset + :limit) " +
+            "AND series = :series")
+    suspend fun getEpisodesPaging(offset: Int, limit: Int, series: String): List<EpisodeListItemRoom>
 }

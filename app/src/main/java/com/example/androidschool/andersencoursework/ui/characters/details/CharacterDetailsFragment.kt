@@ -1,7 +1,6 @@
 package com.example.androidschool.andersencoursework.ui.characters.details
 
 import android.content.Context
-import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +21,7 @@ import javax.inject.Inject
 
 class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.layout.fragment_character_details) {
 
-    @Inject lateinit var resources: ResourceProvider
+    @Inject lateinit var resourceProvider: ResourceProvider
     @Inject lateinit var mContext: Context
 
     private val args: CharacterDetailsFragmentArgs by navArgs()
@@ -99,7 +98,7 @@ class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.
     private fun showErrorMessage(data: CharacterDetailsUI) {
         Snackbar.make(
             viewBinding.root,
-            resources.getString(R.string.default_error_message),
+            resourceProvider.resources. getString(R.string.default_error_message),
             Snackbar.LENGTH_LONG)
             .setAction(
                 R.string.refresh_btn_title,

@@ -21,7 +21,7 @@ interface EpisodesListLocalStorage {
     ): EpisodesListLocalStorage {
 
         override suspend fun getEpisodesPaging(offset: Int, limit: Int): List<EpisodeListItem> {
-            return dao.getEpisodesPaging(offset, limit).map(EpisodeListItemRoom::toDomainModel)
+            return dao.getEpisodesPaging(offset, limit, "Breaking Bad").map(EpisodeListItemRoom::toDomainModel)
         }
 
         override suspend fun insertAndReturn(

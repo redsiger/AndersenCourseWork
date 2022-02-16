@@ -10,6 +10,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentSearchBinding
 import com.example.androidschool.andersencoursework.di.appComponent
@@ -28,11 +30,13 @@ class SearchFragment: BaseFragment<FragmentSearchBinding>(R.layout.fragment_sear
     @Inject lateinit var viewModelFactory: SearchViewModel.Factory
     private val viewModel: SearchViewModel by viewModels { viewModelFactory }
 
+    private val mNavController: NavController by lazy { findNavController() }
+
     private val mAdapter: SearchAdapter by lazy { SearchAdapter() }
 
     override fun initBinding(view: View): FragmentSearchBinding = FragmentSearchBinding.bind(view)
     override fun initFragment() {
-        setupToolbar(viewBinding.fragmentSearchToolbar)
+        viewBinding.fragmentSearchBackBtn.setOnClickListener { mNavController.navigateUp() }
         initSearchResultList()
 
         with(viewBinding) {

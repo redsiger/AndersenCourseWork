@@ -5,51 +5,42 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/fragment_search_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        style="@style/Theme.ToolBar">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="?actionBarSize"
+            android:orientation="horizontal"
+            android:background="@color/colorSurface">
+
+            <ImageView
+                android:id="@+id/fragment_search_back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:src="@drawable/ic_arrow_back"
+                />
 
             <EditText
                 android:id="@+id/fragment_search_input"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:inputType="text"
                 android:hint="@string/fragment_search_hint"
-                android:backgroundTint="?attr/colorPrimary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/fragment_search_clear_btn"/>
+                android:backgroundTint="?attr/colorPrimary" />
 
             <ImageView
                 android:id="@+id/fragment_search_clear_btn"
                 android:src="@drawable/ic_delete_text"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_margin="12dp"
-                app:layout_constraintEnd_toStartOf="@id/fragment_search_search_btn"
+                android:layout_margin="@dimen/app_offset_medium_small"
                 android:clickable="true"
                 android:visibility="gone"
                 android:background="?attr/selectableItemBackgroundBorderless"/>
 
-            <ImageView
-                android:id="@+id/fragment_search_search_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="12dp"
-                android:src="@drawable/ic_search"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:clickable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"/>
+        </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.appbar.MaterialToolbar>
-    
     <include layout="@layout/merge_decor_line"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

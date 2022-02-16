@@ -29,6 +29,10 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
     private var _toolbarBinding: MergeToolbarBinding? = null
     private val toolbarBinding get() = _toolbarBinding!!
 
+    @Inject
+    lateinit var viewModelFactory: CharactersListStateViewModel.Factory
+    private val viewModel: CharactersListStateViewModel by viewModels { viewModelFactory }
+
     private val mNavController: NavController by lazy { findNavController() }
 
     private val mScrollListener: InfiniteScrollListener by lazy {
@@ -38,30 +42,15 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
         )
     }
 
-    @Inject
-    lateinit var viewModelFactory: CharactersListStateViewModel.Factory
-    private val viewModel: CharactersListStateViewModel by viewModels { viewModelFactory }
+    @Inject lateinit var charactersListAdapter: CharactersListDelegateAdapter
 
     private val mPagingAdapter: CompositeAdapter by lazy {
         CompositeAdapter.Builder()
-            .add(CharactersListDelegateAdapter())
+            .add(charactersListAdapter)
             .add(DefaultErrorDelegateAdapter( onTryAgain = {} ))
             .add(DefaultLoadingDelegateAdapter())
             .build()
     }
-
-//    @Inject lateinit var pagingAdapterFactory: GenericListAdapter.Factory<CharacterListItemUI>
-//    private val mPagingAdapter: GenericListAdapter<CharacterListItemUI> by lazy {
-//        pagingAdapterFactory.create(
-//            layoutId =  R.layout.list_item_character,
-//            errorAndLoadingLayoutId = R.layout.include_default_load_state,
-//            onClick = { id: Int ->
-//                val action = CharactersListFragmentDirections.fromListToDetails(id)
-//                mNavController.navigate(action)
-//            },
-//            refresh = { viewModel.loadNewPage() }
-//        )
-//    }
 
     override fun initFragment() {
         _toolbarBinding = MergeToolbarBinding.bind(viewBinding.root)
@@ -135,7 +124,7 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
         viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener { viewModel.refresh() }
     }
 
-    private fun handleState(state: UIStatePaging<DiffComparable>) {
+    private fun handleState(state: UIStatePaging<DiffComparable>) =
         when (state) {
             is UIStatePaging.EmptyLoading -> handleEmptyLoading(state)
             is UIStatePaging.EmptyData -> handleEmptyData(state)
@@ -146,7 +135,6 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
             is UIStatePaging.LoadingPartialDataError -> handleLoadingPartialDataError(state)
             is UIStatePaging.Refresh -> handleRefresh(state)
         }
-    }
 
     private fun handleEmptyLoading(state: UIStatePaging.EmptyLoading<DiffComparable>) {
         hideAll()

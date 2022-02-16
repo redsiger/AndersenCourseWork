@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="@dimen/app_card_radius_small"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/app_offset_medium_small">
+
+        <TextView
+            android:id="@+id/list_item_episode_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/app_offset_small"
+            style="@style/PrimaryText.EpisodeListItem"
+            tools:text="Episode 1: &quot;Episode&quot;"/>
+
+        <TextView
+            android:id="@+id/list_item_episode_airDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SecondaryText.EpisodeListItem"
+            tools:text="01-20-2008"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,14 +1,14 @@
 package com.example.androidschool.andersencoursework.di.util
 
 import android.content.Context
+import android.content.res.Resources
 import javax.inject.Inject
 
 interface ResourceProvider {
 
-    fun getString(resId: Int): String
+    val resources: Resources
 
     class Base @Inject constructor(private val context: Context): ResourceProvider {
-
-        override fun getString(resId: Int) = context.resources.getString(resId)
+        override val resources: Resources = context.resources
     }
 }

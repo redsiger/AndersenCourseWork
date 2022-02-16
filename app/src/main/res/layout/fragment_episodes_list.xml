@@ -4,8 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/merge_toolbar"/>
-    <include layout="@layout/merge_decor_line"/>
+    <include layout="@layout/merge_toolbar" />
+
+    <include layout="@layout/merge_decor_line" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/fragment_episodes_list_refresh"
@@ -21,12 +22,13 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/fragment_episodes_list_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
-            <include layout="@layout/include_default_empty_error" />
+            <include
+                android:id="@+id/errorBlock"
+                layout="@layout/include_default_empty_error" />
 
         </FrameLayout>
-
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

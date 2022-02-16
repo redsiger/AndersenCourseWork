@@ -14,6 +14,7 @@
     <!--  Episodes  -->
     <string name="episodes_nav_graph_title">Episodes</string>
     <string name="episodes_fragment_title">Episodes</string>
+    <string name="episode_list_item_title">%1$s:"%2$s. "%3$s"</string>
 
     <!--  Search  -->
     <string name="fragment_search_hint">Search for characters/episodes…</string>

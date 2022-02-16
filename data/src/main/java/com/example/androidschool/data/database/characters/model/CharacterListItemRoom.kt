@@ -4,7 +4,7 @@ import androidx.room.*
 import com.example.androidschool.domain.characters.model.CharacterListItem
 
 @Entity(tableName = "characters")
-data class CharacterRoomEntity(
+data class CharacterListItemRoom(
     @PrimaryKey
     @ColumnInfo(name = "charId")
     val charId: Int,
@@ -48,6 +48,6 @@ data class CharacterRoomEntity(
     }
 }
 
-fun List<CharacterRoomEntity>.toDomainList(): List<CharacterListItem> {
+fun List<CharacterListItemRoom>.toDomainList(): List<CharacterListItem> {
     return this.map { it.toDomainModel() }
 }

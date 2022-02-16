@@ -2,7 +2,7 @@ package com.example.androidschool.data.repositories.characters.list
 
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.characters.CharactersListDao
-import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
+import com.example.androidschool.data.database.characters.model.CharacterListItemRoom
 import com.example.androidschool.data.database.characters.model.toDomainList
 import com.example.androidschool.domain.characters.model.CharacterListItem
 import kotlinx.coroutines.flow.Flow
@@ -29,7 +29,7 @@ interface CharactersLocalStorage {
             = dao.searchCharacters(query).map { it.toDomainList() }
 
         override suspend fun getCharactersPaging(offset: Int, limit: Int): List<CharacterListItem>
-            = dao.getCharactersPaging(offset).map(CharacterRoomEntity::toDomainModel)
+            = dao.getCharactersPaging(offset).map(CharacterListItemRoom::toDomainModel)
 
         override suspend fun insertAndReturnPage(
             characters: List<CharacterListItem>,
@@ -41,7 +41,7 @@ interface CharactersLocalStorage {
                     characters.map { mapper.toRoomEntity(it, offset) }
                     , offset, limit
                 )
-                .map(CharacterRoomEntity::toDomainModel)
+                .map(CharacterListItemRoom::toDomainModel)
         }
 
         override suspend fun insertCharacters(characters: List<CharacterListItem>, offset: Int)

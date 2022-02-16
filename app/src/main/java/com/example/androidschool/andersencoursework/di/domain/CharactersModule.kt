@@ -1,4 +1,4 @@
-package com.example.androidschool.andersencoursework.di.domain.characters
+package com.example.androidschool.andersencoursework.di.domain
 
 import com.example.androidschool.data.network.characters.CharactersService
 import com.example.androidschool.data.repositories.characters.detail.CharacterDetailsLocalStorage

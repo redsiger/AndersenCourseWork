@@ -5,10 +5,15 @@ import androidx.room.*
 import com.example.androidschool.data.database.characters.CharacterDetailsDao
 import com.example.androidschool.data.database.characters.CharactersListDao
 import com.example.androidschool.data.database.characters.model.CharacterDetailsRoom
-import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
+import com.example.androidschool.data.database.characters.model.CharacterListItemRoom
+import com.example.androidschool.data.database.episodes.EpisodesListDao
+import com.example.androidschool.data.database.episodes.model.EpisodeListItemRoom
 
 @Database(
-    entities = [CharacterRoomEntity::class, CharacterDetailsRoom::class],
+    entities = [
+        CharacterListItemRoom::class,
+        CharacterDetailsRoom::class,
+        EpisodeListItemRoom::class],
     version = 1,
     exportSchema = true
 )
@@ -37,4 +42,6 @@ abstract class AppDatabase: RoomDatabase() {
 
     abstract fun getCharactersDao(): CharactersListDao
     abstract fun getCharacterDetailsDao(): CharacterDetailsDao
+
+    abstract fun getEpisodesDao(): EpisodesListDao
 }

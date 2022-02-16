@@ -5,12 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterListItemUI
 import com.example.androidschool.andersencoursework.ui.core.recycler.DelegateAdapter
+import dagger.Component
+import javax.inject.Inject
 
-class CharactersListDelegateAdapter:
+class CharactersListDelegateAdapter @Inject constructor (
+    private val glide: RequestManager
+):
     DelegateAdapter<CharacterListItemUI, CharactersListDelegateAdapter.ViewHolder>(CharacterListItemUI::class.java) {
 
     override fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
@@ -29,7 +34,7 @@ class CharactersListDelegateAdapter:
 
         fun bind(item: CharacterListItemUI) {
             viewBinding.listItemCharacterName.text = item.name
-            Glide.with(itemView.context)
+            glide
                 .load(item.img)
                 .centerCrop()
                 .into(viewBinding.listItemCharacterImg)

@@ -1,4 +1,4 @@
-package com.example.androidschool.andersencoursework.di.domain.episodes
+package com.example.androidschool.andersencoursework.di.domain
 
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.episodes.EpisodesListDao
@@ -9,6 +9,7 @@ import com.example.androidschool.domain.episode.EpisodesListRepository
 import com.example.androidschool.domain.episode.interactors.EpisodesListInteractor
 import dagger.Module
 import dagger.Provides
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
@@ -36,5 +37,11 @@ class EpisodesModule {
         mapper: DatabaseMapper
     ): EpisodesListLocalStorage {
         return EpisodesListLocalStorage.Base(dao, mapper)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEpisodesService(retrofit: Retrofit): EpisodesService {
+        return retrofit.create(EpisodesService::class.java)
     }
 }

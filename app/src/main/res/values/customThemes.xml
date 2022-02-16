@@ -10,16 +10,16 @@
     <style name="Theme.MainTheme" parent="Theme.AppTheme">
         <item name="bottomNavigationStyle">@style/bottom</item>
         <item name="android:fontFamily">@font/montserrat</item>
-        <item name="android:textColorTertiary">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
     </style>
 
 
     <!-- BottomNavigation  -->
     <style name="bottom" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
-        <item name="materialThemeOverlay">@style/overlay</item>
+        <item name="materialThemeOverlay">@style/bottomOverlay</item>
     </style>
 
-    <style name="overlay">
+    <style name="bottomOverlay">
         <item name="elevationOverlayEnabled">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/colorSecondary</item>
@@ -35,7 +35,7 @@
         <item name="titleTextColor">?attr/colorOnPrimary</item>
         <item name="subtitleTextAppearance">@style/ToolbarSubtitle</item>
         <item name="subtitleTextColor">?attr/colorOnPrimary</item>
-        <item name="colorControlNormal">@color/teal_200</item>
+        <item name="navigationIconTint">@color/teal_200</item>
     </style>
 
     <!--  Toolbar Title  -->

@@ -11,12 +11,16 @@
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/include_default_load_state.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/list_item_character.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/feature_characters/src/main/res/layout/fragment_characters_list.xml" value="0.5" />
-        <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_character_details.xml" value="0.25416666666666665" />
+        <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/drawable/ic_arrow_back.xml" value="0.2595" />
+        <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_character_details.xml" value="0.1" />
         <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_characters_list.xml" value="0.25416666666666665" />
         <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_episodes_list.xml" value="0.264" />
-        <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_search.xml" value="0.25416666666666665" />
+        <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_search.xml" value="0.4" />
         <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/include_default_empty_error.xml" value="0.1388888888888889" />
         <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/include_default_load_state.xml" value="0.17407407407407408" />
+        <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/list_item_character.xml" value="0.4" />
+        <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/list_item_episode.xml" value="0.536" />
         <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/merge_toolbar_decor.xml" value="0.25416666666666665" />
       </map>
     </option>

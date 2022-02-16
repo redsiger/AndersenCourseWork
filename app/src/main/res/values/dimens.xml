@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--  App text sizes  -->
+    <dimen name="app_text_large">20sp</dimen>
+    <dimen name="app_text_medium">14sp</dimen>
+    <dimen name="app_text_small">10sp</dimen>
+
+    <!--  App margins/paddings  -->
+    <dimen name="app_offset_large">20dp</dimen>
+    <dimen name="app_offset_medium">16dp</dimen>
+    <dimen name="app_offset_medium_small">12dp</dimen>
+    <dimen name="app_offset_small">8dp</dimen>
+
+    <!--  App cards sizes  -->
+    <dimen name="app_card_radius_large">20dp</dimen>
+    <dimen name="app_card_radius_medium">16dp</dimen>
+    <dimen name="app_card_radius_small">8dp</dimen>
+
     <!--  Character List Item  -->
     <dimen name="list_item_character_img_width">150dp</dimen>
     <dimen name="list_item_character_img_height">200dp</dimen>
+
 </resources>

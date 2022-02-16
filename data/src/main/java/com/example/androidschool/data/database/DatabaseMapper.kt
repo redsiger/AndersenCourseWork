@@ -1,7 +1,7 @@
 package com.example.androidschool.data.database
 
 import com.example.androidschool.data.database.characters.model.CharacterDetailsRoom
-import com.example.androidschool.data.database.characters.model.CharacterRoomEntity
+import com.example.androidschool.data.database.characters.model.CharacterListItemRoom
 import com.example.androidschool.data.database.episodes.model.EpisodeListItemRoom
 import com.example.androidschool.data.network.characters.model.CharacterNetworkEntity
 import com.example.androidschool.domain.characters.model.CharacterDetails
@@ -26,8 +26,8 @@ class DatabaseMapper {
         )
     }
 
-    fun toRoomEntity(characterNetworkEntity: CharacterNetworkEntity, offset: Int): CharacterRoomEntity {
-        return CharacterRoomEntity(
+    fun toRoomEntity(characterNetworkEntity: CharacterNetworkEntity, offset: Int): CharacterListItemRoom {
+        return CharacterListItemRoom(
             appearance = characterNetworkEntity.appearance,
             betterCallSaulAppearance = characterNetworkEntity.betterCallSaulAppearance,
             birthday = characterNetworkEntity.birthday,
@@ -43,8 +43,8 @@ class DatabaseMapper {
         )
     }
 
-    fun toRoomEntity(characterEntity: CharacterListItem, offset: Int): CharacterRoomEntity {
-        return CharacterRoomEntity(
+    fun toRoomEntity(characterEntity: CharacterListItem, offset: Int): CharacterListItemRoom {
+        return CharacterListItemRoom(
             appearance = characterEntity.appearance,
             betterCallSaulAppearance = characterEntity.betterCallSaulAppearance,
             birthday = characterEntity.birthday,
