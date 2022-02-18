@@ -1,12 +1,17 @@
 package com.example.androidschool.andersencoursework.di.domain
 
 import com.example.androidschool.data.database.DatabaseMapper
+import com.example.androidschool.data.database.episodes.EpisodeDetailsDao
 import com.example.androidschool.data.database.episodes.EpisodesListDao
 import com.example.androidschool.data.network.episodes.EpisodesService
+import com.example.androidschool.data.repositories.episodes.details.EpisodeDetailsLocalStorage
+import com.example.androidschool.data.repositories.episodes.details.EpisodeDetailsRepositoryImpl
 import com.example.androidschool.data.repositories.episodes.list.EpisodesListLocalStorage
-import com.example.androidschool.data.repositories.episodes.list.EpisodesRepositoryImpl
-import com.example.androidschool.domain.episode.EpisodesListRepository
+import com.example.androidschool.data.repositories.episodes.list.EpisodesListRepositoryImpl
+import com.example.androidschool.domain.episode.interactors.EpisodeDetailsInteractor
+import com.example.androidschool.domain.episode.repository.EpisodesListRepository
 import com.example.androidschool.domain.episode.interactors.EpisodesListInteractor
+import com.example.androidschool.domain.episode.repository.EpisodeDetailsRepository
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -14,6 +19,30 @@ import javax.inject.Singleton
 
 @Module
 class EpisodesModule {
+
+    @Singleton
+    @Provides
+    fun provideEpisodeDetailsInteractor(repository: EpisodeDetailsRepository): EpisodeDetailsInteractor {
+        return EpisodeDetailsInteractor.Base(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEpisodeDetailsRepository(
+        service: EpisodesService,
+        localStorage: EpisodeDetailsLocalStorage
+    ): EpisodeDetailsRepository {
+        return EpisodeDetailsRepositoryImpl(service, localStorage)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEpisodeDetailsLocalStorage(
+        dao: EpisodeDetailsDao,
+        mapper: DatabaseMapper
+    ): EpisodeDetailsLocalStorage {
+        return EpisodeDetailsLocalStorage.Base(dao, mapper)
+    }
 
     @Singleton
     @Provides
@@ -27,7 +56,7 @@ class EpisodesModule {
         service: EpisodesService,
         localStorage: EpisodesListLocalStorage
     ): EpisodesListRepository {
-        return EpisodesRepositoryImpl(service, localStorage)
+        return EpisodesListRepositoryImpl(service, localStorage)
     }
 
     @Singleton

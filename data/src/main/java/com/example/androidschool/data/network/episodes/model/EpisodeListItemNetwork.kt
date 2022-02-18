@@ -1,5 +1,6 @@
 package com.example.androidschool.data.network.episodes.model
 
+import com.example.androidschool.domain.episode.model.EpisodeDetails
 import com.example.androidschool.domain.episode.model.EpisodeListItem
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -23,6 +24,18 @@ data class EpisodeListItemNetwork(
 ) {
     fun toDomainModel(): EpisodeListItem {
         return EpisodeListItem(
+            airDate = airDate,
+            characters = characters,
+            episode = episode,
+            episodeId = episodeId,
+            season = season,
+            series = series,
+            title = title
+        )
+    }
+
+    fun toDomainDetailsModel(): EpisodeDetails {
+        return EpisodeDetails(
             airDate = airDate,
             characters = characters,
             episode = episode,

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,6 +21,8 @@ import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
 private const val DEFAULT_FRAGMENT_TITLE = ""
 
 abstract class BaseFragment<B: ViewBinding>(resId: Int): Fragment(resId) {
+
+    val navController: NavController by lazy { findNavController() }
 
     private var _viewBinding: B? = null
     protected val viewBinding: B get() = checkNotNull(_viewBinding)

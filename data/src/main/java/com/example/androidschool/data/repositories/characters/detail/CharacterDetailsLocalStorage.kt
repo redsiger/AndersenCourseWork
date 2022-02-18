@@ -7,9 +7,7 @@ import kotlin.Exception
 
 interface CharacterDetailsLocalStorage {
 
-    suspend fun getCharacterDetails(id: Int): CharacterDetails
-
-    suspend fun insertCharacterDetails(character: CharacterDetails)
+    suspend fun getCharacterDetails(id: Int): CharacterDetails?
 
     suspend fun insertAndReturn(character: CharacterDetails): CharacterDetails
 
@@ -18,16 +16,10 @@ interface CharacterDetailsLocalStorage {
         private val mapper: DatabaseMapper
     ): CharacterDetailsLocalStorage {
 
-        override suspend fun getCharacterDetails(id: Int): CharacterDetails {
+        override suspend fun getCharacterDetails(id: Int): CharacterDetails? {
             return try {
                 dao.getCharacterDetails(id).toDomainModel()
-            } catch (e: Exception) {
-                CharacterDetails()
-            }
-        }
-
-        override suspend fun insertCharacterDetails(character: CharacterDetails) {
-            dao.insertCharacterDetails(mapper.toRoomEntity(character))
+            } catch (e: Exception) { null }
         }
 
         override suspend fun insertAndReturn(character: CharacterDetails): CharacterDetails {

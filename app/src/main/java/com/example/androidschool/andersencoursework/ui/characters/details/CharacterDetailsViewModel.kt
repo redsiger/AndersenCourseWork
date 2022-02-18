@@ -4,65 +4,76 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterDetailsUI
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
+import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
 import com.example.androidschool.andersencoursework.util.UIState
 import com.example.androidschool.domain.characters.interactors.CharacterDetailsInteractor
+import com.example.androidschool.domain.episode.interactors.EpisodesListInteractor
 import com.example.androidschool.util.NetworkResponse
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
 
-class CharacterDetailsViewModel @Inject constructor(
+class CharacterDetailsViewModel constructor(
     private val defaultDispatcher: CoroutineDispatcher,
-    private val interactor: CharacterDetailsInteractor,
+    private val characterInteractor: CharacterDetailsInteractor,
+    private val episodesListInteractor: EpisodesListInteractor,
     private val mapper: UIMapper
 ): ViewModel() {
 
-    private var _character = MutableStateFlow<UIState<CharacterDetailsUI>>(UIState.InitialLoading)
-    val character: StateFlow<UIState<CharacterDetailsUI>> get() = _character.asStateFlow()
+    private val _uiState = MutableStateFlow<UIState<CharacterDetailsState>>(UIState.InitialLoading)
+    val uiState: StateFlow<UIState<CharacterDetailsState>> get() = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            character.collectLatest {
+            uiState.collectLatest {
                 Log.e("CharacterDetailsViewModel", "state:$it")
             }
         }
     }
 
-    fun loadCharacter(characterId: Int) {
-        _character.value = UIState.InitialLoading
-        load(characterId)
+    fun load(characterId: Int) {
+        _uiState.value = UIState.InitialLoading
+        this.loadUIState(characterId)
     }
 
-    fun refresh(data: CharacterDetailsUI, characterId: Int) {
-        _character.value = UIState.Refresh(data)
-        load(characterId)
+    fun refresh(characterId: Int) {
+        _uiState.value = UIState.Refresh
+        this.loadUIState(characterId)
     }
 
     fun retry(characterId: Int) {
-        _character.value = UIState.InitialLoading
-        load(characterId)
+        _uiState.value = UIState.InitialLoading
+        this.loadUIState(characterId)
     }
 
-    private fun load(characterId: Int) {
+    private fun loadUIState(characterId: Int) {
         viewModelScope.launch(defaultDispatcher) {
-            val response = interactor.getCharacterDetails(characterId)
-            when (response) {
+
+            when (val characterDetails = loadCharacterDetails(characterId)) {
                 is NetworkResponse.Success -> {
-                    _character.value = UIState.Success(
-                        data = mapper.mapCharacterDetailEntity(response.data)
+                    val appearanceList = loadAppearance(characterDetails.data!!.appearance)
+                    _uiState.value = UIState.Success(
+                        data = CharacterDetailsState(
+                            character = characterDetails.data!!,
+                            appearance = appearanceList
+                        )
                     )
                 }
                 is NetworkResponse.Error -> {
-                    when (response.data.charId) {
-                        -1 -> _character.value = UIState.EmptyError(response.exception)
-                        else -> _character.value = UIState.Error(
-                            data = mapper.mapCharacterDetailEntity(response.data),
-                            error = response.exception
+                    characterDetails.data?.let { character ->
+                        val appearanceList = loadAppearance(character.appearance)
+                        _uiState.value = UIState.Error(
+                            data = CharacterDetailsState(
+                                character = character,
+                                appearance = appearanceList
+                            ),
+                            error = characterDetails.exception
+                        )
+                    } ?: run {
+                        _uiState.value = UIState.EmptyError(
+                            error = characterDetails.exception
                         )
                     }
                 }
@@ -70,16 +81,45 @@ class CharacterDetailsViewModel @Inject constructor(
         }
     }
 
+    private suspend fun loadCharacterDetails(characterId: Int): NetworkResponse<CharacterDetailsUI?> {
+        val response = characterInteractor.getCharacterDetails(characterId)
+        return when (response) {
+            is NetworkResponse.Success -> NetworkResponse.Success(
+                data = mapper.mapCharacterDetails(response.data)
+            )
+            is NetworkResponse.Error -> NetworkResponse.Error(
+                data = mapper.mapCharacterDetails(response.data),
+                exception = response.exception
+            )
+        }
+    }
+
+    private suspend fun loadAppearance(appearanceList: List<Int>): List<EpisodeListItemUI> {
+        val response = episodesListInteractor.getCharacterAppearance(appearanceList)
+        return mapper.mapListEpisodeListItem(response.data)
+    }
+
     class Factory @Inject constructor(
         @Named("Dispatchers.IO") private val defaultDispatcher: CoroutineDispatcher,
-        private val interactor: CharacterDetailsInteractor,
+        private val characterInteractor: CharacterDetailsInteractor,
+        private val episodesListInteractor: EpisodesListInteractor,
         private val mapper: UIMapper
     ): ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             require(modelClass == CharacterDetailsViewModel::class.java)
-            return CharacterDetailsViewModel(defaultDispatcher, interactor, mapper) as T
+            return CharacterDetailsViewModel(
+                defaultDispatcher,
+                characterInteractor,
+                episodesListInteractor,
+                mapper
+            ) as T
         }
     }
 }
+
+data class CharacterDetailsState(
+    val character: CharacterDetailsUI,
+    val appearance: List<EpisodeListItemUI>
+)

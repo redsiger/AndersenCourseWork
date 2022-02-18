@@ -10,11 +10,20 @@
     <!--  Characters  -->
     <string name="characters_nav_graph_title">Characters</string>
     <string name="characters_fragment_title">Characters</string>
+    <string name="characters_details_nickname">\"%1$s\"</string>
+    <string name="character_appeared_in">Character appeared in</string>
+
+    <!--  Appearance List Item  -->
+    <string name="appearance_list_item_season">Season %1$s</string>
+    <string name="appearance_list_item_episode">Episode %1$s</string>
 
     <!--  Episodes  -->
     <string name="episodes_nav_graph_title">Episodes</string>
     <string name="episodes_fragment_title">Episodes</string>
-    <string name="episode_list_item_title">%1$s:"%2$s. "%3$s"</string>
+    <string name="episode_list_item_title">%1$s.%2$s: \"%3$s\"</string>
+
+    <!--  Episode Details  -->
+    <string name="episode_details_season_title">Season</string>
 
     <!--  Search  -->
     <string name="fragment_search_hint">Search for characters/episodes…</string>
@@ -22,5 +31,7 @@
     <string name="try_again">Try again</string>
     <string name="default_error_message">Something went wrong</string>
     <string name="default_emptyData_message">Nothing to show here</string>
+    <string name="episode_details_episode_details">Episode</string>
+    <string name="episode_details_characters_list_title">Characters</string>
 
 </resources>

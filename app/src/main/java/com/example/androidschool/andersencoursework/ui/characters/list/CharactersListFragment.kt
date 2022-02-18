@@ -21,7 +21,7 @@ import com.example.androidschool.andersencoursework.util.InfiniteScrollListener
 import com.example.androidschool.andersencoursework.util.UIStatePaging
 import javax.inject.Inject
 
-@Suppress("UNCHECKED_CAST")
+//@Suppress("UNCHECKED_CAST")
 class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layout.fragment_characters_list) {
 
     override fun initBinding(view: View): FragmentCharactersListBinding = FragmentCharactersListBinding.bind(view)
@@ -33,8 +33,6 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
     lateinit var viewModelFactory: CharactersListStateViewModel.Factory
     private val viewModel: CharactersListStateViewModel by viewModels { viewModelFactory }
 
-    private val mNavController: NavController by lazy { findNavController() }
-
     private val mScrollListener: InfiniteScrollListener by lazy {
         InfiniteScrollListener(
             action = viewModel::loadNewPage,
@@ -42,11 +40,11 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
         )
     }
 
-    @Inject lateinit var charactersListAdapter: CharactersListDelegateAdapter
+    @Inject lateinit var charactersListAdapter: CharactersListDelegateAdapter.Factory
 
     private val mPagingAdapter: CompositeAdapter by lazy {
         CompositeAdapter.Builder()
-            .add(charactersListAdapter)
+            .add(charactersListAdapter.create(::navigateToDetails))
             .add(DefaultErrorDelegateAdapter( onTryAgain = {} ))
             .add(DefaultLoadingDelegateAdapter())
             .build()
@@ -66,6 +64,11 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
         super.onAttach(context)
     }
 
+    private fun navigateToDetails(id: Int) {
+        val action = CharactersListFragmentDirections.fromListToDetails(id)
+        navController.navigate(action)
+    }
+
     private fun initToolbar() {
 
         setupMainToolbar(
@@ -77,7 +80,7 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
                     R.id.menu_item_search -> {
                         val action =
                             CharactersListFragmentDirections.actionGlobalToSearch()
-                        mNavController.navigate(action)
+                        navController.navigate(action)
                         true
                     }
                     else -> false

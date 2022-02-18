@@ -19,4 +19,7 @@ interface CharactersService {
         @Path("id") characterId: Int
     ): Response<List<CharacterNetworkEntity>>
 
+    @GET("characters/")
+    suspend fun getAllCharacters(): Response<List<CharacterNetworkEntity>>
+
 }

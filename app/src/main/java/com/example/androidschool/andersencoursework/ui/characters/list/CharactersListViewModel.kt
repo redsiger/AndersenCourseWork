@@ -40,7 +40,7 @@ class CharactersListStateViewModel(
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             require(modelClass == CharactersListStateViewModel::class.java)
             return CharactersListStateViewModel(
-                mapper::mapCharacterEntity,
+                mapper::mapCharacterListItem,
                 defaultDispatcher,
                 charactersListInteractor
             ) as T

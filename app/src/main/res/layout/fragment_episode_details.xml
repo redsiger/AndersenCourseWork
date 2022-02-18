@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/episode_details_refresh_container"
+    android:background="?attr/colorSurface">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                android:id="@+id/errorBlock"
+                layout="@layout/include_default_empty_error" />
+
+            <LinearLayout
+                android:id="@+id/episode_details_main_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="?actionBarSize"
+                android:padding="@dimen/app_offset_large">
+
+                <TextView
+                    android:id="@+id/episode_details_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/app_offset_large"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    style="@style/AppDefaultTitle"
+                    tools:text="Episode Title Title Title" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/episode_details_season_title"
+                    style="@style/SecondaryText" />
+
+                <TextView
+                    android:id="@+id/episode_details_season"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/app_offset_small"
+                    tools:text="1"
+                    style="@style/PrimaryText"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/episode_details_episode_details"
+                    style="@style/SecondaryText" />
+
+                <TextView
+                    android:id="@+id/episode_details_episode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/app_offset_small"
+                    tools:text="1"
+                    style="@style/PrimaryText"
+                    />
+
+                <TextView
+                    android:id="@+id/episode_details_characters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/app_offset_small"
+                    android:text="@string/episode_details_characters_list_title"
+                    style="@style/SecondaryText" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/episode_details_characters_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/list_item_character"
+                    tools:itemCount="1" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/fragment_episode_details_fakeToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_gravity="center"
+                    android:background="@drawable/default_shade_from_top" />
+
+                <ImageView
+                    android:id="@+id/fragment_episode_details_backBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="?actionBarSize"
+                    android:layout_gravity="start"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/app_offset_medium"
+                    android:src="@drawable/ic_arrow_back"
+                    android:clickable="true" />
+
+            </FrameLayout>
+
+        </FrameLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

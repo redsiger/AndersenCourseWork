@@ -15,7 +15,7 @@
     <color name="colorPrimary">@color/black</color>
     <color name="colorOnPrimary">@color/white</color>
     <color name="colorSecondary">#FFEB3B</color>
-    <color name="colorTertiary">#595959</color>
+    <color name="colorTertiary">#C4C4C4</color>
 <!--    <color name="colorSurface">#39473a</color>-->
     <color name="colorSurface">@color/black</color>
     <color name="colorOnSurface">@color/white</color>

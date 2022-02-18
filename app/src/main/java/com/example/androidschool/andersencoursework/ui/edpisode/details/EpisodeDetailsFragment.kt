@@ -1,6 +1,7 @@
-package com.example.androidschool.andersencoursework.ui.characters.details
+package com.example.androidschool.andersencoursework.ui.edpisode.details
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -8,9 +9,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
 import com.example.androidschool.andersencoursework.R
-import com.example.androidschool.andersencoursework.databinding.FragmentCharacterDetailsBinding
+import com.example.androidschool.andersencoursework.databinding.FragmentEpisodeDetailsBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
+import com.example.androidschool.andersencoursework.ui.characters.details.CharacterDetailsState
+import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListDelegateAdapter
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.recycler.CompositeAdapter
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
@@ -19,43 +22,37 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
-class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.layout.fragment_character_details) {
+class EpisodeDetailsFragment: BaseFragment<FragmentEpisodeDetailsBinding>(R.layout.fragment_episode_details) {
 
     @Inject lateinit var resourceProvider: ResourceProvider
     @Inject lateinit var mContext: Context
-    @Inject lateinit var glide: RequestManager
 
-    private val args: CharacterDetailsFragmentArgs by navArgs()
-    private val characterId by lazy { args.characterId }
+    private val args: EpisodeDetailsFragmentArgs by navArgs()
+    private val episodeId by lazy { args.episodeId }
 
-    @Inject lateinit var viewModelFactory: CharacterDetailsViewModel.Factory
-    private val viewModel: CharacterDetailsViewModel by viewModels { viewModelFactory }
+    @Inject lateinit var viewModelFactory: EpisodeDetailsViewModel.Factory
+    private val viewModel: EpisodeDetailsViewModel by viewModels { viewModelFactory }
 
-    @Inject lateinit var appearanceAdapter: CharacterAppearanceDelegateAdapter
+    @Inject lateinit var charactersAdapter: CharactersListDelegateAdapter.Factory
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter.Builder()
-            .add(appearanceAdapter)
+            .add(charactersAdapter.create {  })
             .build()
     }
 
-    override fun initBinding(view: View): FragmentCharacterDetailsBinding =
-        FragmentCharacterDetailsBinding.bind(view)
+    override fun initBinding(view: View): FragmentEpisodeDetailsBinding =
+        FragmentEpisodeDetailsBinding.bind(view)
 
     override fun initFragment() {
         initBackBtn()
         initPage()
     }
 
-    override fun onAttach(context: Context) {
-        requireActivity().appComponent.inject(this)
-        super.onAttach(context)
-    }
-
     private fun initPage() {
         lifecycleScope.launchWhenStarted {
             viewModel.uiState.collectLatest { state -> handleState(state) }
         }
-        with(viewBinding.characterSeriesAppearanceList) {
+        with(viewBinding.episodeDetailsCharactersList) {
             adapter = mAdapter
             layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(
@@ -70,7 +67,11 @@ class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.
         }
     }
 
-    private fun handleState(state: UIState<CharacterDetailsState>) {
+    private fun initBackBtn() {
+        viewBinding.fragmentEpisodeDetailsBackBtn.setOnClickListener { navController.navigateUp() }
+    }
+
+    private fun handleState(state: UIState<EpisodeDetailsState>) {
         when (state) {
             is UIState.Success -> handleSuccess(state)
             is UIState.Error -> handleError(state)
@@ -88,33 +89,33 @@ class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.
     private fun handleInitialLoading(state: UIState.InitialLoading) {
         hideAll()
         showLoading()
-        viewModel.load(characterId)
+        viewModel.load(episodeId)
     }
 
     private fun handleRefresh(state: UIState.Refresh) {
         showLoading()
-        viewModel.load(characterId)
+        viewModel.load(episodeId)
     }
 
-    private fun handleSuccess(state: UIState.Success<CharacterDetailsState>) {
+    private fun handleSuccess(state: UIState.Success<EpisodeDetailsState>) {
         hideLoading()
         showContent(state.data)
-        viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
-            viewModel.refresh(characterId)
+        viewBinding.episodeDetailsRefreshContainer.setOnRefreshListener {
+            viewModel.refresh(episodeId)
         }
     }
 
-    private fun handleError(state: UIState.Error<CharacterDetailsState>) {
+    private fun handleError(state: UIState.Error<EpisodeDetailsState>) {
         hideLoading()
         hideAll()
         showContent(state.data)
         showErrorMessage(state)
-        viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
-            viewModel.refresh(characterId)
+        viewBinding.episodeDetailsRefreshContainer.setOnRefreshListener {
+            viewModel.refresh(episodeId)
         }
     }
 
-    private fun showErrorMessage(state: UIState.Error<CharacterDetailsState>) {
+    private fun showErrorMessage(state: UIState.Error<EpisodeDetailsState>) {
         Snackbar.make(
             viewBinding.root,
             resourceProvider.resources. getString(R.string.default_error_message),
@@ -123,7 +124,7 @@ class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.
             R.string.refresh_btn_title,
             object: View.OnClickListener {
                 override fun onClick(p0: View?) {
-                    viewModel.refresh(characterId)
+                    viewModel.refresh(episodeId)
                 }
             }
         ).show()
@@ -131,7 +132,7 @@ class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.
 
     private fun hideAll() {
         hideErrorBlock()
-        viewBinding.characterDetailsMainContent.visibility = View.GONE
+        viewBinding.episodeDetailsMainContent.visibility = View.GONE
     }
 
     private fun hideErrorBlock() {
@@ -140,33 +141,24 @@ class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.
     }
 
     private fun showLoading() {
-        viewBinding.characterDetailsRefreshContainer.isRefreshing = true
+        viewBinding.episodeDetailsRefreshContainer.isRefreshing = true
     }
 
     private fun hideLoading() {
-        viewBinding.characterDetailsRefreshContainer.isRefreshing = false
+        viewBinding.episodeDetailsRefreshContainer.isRefreshing = false
     }
 
-    private fun showContent(data: CharacterDetailsState) {
+    private fun showContent(data: EpisodeDetailsState) {
         hideErrorBlock()
-        viewBinding.characterDetailsMainContent.visibility = View.VISIBLE
+        viewBinding.episodeDetailsMainContent.visibility = View.VISIBLE
         with(viewBinding) {
-            with(data) {
-                glide
-                    .load(character.img)
-                    .centerCrop()
-                    .into(characterPhoto)
 
-                characterNickname.text =
-                    resourceProvider.resources.getString(
-                        R.string.characters_details_nickname,
-                        character.nickname
-                    )
+            episodeDetailsTitle.text = data.episode.title
+            episodeDetailsSeason.text = data.episode.season
+            episodeDetailsEpisode.text = data.episode.episode
 
-                characterName.text = character.name
-
-                mAdapter.submitList(appearance)
-            }
+            Log.e("CharactersInEpisode", "${data.characters}")
+            mAdapter.submitList(data.characters)
         }
     }
 
@@ -178,15 +170,16 @@ class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.
     private fun showErrorBlock(error: Exception) {
         hideLoading()
         viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE
-        viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
-            viewModel.retry(characterId)
+        viewBinding.episodeDetailsRefreshContainer.setOnRefreshListener {
+            viewModel.retry(episodeId)
         }
         viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener {
-            viewModel.retry(characterId)
+            viewModel.retry(episodeId)
         }
     }
 
-    private fun initBackBtn() {
-        viewBinding.fragmentCharacterDetailsBackBtn.setOnClickListener { navController.navigateUp() }
+    override fun onAttach(context: Context) {
+        requireActivity().appComponent.inject(this)
+        super.onAttach(context)
     }
 }

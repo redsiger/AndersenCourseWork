@@ -4,7 +4,7 @@ import com.example.androidschool.data.network.characters.CharactersService
 import com.example.androidschool.data.repositories.characters.detail.CharacterDetailsLocalStorage
 import com.example.androidschool.data.repositories.characters.detail.CharacterDetailsRepositoryImpl
 import com.example.androidschool.data.repositories.characters.list.CharactersListRepositoryImpl
-import com.example.androidschool.data.repositories.characters.list.CharactersLocalStorage
+import com.example.androidschool.data.repositories.characters.list.CharactersListLocalStorage
 import com.example.androidschool.domain.characters.interactors.CharacterDetailsInteractor
 import com.example.androidschool.domain.characters.interactors.CharactersListInteractor
 import com.example.androidschool.domain.characters.repository.CharacterDetailsRepository
@@ -42,7 +42,7 @@ class CharactersModule {
     @Provides
     fun provideCharactersRepository(
         service: CharactersService,
-        localStorage: CharactersLocalStorage
+        localStorage: CharactersListLocalStorage
     ): CharactersListRepository {
         return CharactersListRepositoryImpl(service, localStorage)
     }

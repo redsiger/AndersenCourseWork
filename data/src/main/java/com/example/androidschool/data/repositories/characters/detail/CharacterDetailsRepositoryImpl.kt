@@ -13,7 +13,7 @@ class CharacterDetailsRepositoryImpl(
     private val localStorage: CharacterDetailsLocalStorage
 ): CharacterDetailsRepository {
 
-    override suspend fun getCharacterDetails(id: Int): NetworkResponse<CharacterDetails> {
+    override suspend fun getCharacterDetails(id: Int): NetworkResponse<CharacterDetails?> {
         return try {
             val response = service.getCharacter(id)
             if (response.isSuccessful) {

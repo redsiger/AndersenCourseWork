@@ -3,6 +3,7 @@ package com.example.androidschool.andersencoursework.di
 import com.example.androidschool.andersencoursework.di.domain.DomainModule
 import com.example.androidschool.andersencoursework.ui.characters.details.CharacterDetailsFragment
 import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragment
+import com.example.androidschool.andersencoursework.ui.edpisode.details.EpisodeDetailsFragment
 import com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListFragment
 import com.example.androidschool.andersencoursework.ui.favorites.FavoritesFragment
 import com.example.androidschool.andersencoursework.ui.seacrh.SearchFragment
@@ -28,5 +29,6 @@ interface AppComponent {
     fun inject(fragment: CharactersListFragment)
     fun inject(fragment: EpisodesListFragment)
     fun inject(fragment: FavoritesFragment)
+    fun inject(fragment: EpisodeDetailsFragment)
     fun inject(fragment: SearchFragment)
 }

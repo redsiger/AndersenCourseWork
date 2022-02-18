@@ -4,17 +4,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterListItemUI
 import com.example.androidschool.andersencoursework.ui.core.recycler.DelegateAdapter
-import dagger.Component
-import javax.inject.Inject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-class CharactersListDelegateAdapter @Inject constructor (
-    private val glide: RequestManager
+class CharactersListDelegateAdapter @AssistedInject constructor (
+    private val glide: RequestManager,
+    @Assisted("onItemClick") private val onItemClick: (id: Int) -> Unit
 ):
     DelegateAdapter<CharacterListItemUI, CharactersListDelegateAdapter.ViewHolder>(CharacterListItemUI::class.java) {
 
@@ -38,6 +39,16 @@ class CharactersListDelegateAdapter @Inject constructor (
                 .load(item.img)
                 .centerCrop()
                 .into(viewBinding.listItemCharacterImg)
+
+            itemView.setOnClickListener { onItemClick.invoke(item.charId) }
         }
     }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            @Assisted("onItemClick") onItemClick: (id: Int) -> Unit
+        ): CharactersListDelegateAdapter
+    }
+
 }

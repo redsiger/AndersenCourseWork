@@ -2,6 +2,7 @@ package com.example.androidschool.data.network.characters.model
 
 
 import com.example.androidschool.domain.characters.model.CharacterDetails
+import com.example.androidschool.domain.characters.model.CharacterInEpisode
 import com.example.androidschool.domain.characters.model.CharacterListItem
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -62,8 +63,20 @@ data class CharacterNetworkEntity(
             status = status
         )
     }
-}
 
-fun List<CharacterNetworkEntity>.toDomainList(): List<CharacterListItem> {
-    return this.map { it.toDomainModel() }
+    fun toDomainInEpisodeModel(): CharacterInEpisode {
+        return CharacterInEpisode(
+            appearance = appearance,
+            betterCallSaulAppearance = betterCallSaulAppearance,
+            birthday = birthday,
+            category = category,
+            charId = charId,
+            img = img,
+            name = name,
+            nickname = nickname,
+            occupation = occupation,
+            portrayed = portrayed,
+            status = status
+        )
+    }
 }

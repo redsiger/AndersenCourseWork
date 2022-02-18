@@ -10,9 +10,14 @@ import com.example.androidschool.andersencoursework.databinding.ListItemEpisodeB
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
 import com.example.androidschool.andersencoursework.ui.core.recycler.DelegateAdapter
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import javax.inject.Inject
 
-class EpisodesListDelegateAdapter @Inject constructor(
+class EpisodesListDelegateAdapter @AssistedInject constructor(
+    @Assisted("onItemClick")
+    private val onItemClick: (id: Int) -> Unit,
     private val resourceProvider: ResourceProvider
 ):
     DelegateAdapter<EpisodeListItemUI, EpisodesListDelegateAdapter.ViewHolder>(EpisodeListItemUI::class.java) {
@@ -42,6 +47,12 @@ class EpisodesListDelegateAdapter @Inject constructor(
                     )
                 listItemEpisodeAirDate.text = item.airDate
             }
+            itemView.setOnClickListener { onItemClick.invoke(item.episodeId) }
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(@Assisted("onItemClick") onItemClick: (id: Int) -> Unit): EpisodesListDelegateAdapter
     }
 }

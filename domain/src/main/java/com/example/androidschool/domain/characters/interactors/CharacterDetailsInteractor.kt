@@ -6,11 +6,12 @@ import com.example.androidschool.util.NetworkResponse
 
 interface CharacterDetailsInteractor {
 
-    suspend fun getCharacterDetails(id: Int): NetworkResponse<CharacterDetails>
+    suspend fun getCharacterDetails(id: Int): NetworkResponse<CharacterDetails?>
 
     class Base(private val repository: CharacterDetailsRepository): CharacterDetailsInteractor {
 
-        override suspend fun getCharacterDetails(id: Int) = repository.getCharacterDetails(id)
+        override suspend fun getCharacterDetails(id: Int): NetworkResponse<CharacterDetails?> =
+            repository.getCharacterDetails(id)
 
     }
 }

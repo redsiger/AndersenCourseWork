@@ -15,14 +15,24 @@
         android:id="@+id/episodesListFragment"
         android:name="com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListFragment"
         android:label="@string/episodes_fragment_title">
-<!--        <action-->
-<!--            android:id="@+id/fromListToDetails"-->
-<!--            app:destination="@id/episodeDetailsFragment">-->
-<!--            <argument-->
-<!--                android:name="episodeId"-->
-<!--                app:argType="integer"-->
-<!--                app:nullable="false"/>-->
-<!--        </action>-->
+        <action
+            android:id="@+id/fromListToDetails"
+            app:destination="@id/episodeDetailsFragment">
+            <argument
+                android:name="episodeId"
+                app:argType="integer"
+                app:nullable="false"/>
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/episodeDetailsFragment"
+        android:name="com.example.androidschool.andersencoursework.ui.edpisode.details.EpisodeDetailsFragment"
+        android:label="EpisodeDetailsFragment">
+        <argument
+            android:name="episodeId"
+            app:argType="integer"
+            app:nullable="false"/>
     </fragment>
 
 </navigation>

@@ -11,7 +11,7 @@ interface EpisodesService {
     suspend fun getEpisodes(): Response<List<EpisodeListItemNetwork>>
 
     @GET("episodes/{id}")
-    suspend fun getEpisode(
+    suspend fun getEpisodeDetails(
         @Path("id") episodeId: Int
     ): Response<List<EpisodeListItemNetwork>>
 

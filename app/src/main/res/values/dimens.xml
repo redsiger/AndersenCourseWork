@@ -2,11 +2,14 @@
 <resources>
 
     <!--  App text sizes  -->
+    <dimen name="app_text_extra_large">32sp</dimen>
     <dimen name="app_text_large">20sp</dimen>
+    <dimen name="app_text_large_medium">18sp</dimen>
     <dimen name="app_text_medium">14sp</dimen>
     <dimen name="app_text_small">10sp</dimen>
 
     <!--  App margins/paddings  -->
+    <dimen name="app_offset_extra_large">32dp</dimen>
     <dimen name="app_offset_large">20dp</dimen>
     <dimen name="app_offset_medium">16dp</dimen>
     <dimen name="app_offset_medium_small">12dp</dimen>
@@ -20,5 +23,8 @@
     <!--  Character List Item  -->
     <dimen name="list_item_character_img_width">150dp</dimen>
     <dimen name="list_item_character_img_height">200dp</dimen>
+
+    <!--  Appearance List Item  -->
+    <dimen name="list_item_appearance_width">150dp</dimen>
 
 </resources>

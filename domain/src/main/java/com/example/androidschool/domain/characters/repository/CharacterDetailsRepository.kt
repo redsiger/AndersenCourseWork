@@ -5,5 +5,5 @@ import com.example.androidschool.util.NetworkResponse
 
 interface CharacterDetailsRepository {
 
-    suspend fun getCharacterDetails(id: Int): NetworkResponse<CharacterDetails>
+    suspend fun getCharacterDetails(id: Int): NetworkResponse<CharacterDetails?>
 }

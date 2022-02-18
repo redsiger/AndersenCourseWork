@@ -1,6 +1,8 @@
 package com.example.androidschool.data.database.characters
 
 import androidx.room.*
+import com.example.androidschool.data.database.characters.model.CharacterDetailsRoom
+import com.example.androidschool.data.database.characters.model.CharacterInEpisodeRoom
 import com.example.androidschool.data.database.characters.model.CharacterListItemRoom
 import kotlinx.coroutines.flow.Flow
 
@@ -17,11 +19,36 @@ interface CharactersListDao {
         return getCharactersPaging(offset)
     }
 
-    @Query("SELECT * FROM characters WHERE charId > :offset AND charId <= (:offset + :limit)")
-    fun getCharactersPagingStatus(offset: Int, limit: Int): List<CharacterListItemRoom>
+    @Transaction
+    suspend fun insertAndReturnCharacterInEpisode(
+        character: CharacterInEpisodeRoom,
+    ): CharacterInEpisodeRoom {
+        insertCharacterDetails(character)
+        return getCharacterInEpisode(character.charId)
+    }
+
+    @Transaction
+    suspend fun insertAndReturnCharactersInEpisode(
+        characters: List<CharacterInEpisodeRoom>,
+    ): List<CharacterInEpisodeRoom> {
+        insertCharactersInEpisode(characters)
+        return getCharactersInEpisode()
+    }
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertCharacterWith(character: CharacterListItemRoom)
+    suspend fun insertCharacterDetails(character: CharacterInEpisodeRoom)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCharactersInEpisode(characters: List<CharacterInEpisodeRoom>)
+
+    @Query("SELECT * FROM characters_in_episode WHERE charId = :id")
+    suspend fun getCharacterInEpisode(id: Int): CharacterInEpisodeRoom
+
+    @Query("SELECT * FROM characters_in_episode")
+    suspend fun getCharactersInEpisode(): List<CharacterInEpisodeRoom>
+
+    @Query("SELECT * FROM characters WHERE charId > :offset AND charId <= (:offset + :limit)")
+    fun getCharactersPagingStatus(offset: Int, limit: Int): List<CharacterListItemRoom>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacters(characters: List<CharacterListItemRoom>)

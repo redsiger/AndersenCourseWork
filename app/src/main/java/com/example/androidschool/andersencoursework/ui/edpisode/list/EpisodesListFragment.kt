@@ -6,14 +6,13 @@ import android.view.View
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentEpisodesListBinding
 import com.example.androidschool.andersencoursework.databinding.MergeToolbarBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
+import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragmentDirections
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.recycler.CompositeAdapter
 import com.example.androidschool.andersencoursework.ui.core.recycler.DefaultErrorDelegateAdapter
@@ -25,6 +24,7 @@ import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
 import com.example.androidschool.andersencoursework.util.UIStatePaging
 import javax.inject.Inject
 
+@Suppress("UNCHECKED_CAST")
 class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.fragment_episodes_list) {
 
     @Inject lateinit var resourceProvider: ResourceProvider
@@ -35,8 +35,6 @@ class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.f
     private var _toolbarBinding: MergeToolbarBinding? = null
     private val toolbarBinding get() = _toolbarBinding!!
 
-    private val mNavController: NavController by lazy { findNavController() }
-
     private val mScrollListener: InfiniteScrollListener by lazy {
         InfiniteScrollListener(
             action = viewModel::loadNewPage,
@@ -44,11 +42,11 @@ class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.f
         )
     }
 
-    @Inject lateinit var episodesListFragment: EpisodesListDelegateAdapter
+    @Inject lateinit var episodesListAdapter: EpisodesListDelegateAdapter.Factory
 
     private val mPagingAdapter: CompositeAdapter by lazy {
         CompositeAdapter.Builder()
-            .add(episodesListFragment)
+            .add(episodesListAdapter.create(::navigateToDetails))
             .add(DefaultErrorDelegateAdapter( onTryAgain = { viewModel.loadNewPage() } ))
             .add(DefaultLoadingDelegateAdapter())
             .build()
@@ -85,7 +83,7 @@ class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.f
                     R.id.menu_item_search -> {
                         val action =
                             EpisodesListFragmentDirections.actionGlobalToSearch()
-                        mNavController.navigate(action)
+                        navController.navigate(action)
                         true
                     }
                     else -> false
@@ -110,6 +108,7 @@ class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.f
         
         addScrollListener()
         collectStates()
+        addListRefresher()
     }
 
     private fun addScrollListener() {
@@ -125,6 +124,16 @@ class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.f
     private fun removeScrollListener() {
         viewBinding.fragmentEpisodesListRecycler.removeOnScrollListener(mScrollListener)
         mScrollListener.reset()
+    }
+
+    private fun navigateToDetails(id: Int) {
+        val action = EpisodesListFragmentDirections.fromListToDetails(id)
+        navController.navigate(action)
+    }
+
+    private fun addListRefresher() {
+        viewBinding.fragmentEpisodesListRefresh.setOnRefreshListener { viewModel.refresh() }
+        viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener { viewModel.refresh() }
     }
 
     private fun collectStates() {

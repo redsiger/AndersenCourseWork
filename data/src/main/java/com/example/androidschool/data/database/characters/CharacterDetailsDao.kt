@@ -10,11 +10,11 @@ interface CharacterDetailsDao {
     suspend fun getCharacterDetails(id: Int): CharacterDetailsRoom
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCharacterDetails(characterRoomDetailEntity: CharacterDetailsRoom)
+    suspend fun insertCharacterDetails(characterDetails: CharacterDetailsRoom)
 
     @Transaction
-    suspend fun insertAndReturn(characterRoomDetailEntity: CharacterDetailsRoom): CharacterDetailsRoom {
-        insertCharacterDetails(characterRoomDetailEntity)
-        return getCharacterDetails(characterRoomDetailEntity.charId)
+    suspend fun insertAndReturn(characterDetails: CharacterDetailsRoom): CharacterDetailsRoom {
+        insertCharacterDetails(characterDetails)
+        return getCharacterDetails(characterDetails.charId)
     }
 }

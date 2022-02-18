@@ -9,10 +9,17 @@ interface EpisodesListLocalStorage {
 
     suspend fun getEpisodesPaging(offset: Int, limit: Int): List<EpisodeListItem>
 
-    suspend fun insertAndReturn(
+    suspend fun insertAndReturnEpisodesPaging(
         episodes: List<EpisodeListItem>,
         offset: Int,
         limit: Int
+    ): List<EpisodeListItem>
+
+    suspend fun getAppearanceList(appearanceList: List<Int>): List<EpisodeListItem>
+
+    suspend fun insertAndReturnAppearance(
+        episodes: List<EpisodeListItem>,
+        appearance: List<Int>
     ): List<EpisodeListItem>
 
     class Base(
@@ -20,20 +27,32 @@ interface EpisodesListLocalStorage {
         private val mapper: DatabaseMapper
     ): EpisodesListLocalStorage {
 
-        override suspend fun getEpisodesPaging(offset: Int, limit: Int): List<EpisodeListItem> {
-            return dao.getEpisodesPaging(offset, limit, "Breaking Bad").map(EpisodeListItemRoom::toDomainModel)
-        }
+        override suspend fun getEpisodesPaging(offset: Int, limit: Int): List<EpisodeListItem> =
+            dao.getEpisodesPaging(offset, limit, "Breaking Bad").map(EpisodeListItemRoom::toDomainModel)
 
-        override suspend fun insertAndReturn(
+
+        override suspend fun insertAndReturnEpisodesPaging(
             episodes: List<EpisodeListItem>,
             offset: Int,
             limit: Int
         ): List<EpisodeListItem> {
-            return dao.insertAndReturn(
+            return dao.insertAndReturnEpisodesPaging(
                 episodes.map(mapper::toRoomEntity),
                 offset,
                 limit
             ).map(EpisodeListItemRoom::toDomainModel)
         }
+
+        override suspend fun getAppearanceList(appearanceList: List<Int>): List<EpisodeListItem> =
+            dao.getAppearanceList(appearanceList).map(EpisodeListItemRoom::toDomainModel)
+
+        override suspend fun insertAndReturnAppearance(
+            episodes: List<EpisodeListItem>,
+            appearance: List<Int>
+        ): List<EpisodeListItem> =
+            dao.insertAndReturnAppearance(
+                episodes.map(mapper::toRoomEntity),
+                appearance
+            ).map(EpisodeListItemRoom::toDomainModel)
     }
 }
