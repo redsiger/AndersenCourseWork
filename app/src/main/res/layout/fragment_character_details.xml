@@ -2,14 +2,16 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/character_details_refresh_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/character_details_refresh_container"
     android:background="?attr/colorSurface">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/app_offset_extra_large">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -38,10 +40,10 @@
 
                     <TextView
                         android:id="@+id/character_nickname"
+                        style="@style/CharacterDetailsNickName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        style="@style/CharacterDetailsNickName"
                         tools:text="&quot;Heisenberg&quot;" />
 
                     <TextView
@@ -54,20 +56,35 @@
 
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:background="@drawable/default_shade_from_top"
+                    app:layout_constraintTop_toBottomOf="@id/character_name_container" />
+
                 <LinearLayout
                     android:id="@+id/character_series_appearance_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/app_offset_medium"
                     android:orientation="vertical"
+                    android:paddingTop="@dimen/app_offset_medium"
                     app:layout_constraintTop_toBottomOf="@id/character_name_container">
 
                     <TextView
                         android:id="@+id/character_series_appearance_title"
+                        style="@style/CharacterDetailsAppearanceTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/CharacterDetailsAppearanceTitle"
-                        android:text="@string/character_appeared_in"/>
+                        android:text="@string/character_appeared_in" />
+
+                    <TextView
+                        android:id="@+id/character_series_appearance_list_no_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/default_no_data_message"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        style="@style/SecondaryText" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/character_series_appearance_list"
@@ -76,8 +93,8 @@
                         android:clipToPadding="false"
                         android:paddingStart="@dimen/app_offset_large"
                         android:paddingEnd="@dimen/app_offset_large"
-                        tools:listitem="@layout/list_item_appearance"
-                        tools:itemCount="1"/>
+                        tools:itemCount="1"
+                        tools:listitem="@layout/list_item_appearance" />
 
                 </LinearLayout>
 

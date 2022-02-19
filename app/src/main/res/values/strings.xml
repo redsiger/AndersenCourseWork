@@ -39,5 +39,6 @@
     <string name="seasons_fragment_details_title">Season %1$s</string>
     <string name="season_list_item_title">Season %1$s</string>
     <string name="fragment_seasons_list_all_episodes">All episodes</string>
+    <string name="default_no_data_message">There\'s no data to show</string>
 
 </resources>

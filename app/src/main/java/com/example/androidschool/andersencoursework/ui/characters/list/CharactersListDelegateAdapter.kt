@@ -37,6 +37,8 @@ class CharactersListDelegateAdapter @AssistedInject constructor (
             viewBinding.listItemCharacterName.text = item.name
             glide
                 .load(item.img)
+                .placeholder(R.drawable.splashscreen)
+                .error(R.drawable.ic_person)
                 .centerCrop()
                 .into(viewBinding.listItemCharacterImg)
 

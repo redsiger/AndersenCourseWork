@@ -71,10 +71,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/app_offset_large"
                     android:layout_marginEnd="@dimen/app_offset_large"
-                    android:layout_marginBottom="@dimen/app_offset_small"
+                    android:layout_marginBottom="@dimen/app_offset_large"
                     tools:text="1"
-                    style="@style/PrimaryText"
-                    />
+                    style="@style/PrimaryText" />
 
                 <TextView
                     android:id="@+id/episode_details_characters"
@@ -84,7 +83,7 @@
                     android:layout_marginEnd="@dimen/app_offset_large"
                     android:layout_marginBottom="@dimen/app_offset_small"
                     android:text="@string/episode_details_characters_list_title"
-                    style="@style/SecondaryText" />
+                    style="@style/AppDefaultSubtitle" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/episode_details_characters_list"

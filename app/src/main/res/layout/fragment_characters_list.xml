@@ -12,7 +12,8 @@
         android:id="@+id/fragment_characters_list_refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurface">
+        android:background="?attr/colorSurface"
+        android:clipToPadding="false">
 
         <FrameLayout
             android:id="@+id/fragment_characters_list_refresh_container"
@@ -22,7 +23,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/fragment_characters_list_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/app_offset_extra_large" />
 
             <include
                 android:id="@+id/errorBlock"

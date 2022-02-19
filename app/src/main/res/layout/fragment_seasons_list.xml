@@ -12,7 +12,9 @@
         android:id="@+id/fragment_seasons_list_refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurface">
+        android:background="?attr/colorSurface"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/app_offset_extra_large">
 
         <FrameLayout
             android:id="@+id/fragment_seasons_list_refresh_container"
@@ -27,15 +29,16 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/fragment_seasons_list_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingBottom="@dimen/app_offset_extra_large" />
 
                 <Button
                     android:id="@+id/fragment_seasons_list_all_episodes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/fragment_seasons_list_all_episodes"
-                    />
+                    android:text="@string/fragment_seasons_list_all_episodes" />
 
             </LinearLayout>
 

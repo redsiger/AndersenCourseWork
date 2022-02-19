@@ -3,7 +3,7 @@
     
     <!--  TEXT  -->
     <style name="PrimaryText">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">?defaultAppTextColor</item>
         <item name="android:textColorTertiary">?defaultAppTextColor</item>
     </style>
 
@@ -18,14 +18,14 @@
         <item name="android:ellipsize">end</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/app_text_extra_large</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">?defaultAppTextColor</item>
     </style>
     <style name="AppDefaultSubtitle">
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/app_text_large_medium</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">?defaultAppTextColor</item>
     </style>
 
     <!--  Character List Item  -->
@@ -72,15 +72,13 @@
     <style name="CharacterDetailsAppearanceTitle">
         <item name="android:layout_marginStart">@dimen/app_offset_large</item>
         <item name="android:layout_marginEnd">@dimen/app_offset_large</item>
-        <item name="android:layout_marginBottom">@dimen/app_offset_large</item>
+        <item name="android:layout_marginBottom">@dimen/app_offset_medium</item>
+        <item name="android:layout_marginTop">@dimen/app_offset_medium</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/app_text_medium</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">?defaultAppTextColor</item>
     </style>
-
-
-
 
 </resources>

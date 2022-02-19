@@ -161,6 +161,8 @@ class CharacterDetailsFragment :
             with(data) {
                 glide
                     .load(character.img)
+                    .placeholder(R.drawable.splashscreen)
+                    .error(R.drawable.ic_person)
                     .centerCrop()
                     .into(characterPhoto)
 
@@ -172,7 +174,12 @@ class CharacterDetailsFragment :
 
                 characterName.text = character.name
 
-                mAdapter.submitList(appearance)
+                if (appearance.isEmpty()) {
+                    characterSeriesAppearanceListNoData.visibility = View.VISIBLE
+                } else {
+                    characterSeriesAppearanceListNoData.visibility = View.GONE
+                    mAdapter.submitList(appearance)
+                }
             }
         }
     }

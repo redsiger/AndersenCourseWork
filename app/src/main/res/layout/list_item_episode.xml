@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="@dimen/app_card_radius_small"
-    xmlns:tools="http://schemas.android.com/tools">
+    app:cardCornerRadius="@dimen/app_card_radius_small">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -14,25 +14,18 @@
 
         <TextView
             android:id="@+id/list_item_episode_title"
+            style="@style/PrimaryText.EpisodeListItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/app_offset_small"
-            style="@style/PrimaryText.EpisodeListItem"
-            tools:text="1. &quot;Episode&quot;"/>
-
-<!--        <TextView-->
-<!--            android:id="@+id/list_item_episode_season"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            style="@style/SecondaryText.EpisodeListItem"-->
-<!--            tools:text="Season 2"/>-->
+            tools:text="1. &quot;Episode&quot;" />
 
         <TextView
             android:id="@+id/list_item_episode_airDate"
+            style="@style/SecondaryText.EpisodeListItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/SecondaryText.EpisodeListItem"
-            tools:text="01-20-2008"/>
+            tools:text="01-20-2008" />
 
     </LinearLayout>
 

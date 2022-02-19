@@ -22,7 +22,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/fragment_seasons_details_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/app_offset_extra_large" />
 
             <include
                 android:id="@+id/errorBlock"
