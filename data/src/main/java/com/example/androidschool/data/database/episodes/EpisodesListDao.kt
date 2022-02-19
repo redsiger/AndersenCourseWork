@@ -21,10 +21,15 @@ interface EpisodesListDao {
 
     @Query(
         value = "SELECT * FROM episodes_list_items " +
-            "WHERE episode_id > :offset " +
-            "AND episode_id <= (:offset + :limit) " +
-            "AND series = :series")
-    suspend fun getEpisodesPaging(offset: Int, limit: Int, series: String): List<EpisodeListItemRoom>
+                "WHERE episode_id > :offset " +
+                "AND episode_id <= (:offset + :limit) " +
+                "AND series = :series"
+    )
+    suspend fun getEpisodesPaging(
+        offset: Int,
+        limit: Int,
+        series: String
+    ): List<EpisodeListItemRoom>
 
     @Transaction
     suspend fun insertAndReturnAppearance(
@@ -47,4 +52,16 @@ interface EpisodesListDao {
 
     @Query("SELECT * FROM episodes_list_items WHERE episode_id = :episode_id")
     suspend fun getAppearance(episode_id: Int): List<EpisodeListItemRoom>
+
+    @Transaction
+    suspend fun insertAndReturnEpisodesBySeason(
+        episodes: List<EpisodeListItemRoom>,
+        season: String
+    ): List<EpisodeListItemRoom> {
+        insertEpisodes(episodes)
+        return getEpisodesBySeason(season)
+    }
+
+    @Query("SELECT * FROM episodes_list_items WHERE season LIKE :season AND series LIKE \"Breaking Bad\"")
+    suspend fun getEpisodesBySeason(season: String): List<EpisodeListItemRoom>
 }

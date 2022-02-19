@@ -1,6 +1,7 @@
 package com.example.androidschool.andersencoursework.di.util
 
 import android.content.Context
+import com.example.androidschool.andersencoursework.di.util.ResourceProvider
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

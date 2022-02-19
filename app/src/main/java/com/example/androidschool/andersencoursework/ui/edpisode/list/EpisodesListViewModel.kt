@@ -2,11 +2,12 @@ package com.example.androidschool.andersencoursework.ui.edpisode.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.androidschool.andersencoursework.di.dispatchers.DispatcherIO
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.core.BasePagingViewModel
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
 import com.example.androidschool.domain.BasePagingInteractor
-import com.example.androidschool.domain.episode.interactors.EpisodesListInteractor
+import com.example.androidschool.domain.episode.interactor.EpisodesListInteractor
 import com.example.androidschool.domain.episode.model.EpisodeListItem
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
@@ -22,7 +23,8 @@ class EpisodesListViewModel(
 
     class Factory @Inject constructor (
         private val interactor: EpisodesListInteractor,
-        @Named("Dispatchers.IO") private val defaultDispatcher: CoroutineDispatcher,
+        @DispatcherIO
+        private val defaultDispatcher: CoroutineDispatcher,
         private val mapper: UIMapper
     ): ViewModelProvider.Factory {
 

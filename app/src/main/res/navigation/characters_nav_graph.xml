@@ -6,6 +6,8 @@
 
     <include app:graph="@navigation/search_nav_graph" />
 
+    <include app:graph="@navigation/character_details_graph" />
+
     <action
         android:id="@+id/action_global_to_search"
         app:destination="@id/search_nav_graph">
@@ -17,22 +19,12 @@
         android:label="@string/characters_fragment_title">
         <action
             android:id="@+id/fromListToDetails"
-            app:destination="@id/characterDetailsFragment">
+            app:destination="@id/character_details_graph">
             <argument
                 android:name="characterId"
                 app:argType="integer"
                 app:nullable="false"/>
         </action>
-    </fragment>
-
-    <fragment
-        android:id="@+id/characterDetailsFragment"
-        android:name="com.example.androidschool.andersencoursework.ui.characters.details.CharacterDetailsFragment"
-        android:label="CharacterDetailsFragment" >
-        <argument
-            android:name="characterId"
-            app:argType="integer"
-            app:nullable="false"/>
     </fragment>
 
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.androidschool.domain.episode.interactors
+package com.example.androidschool.domain.episode.interactor
 
 import com.example.androidschool.domain.episode.model.EpisodeDetails
 import com.example.androidschool.domain.episode.repository.EpisodeDetailsRepository

@@ -1,6 +1,7 @@
 package com.example.androidschool.andersencoursework.di
 
 import android.content.Context
+import com.example.androidschool.andersencoursework.di.dispatchers.CoroutineDispatchersModule
 import com.example.androidschool.andersencoursework.di.util.GlideModule
 import com.example.androidschool.andersencoursework.di.util.ResourceProviderModule
 import com.example.androidschool.andersencoursework.di.util.UIMapperModule
@@ -10,7 +11,7 @@ import javax.inject.Singleton
 
 @Module(
     includes = [
-        CoroutinesScopesModule::class,
+        CoroutineDispatchersModule::class,
         ResourceProviderModule::class,
         GlideModule::class,
         UIMapperModule::class

@@ -5,8 +5,8 @@ import com.example.androidschool.data.repositories.characters.detail.CharacterDe
 import com.example.androidschool.data.repositories.characters.detail.CharacterDetailsRepositoryImpl
 import com.example.androidschool.data.repositories.characters.list.CharactersListRepositoryImpl
 import com.example.androidschool.data.repositories.characters.list.CharactersListLocalStorage
-import com.example.androidschool.domain.characters.interactors.CharacterDetailsInteractor
-import com.example.androidschool.domain.characters.interactors.CharactersListInteractor
+import com.example.androidschool.domain.characters.interactor.CharacterDetailsInteractor
+import com.example.androidschool.domain.characters.interactor.CharactersListInteractor
 import com.example.androidschool.domain.characters.repository.CharacterDetailsRepository
 import com.example.androidschool.domain.characters.repository.CharactersListRepository
 import dagger.Module

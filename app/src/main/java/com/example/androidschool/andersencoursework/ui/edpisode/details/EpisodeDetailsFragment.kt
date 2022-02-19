@@ -36,8 +36,18 @@ class EpisodeDetailsFragment: BaseFragment<FragmentEpisodeDetailsBinding>(R.layo
     @Inject lateinit var charactersAdapter: CharactersListDelegateAdapter.Factory
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter.Builder()
-            .add(charactersAdapter.create {  })
+            .add(charactersAdapter.create(::toCharacterDetails))
             .build()
+    }
+
+    private fun toCharacterDetails(id: Int) {
+        val action = EpisodeDetailsFragmentDirections.toCharacterDetailsGraph(id)
+        navController.navigate(action)
+    }
+
+    override fun onAttach(context: Context) {
+        requireActivity().appComponent.inject(this)
+        super.onAttach(context)
     }
 
     override fun initBinding(view: View): FragmentEpisodeDetailsBinding =
@@ -176,10 +186,5 @@ class EpisodeDetailsFragment: BaseFragment<FragmentEpisodeDetailsBinding>(R.layo
         viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener {
             viewModel.retry(episodeId)
         }
-    }
-
-    override fun onAttach(context: Context) {
-        requireActivity().appComponent.inject(this)
-        super.onAttach(context)
     }
 }

@@ -16,7 +16,7 @@ class CompositeAdapter(
             if (delegates[i].modelClass == getItem(position).javaClass)
                 return delegates.keyAt(i)
         }
-        throw IllegalArgumentException("Illegal item viewType: ${getItem(position)}")
+        throw IllegalArgumentException("Illegal item viewType: ${getItem(position)}, delegates: $delegates")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =

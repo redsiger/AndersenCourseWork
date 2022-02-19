@@ -1,4 +1,4 @@
-package com.example.androidschool.andersencoursework.ui.seacrh.models
+package com.example.androidschool.andersencoursework.ui.search.models
 
 import com.example.androidschool.domain.characters.model.CharacterListItem
 

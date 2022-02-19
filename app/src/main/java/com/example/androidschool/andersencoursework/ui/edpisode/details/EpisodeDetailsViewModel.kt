@@ -3,47 +3,47 @@ package com.example.androidschool.andersencoursework.ui.edpisode.details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.androidschool.andersencoursework.di.dispatchers.DispatcherIO
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterListItemUI
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeDetailsUI
 import com.example.androidschool.andersencoursework.util.UIState
-import com.example.androidschool.domain.characters.interactors.CharactersListInteractor
-import com.example.androidschool.domain.episode.interactors.EpisodeDetailsInteractor
+import com.example.androidschool.domain.characters.interactor.CharactersListInteractor
+import com.example.androidschool.domain.episode.interactor.EpisodeDetailsInteractor
 import com.example.androidschool.util.NetworkResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Named
 
 class EpisodeDetailsViewModel @Inject constructor(
     private val defaultDispatcher: CoroutineDispatcher,
     private val charactersListInteractor: CharactersListInteractor,
     private val episodeDetailsInteractor: EpisodeDetailsInteractor,
     private val mapper: UIMapper
-): ViewModel() {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UIState<EpisodeDetailsState>>(UIState.InitialLoading)
     val uiState: StateFlow<UIState<EpisodeDetailsState>> get() = _uiState.asStateFlow()
 
     fun load(episodeId: Int) {
         _uiState.value = UIState.InitialLoading
-        this.loadUIState(episodeId)
+        loadUIState(episodeId)
     }
 
     fun refresh(episodeId: Int) {
         _uiState.value = UIState.Refresh
-        this.loadUIState(episodeId)
+        loadUIState(episodeId)
     }
 
     fun retry(episodeId: Int) {
         _uiState.value = UIState.InitialLoading
-        this.loadUIState(episodeId)
+        loadUIState(episodeId)
     }
 
     private fun loadUIState(episodeId: Int) {
-        viewModelScope.launch(defaultDispatcher) {
 
+        viewModelScope.launch(defaultDispatcher) {
             when (val episodeDetails = loadEpisodeDetails(episodeId)) {
                 is NetworkResponse.Success -> {
                     val appearanceList = loadCharacters(episodeDetails.data!!.characters)
@@ -93,11 +93,12 @@ class EpisodeDetailsViewModel @Inject constructor(
     }
 
     class Factory @Inject constructor(
-        @Named("Dispatchers.IO") private val defaultDispatcher: CoroutineDispatcher,
+        @DispatcherIO
+        private val defaultDispatcher: CoroutineDispatcher,
         private val charactersListInteractor: CharactersListInteractor,
         private val episodeDetailsInteractor: EpisodeDetailsInteractor,
         private val mapper: UIMapper
-    ): ViewModelProvider.Factory {
+    ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {

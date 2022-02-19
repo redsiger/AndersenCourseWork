@@ -1,7 +1,6 @@
-package com.example.androidschool.andersencoursework.ui.seacrh
+package com.example.androidschool.andersencoursework.ui.search
 
 import android.content.Context
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -16,14 +15,10 @@ import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentSearchBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
-import com.example.androidschool.domain.characters.interactors.CharactersListInteractor
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 class SearchFragment: BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
 

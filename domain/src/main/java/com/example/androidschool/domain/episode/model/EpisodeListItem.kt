@@ -1,5 +1,7 @@
 package com.example.androidschool.domain.episode.model
 
+import com.example.androidschool.domain.listItemUtils.ListItem
+
 data class EpisodeListItem(
     val airDate: String,
     val characters: List<String>,
@@ -8,4 +10,4 @@ data class EpisodeListItem(
     val season: String,
     val series: String,
     val title: String
-)
+): ListItem

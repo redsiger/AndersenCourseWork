@@ -7,7 +7,8 @@
         android:title="@string/characters_nav_graph_title"/>
 
     <item
-        android:id="@+id/episodes_nav_graph"
+        android:id="@+id/seasons_nav_graph"
         android:icon="@drawable/ic_episode"
-        android:title="@string/episodes_nav_graph_title"/>
+        android:title="@string/seasons_fragment_title"/>
+
 </menu>

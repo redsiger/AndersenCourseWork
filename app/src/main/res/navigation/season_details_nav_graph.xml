@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/season_details_nav_graph"
+    app:startDestination="@id/seasonDetailsFragment">
+
+    <fragment
+        android:id="@+id/seasonDetailsFragment"
+        android:name="com.example.androidschool.andersencoursework.ui.seasons.details.SeasonDetailsFragment"
+        android:label="SeasonDetailsFragment">
+        <argument
+            android:name="season"
+            app:argType="string"
+            app:nullable="false" />
+        <action
+            android:id="@+id/toEpisode"
+            app:destination="@id/episode_details_nav_graph">
+            <argument
+                android:name="episodeId"
+                app:argType="integer"
+                app:nullable="false" />
+        </action>
+    </fragment>
+
+    <include app:graph="@navigation/episode_details_nav_graph" />
+
+</navigation>

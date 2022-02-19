@@ -8,9 +8,9 @@ import com.example.androidschool.data.repositories.episodes.details.EpisodeDetai
 import com.example.androidschool.data.repositories.episodes.details.EpisodeDetailsRepositoryImpl
 import com.example.androidschool.data.repositories.episodes.list.EpisodesListLocalStorage
 import com.example.androidschool.data.repositories.episodes.list.EpisodesListRepositoryImpl
-import com.example.androidschool.domain.episode.interactors.EpisodeDetailsInteractor
+import com.example.androidschool.domain.episode.interactor.EpisodeDetailsInteractor
 import com.example.androidschool.domain.episode.repository.EpisodesListRepository
-import com.example.androidschool.domain.episode.interactors.EpisodesListInteractor
+import com.example.androidschool.domain.episode.interactor.EpisodesListInteractor
 import com.example.androidschool.domain.episode.repository.EpisodeDetailsRepository
 import dagger.Module
 import dagger.Provides
@@ -22,55 +22,49 @@ class EpisodesModule {
 
     @Singleton
     @Provides
-    fun provideEpisodeDetailsInteractor(repository: EpisodeDetailsRepository): EpisodeDetailsInteractor {
-        return EpisodeDetailsInteractor.Base(repository)
-    }
+    fun provideEpisodeDetailsInteractor(repository: EpisodeDetailsRepository): EpisodeDetailsInteractor =
+        EpisodeDetailsInteractor.Base(repository)
 
     @Singleton
     @Provides
     fun provideEpisodeDetailsRepository(
         service: EpisodesService,
         localStorage: EpisodeDetailsLocalStorage
-    ): EpisodeDetailsRepository {
-        return EpisodeDetailsRepositoryImpl(service, localStorage)
-    }
+    ): EpisodeDetailsRepository =
+        EpisodeDetailsRepositoryImpl(service, localStorage)
+
 
     @Singleton
     @Provides
     fun provideEpisodeDetailsLocalStorage(
         dao: EpisodeDetailsDao,
         mapper: DatabaseMapper
-    ): EpisodeDetailsLocalStorage {
-        return EpisodeDetailsLocalStorage.Base(dao, mapper)
-    }
+    ): EpisodeDetailsLocalStorage =
+        EpisodeDetailsLocalStorage.Base(dao, mapper)
 
     @Singleton
     @Provides
-    fun provideEpisodesInteractor(repository: EpisodesListRepository): EpisodesListInteractor {
-        return EpisodesListInteractor.Base(repository)
-    }
+    fun provideEpisodesInteractor(repository: EpisodesListRepository): EpisodesListInteractor =
+        EpisodesListInteractor.Base(repository)
 
     @Singleton
     @Provides
     fun provideEpisodesRepository(
         service: EpisodesService,
         localStorage: EpisodesListLocalStorage
-    ): EpisodesListRepository {
-        return EpisodesListRepositoryImpl(service, localStorage)
-    }
+    ): EpisodesListRepository =
+        EpisodesListRepositoryImpl(service, localStorage)
 
     @Singleton
     @Provides
     fun provideEpisodesListLocalStorage(
         dao: EpisodesListDao,
         mapper: DatabaseMapper
-    ): EpisodesListLocalStorage {
-        return EpisodesListLocalStorage.Base(dao, mapper)
-    }
+    ): EpisodesListLocalStorage =
+        EpisodesListLocalStorage.Base(dao, mapper)
 
     @Singleton
     @Provides
-    fun provideEpisodesService(retrofit: Retrofit): EpisodesService {
-        return retrofit.create(EpisodesService::class.java)
-    }
+    fun provideEpisodesService(retrofit: Retrofit): EpisodesService =
+        retrofit.create(EpisodesService::class.java)
 }

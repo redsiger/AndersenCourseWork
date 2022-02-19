@@ -2,12 +2,13 @@ package com.example.androidschool.andersencoursework.ui.characters.details
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.androidschool.andersencoursework.di.dispatchers.DispatcherIO
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterDetailsUI
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
 import com.example.androidschool.andersencoursework.util.UIState
-import com.example.androidschool.domain.characters.interactors.CharacterDetailsInteractor
-import com.example.androidschool.domain.episode.interactors.EpisodesListInteractor
+import com.example.androidschool.domain.characters.interactor.CharacterDetailsInteractor
+import com.example.androidschool.domain.episode.interactor.EpisodesListInteractor
 import com.example.androidschool.util.NetworkResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -24,14 +25,6 @@ class CharacterDetailsViewModel constructor(
 
     private val _uiState = MutableStateFlow<UIState<CharacterDetailsState>>(UIState.InitialLoading)
     val uiState: StateFlow<UIState<CharacterDetailsState>> get() = _uiState.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            uiState.collectLatest {
-                Log.e("CharacterDetailsViewModel", "state:$it")
-            }
-        }
-    }
 
     fun load(characterId: Int) {
         _uiState.value = UIState.InitialLoading
@@ -100,7 +93,8 @@ class CharacterDetailsViewModel constructor(
     }
 
     class Factory @Inject constructor(
-        @Named("Dispatchers.IO") private val defaultDispatcher: CoroutineDispatcher,
+        @DispatcherIO
+        private val defaultDispatcher: CoroutineDispatcher,
         private val characterInteractor: CharacterDetailsInteractor,
         private val episodesListInteractor: EpisodesListInteractor,
         private val mapper: UIMapper

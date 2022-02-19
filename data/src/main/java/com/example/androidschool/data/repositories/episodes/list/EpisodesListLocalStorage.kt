@@ -22,6 +22,13 @@ interface EpisodesListLocalStorage {
         appearance: List<Int>
     ): List<EpisodeListItem>
 
+    suspend fun getEpisodesBySeason(season: String): List<EpisodeListItem>
+
+    suspend fun insertAndReturnEpisodesBySeason(
+        episodes: List<EpisodeListItem>,
+        season: String
+    ): List<EpisodeListItem>
+
     class Base(
         private val dao: EpisodesListDao,
         private val mapper: DatabaseMapper
@@ -54,5 +61,19 @@ interface EpisodesListLocalStorage {
                 episodes.map(mapper::toRoomEntity),
                 appearance
             ).map(EpisodeListItemRoom::toDomainModel)
+
+        override suspend fun getEpisodesBySeason(season: String): List<EpisodeListItem> =
+            dao.getEpisodesBySeason(season).map(EpisodeListItemRoom::toDomainModel)
+
+        override suspend fun insertAndReturnEpisodesBySeason(
+            episodes: List<EpisodeListItem>,
+            season: String
+        ): List<EpisodeListItem> =
+            dao.insertAndReturnEpisodesBySeason(
+                episodes.map(mapper::toRoomEntity),
+                season
+            ).map(EpisodeListItemRoom::toDomainModel)
+
+
     }
 }

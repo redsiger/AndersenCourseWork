@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/episode_details_nav_graph"
+    app:startDestination="@id/episodeDetailsFragment">
+
+    <fragment
+        android:id="@+id/episodeDetailsFragment"
+        android:name="com.example.androidschool.andersencoursework.ui.edpisode.details.EpisodeDetailsFragment"
+        android:label="EpisodeDetailsFragment">
+        <argument
+            android:name="episodeId"
+            app:argType="integer"
+            app:nullable="false" />
+        <action
+            android:id="@+id/toCharacterDetailsGraph"
+            app:destination="@id/character_details_graph">
+            <argument
+                android:name="characterId"
+                app:argType="integer"
+                app:nullable="false" />
+        </action>
+    </fragment>
+
+    <include app:graph="@navigation/character_details_graph" />
+
+</navigation>

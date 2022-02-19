@@ -5,6 +5,6 @@
     app:startDestination="@id/characters_nav_graph">
 
     <include app:graph="@navigation/characters_nav_graph" />
-    <include app:graph="@navigation/episodes_nav_graph" />
+    <include app:graph="@navigation/seasons_nav_graph" />
 
 </navigation>

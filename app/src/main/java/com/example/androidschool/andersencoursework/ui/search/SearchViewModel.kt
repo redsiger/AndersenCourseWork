@@ -1,10 +1,10 @@
-package com.example.androidschool.andersencoursework.ui.seacrh
+package com.example.androidschool.andersencoursework.ui.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.androidschool.andersencoursework.ui.seacrh.models.CharacterSearchEntity
-import com.example.androidschool.andersencoursework.ui.seacrh.models.SearchMapper
-import com.example.androidschool.domain.characters.interactors.CharactersListInteractor
+import com.example.androidschool.andersencoursework.ui.search.models.CharacterSearchEntity
+import com.example.androidschool.andersencoursework.ui.search.models.SearchMapper
+import com.example.androidschool.domain.characters.interactor.CharactersListInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn

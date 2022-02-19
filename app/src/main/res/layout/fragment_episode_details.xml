@@ -24,13 +24,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="?actionBarSize"
-                android:padding="@dimen/app_offset_large">
+                android:layout_marginTop="?actionBarSize">
 
                 <TextView
                     android:id="@+id/episode_details_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/app_offset_large"
+                    android:layout_marginEnd="@dimen/app_offset_large"
                     android:layout_marginBottom="@dimen/app_offset_large"
                     android:maxLines="1"
                     android:ellipsize="end"
@@ -40,6 +41,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/app_offset_large"
+                    android:layout_marginEnd="@dimen/app_offset_large"
                     android:text="@string/episode_details_season_title"
                     style="@style/SecondaryText" />
 
@@ -47,6 +50,8 @@
                     android:id="@+id/episode_details_season"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/app_offset_large"
+                    android:layout_marginEnd="@dimen/app_offset_large"
                     android:layout_marginBottom="@dimen/app_offset_small"
                     tools:text="1"
                     style="@style/PrimaryText"
@@ -55,6 +60,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/app_offset_large"
+                    android:layout_marginEnd="@dimen/app_offset_large"
                     android:text="@string/episode_details_episode_details"
                     style="@style/SecondaryText" />
 
@@ -62,6 +69,8 @@
                     android:id="@+id/episode_details_episode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/app_offset_large"
+                    android:layout_marginEnd="@dimen/app_offset_large"
                     android:layout_marginBottom="@dimen/app_offset_small"
                     tools:text="1"
                     style="@style/PrimaryText"
@@ -71,6 +80,8 @@
                     android:id="@+id/episode_details_characters"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/app_offset_large"
+                    android:layout_marginEnd="@dimen/app_offset_large"
                     android:layout_marginBottom="@dimen/app_offset_small"
                     android:text="@string/episode_details_characters_list_title"
                     style="@style/SecondaryText" />
@@ -79,6 +90,9 @@
                     android:id="@+id/episode_details_characters_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/app_offset_large"
+                    android:paddingEnd="@dimen/app_offset_large"
+                    android:clipToPadding="false"
                     tools:listitem="@layout/list_item_character"
                     tools:itemCount="1" />
 

@@ -24,6 +24,9 @@
 
     <!--  Episode Details  -->
     <string name="episode_details_season_title">Season</string>
+    <string name="episode_details_episode_details">Episode</string>
+    <string name="episode_details_characters_list_title">Characters</string>
+
 
     <!--  Search  -->
     <string name="fragment_search_hint">Search for characters/episodes…</string>
@@ -31,7 +34,11 @@
     <string name="try_again">Try again</string>
     <string name="default_error_message">Something went wrong</string>
     <string name="default_emptyData_message">Nothing to show here</string>
-    <string name="episode_details_episode_details">Episode</string>
-    <string name="episode_details_characters_list_title">Characters</string>
+
+    <!--  Seasons  -->
+    <string name="seasons_fragment_title">Seasons</string>
+    <string name="seasons_fragment_details_title">Season %1$s</string>
+    <string name="season_list_item_title">Season %1$d</string>
+    <string name="fragment_seasons_list_all_episodes">All episodes</string>
 
 </resources>

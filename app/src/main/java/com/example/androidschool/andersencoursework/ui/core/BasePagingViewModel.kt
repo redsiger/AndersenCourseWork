@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidschool.andersencoursework.ui.core.recycler.DefaultRecyclerError
 import com.example.androidschool.andersencoursework.ui.core.recycler.DefaultRecyclerLoading
-import com.example.androidschool.andersencoursework.ui.core.recycler.ListItem
 import com.example.androidschool.andersencoursework.ui.core.recycler.DiffComparable
 import com.example.androidschool.andersencoursework.util.UIStatePaging
 import com.example.androidschool.domain.BasePagingInteractor

@@ -19,7 +19,7 @@ class EpisodesListDelegateAdapter @AssistedInject constructor(
     @Assisted("onItemClick")
     private val onItemClick: (id: Int) -> Unit,
     private val resourceProvider: ResourceProvider
-):
+) :
     DelegateAdapter<EpisodeListItemUI, EpisodesListDelegateAdapter.ViewHolder>(EpisodeListItemUI::class.java) {
 
     override fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
@@ -32,7 +32,7 @@ class EpisodesListDelegateAdapter @AssistedInject constructor(
         viewHolder.bind(model)
     }
 
-    inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val viewBinding = ListItemEpisodeBinding.bind(itemView)
 

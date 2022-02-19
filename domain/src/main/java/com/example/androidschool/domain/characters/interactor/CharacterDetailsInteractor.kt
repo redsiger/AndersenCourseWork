@@ -1,4 +1,4 @@
-package com.example.androidschool.domain.characters.interactors
+package com.example.androidschool.domain.characters.interactor
 
 import com.example.androidschool.domain.characters.model.CharacterDetails
 import com.example.androidschool.domain.characters.repository.CharacterDetailsRepository

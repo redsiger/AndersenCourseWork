@@ -43,27 +43,50 @@ class EpisodesListRepositoryImpl(
         }
     }
 
-    override suspend fun getCharacterAppearance(appearanceList: List<Int>): NetworkResponse<List<EpisodeListItem>> {
+    override suspend fun getCharacterAppearance(appearanceInList: List<Int>): NetworkResponse<List<EpisodeListItem>> {
         return try {
-            // imitation of paging because API service don't support paging
             val response = service.getEpisodes()
             if (response.isSuccessful) {
                 val remoteData = (response.body() as List<EpisodeListItemNetwork>)
-                // imitation of paging because API service don't support paging
-                val partialData = remoteData.filter { episode ->
-                    filterAppearance(episode, appearanceList)
+
+                val appearanceList = remoteData.filter { episode ->
+                    filterAppearance(episode, appearanceInList)
                 }.map(EpisodeListItemNetwork::toDomainModel)
 
-                val data = localStorage.insertAndReturnAppearance(partialData, appearanceList)
+                val data = localStorage.insertAndReturnAppearance(appearanceList, appearanceInList)
                 NetworkResponse.Success(data)
             }
             else {
-                val localData = localStorage.getAppearanceList(appearanceList)
+                val localData = localStorage.getAppearanceList(appearanceInList)
                 val exception = response.errorBody() as HttpException
                 NetworkResponse.Error(localData, exception)
             }
         } catch (e: Exception) {
-            val localData = localStorage.getAppearanceList(appearanceList)
+            val localData = localStorage.getAppearanceList(appearanceInList)
+            NetworkResponse.Error(localData, e)
+        }
+    }
+
+    override suspend fun getEpisodesBySeason(season: String): NetworkResponse<List<EpisodeListItem>> {
+        return try {
+            val response = service.getEpisodes()
+            if (response.isSuccessful) {
+                val remoteData = (response.body() as List<EpisodeListItemNetwork>)
+
+                val appearanceList = remoteData.filter { episode ->
+                    episode.season == season
+                }.map(EpisodeListItemNetwork::toDomainModel)
+
+                val data = localStorage.insertAndReturnEpisodesBySeason(appearanceList, season)
+                NetworkResponse.Success(data)
+            }
+            else {
+                val localData = localStorage.getEpisodesBySeason(season)
+                val exception = response.errorBody() as HttpException
+                NetworkResponse.Error(localData, exception)
+            }
+        } catch (e: Exception) {
+            val localData = localStorage.getEpisodesBySeason(season)
             NetworkResponse.Error(localData, e)
         }
     }

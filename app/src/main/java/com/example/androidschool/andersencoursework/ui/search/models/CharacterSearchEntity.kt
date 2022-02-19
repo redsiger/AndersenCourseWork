@@ -1,4 +1,4 @@
-package com.example.androidschool.andersencoursework.ui.seacrh.models
+package com.example.androidschool.andersencoursework.ui.search.models
 
 data class CharacterSearchEntity(
     val appearance: List<Int>,

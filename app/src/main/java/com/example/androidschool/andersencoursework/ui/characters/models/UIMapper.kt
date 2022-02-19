@@ -3,16 +3,24 @@ package com.example.androidschool.andersencoursework.ui.characters.models
 import com.example.androidschool.andersencoursework.ui.core.recycler.ListItem
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeDetailsUI
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
+import com.example.androidschool.andersencoursework.ui.seasons.model.SeasonListItemUI
 import com.example.androidschool.domain.characters.model.CharacterDetails
 import com.example.androidschool.domain.characters.model.CharacterInEpisode
 import com.example.androidschool.domain.characters.model.CharacterListItem
 import com.example.androidschool.domain.episode.model.EpisodeDetails
 import com.example.androidschool.domain.episode.model.EpisodeListItem
+import com.example.androidschool.domain.seasons.model.SeasonListItem
 
 class UIMapper {
 
     fun mapEpisodeListItemToListItemUI(entity: EpisodeListItem): ListItem.Item<EpisodeListItemUI> {
         return ListItem.Item(mapEpisodeListItem(entity))
+    }
+
+    fun mapSeasonListItem(entity: SeasonListItem): SeasonListItemUI {
+        return SeasonListItemUI(
+            season_number = entity.season_number
+        )
     }
 
     fun mapEpisodeDetails(entity: EpisodeDetails?): EpisodeDetailsUI? {
