@@ -7,4 +7,14 @@
     <include app:graph="@navigation/characters_nav_graph" />
     <include app:graph="@navigation/seasons_nav_graph" />
 
+    <include app:graph="@navigation/search_nav_graph" />
+    <action
+        android:id="@+id/action_global_to_search"
+        app:destination="@id/search_nav_graph" />
+
+    <include app:graph="@navigation/season_details_nav_graph" />
+    <action
+        android:id="@+id/action_global_to_season_details"
+        app:destination="@id/season_details_nav_graph" />
+
 </navigation>

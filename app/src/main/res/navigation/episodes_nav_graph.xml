@@ -4,12 +4,6 @@
     android:id="@+id/episodes_nav_graph"
     app:startDestination="@id/episodesListFragment">
 
-    <include app:graph="@navigation/search_nav_graph" />
-
-    <action
-        android:id="@+id/action_global_to_search"
-        app:destination="@id/search_nav_graph" />
-
     <fragment
         android:id="@+id/episodesListFragment"
         android:name="com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListFragment"

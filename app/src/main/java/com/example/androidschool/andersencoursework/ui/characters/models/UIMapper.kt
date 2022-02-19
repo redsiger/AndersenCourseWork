@@ -13,15 +13,11 @@ import com.example.androidschool.domain.seasons.model.SeasonListItem
 
 class UIMapper {
 
-    fun mapEpisodeListItemToListItemUI(entity: EpisodeListItem): ListItem.Item<EpisodeListItemUI> {
-        return ListItem.Item(mapEpisodeListItem(entity))
-    }
+    fun mapSeasonListItem(entity: SeasonListItem): SeasonListItemUI =
+        SeasonListItemUI(season = entity.season)
 
-    fun mapSeasonListItem(entity: SeasonListItem): SeasonListItemUI {
-        return SeasonListItemUI(
-            season_number = entity.season_number
-        )
-    }
+    fun mapListSeasonListItem(list: List<SeasonListItem>): List<SeasonListItemUI> =
+        list.map(::mapSeasonListItem)
 
     fun mapEpisodeDetails(entity: EpisodeDetails?): EpisodeDetailsUI? {
         return if (entity != null) {
@@ -49,9 +45,8 @@ class UIMapper {
         )
     }
 
-    fun mapListEpisodeListItem(list: List<EpisodeListItem>): List<EpisodeListItemUI> {
-        return list.map(::mapEpisodeListItem)
-    }
+    fun mapListEpisodeListItem(list: List<EpisodeListItem>): List<EpisodeListItemUI> =
+        list.map(::mapEpisodeListItem)
 
     fun mapCharacterDetails(entity: CharacterDetails?): CharacterDetailsUI? {
         return if (entity != null) {
@@ -87,10 +82,6 @@ class UIMapper {
         )
     }
 
-    fun mapListCharacterListItem(list: List<CharacterListItem>): List<CharacterListItemUI> {
-        return list.map(::mapCharacterListItem)
-    }
-
     fun mapCharacterInEpisode(entity: CharacterInEpisode): CharacterListItemUI {
         return CharacterListItemUI(
             appearance = entity.appearance,
@@ -107,7 +98,6 @@ class UIMapper {
         )
     }
 
-    fun mapListCharacterInEpisode(list: List<CharacterInEpisode>): List<CharacterListItemUI> {
-        return list.map(::mapCharacterInEpisode)
-    }
+    fun mapListCharacterInEpisode(list: List<CharacterInEpisode>): List<CharacterListItemUI> =
+        list.map(::mapCharacterInEpisode)
 }

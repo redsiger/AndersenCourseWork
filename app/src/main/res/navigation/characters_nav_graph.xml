@@ -4,14 +4,7 @@
     android:id="@+id/characters_nav_graph"
     app:startDestination="@id/charactersListFragment">
 
-    <include app:graph="@navigation/search_nav_graph" />
-
     <include app:graph="@navigation/character_details_graph" />
-
-    <action
-        android:id="@+id/action_global_to_search"
-        app:destination="@id/search_nav_graph">
-    </action>
 
     <fragment
         android:id="@+id/charactersListFragment"
@@ -23,7 +16,7 @@
             <argument
                 android:name="characterId"
                 app:argType="integer"
-                app:nullable="false"/>
+                app:nullable="false" />
         </action>
     </fragment>
 

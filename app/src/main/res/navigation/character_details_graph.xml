@@ -7,11 +7,11 @@
     <fragment
         android:id="@+id/characterDetailsFragment"
         android:name="com.example.androidschool.andersencoursework.ui.characters.details.CharacterDetailsFragment"
-        android:label="CharacterDetailsFragment" >
+        android:label="CharacterDetailsFragment">
         <argument
             android:name="characterId"
             app:argType="integer"
-            app:nullable="false"/>
+            app:nullable="false" />
     </fragment>
 
 </navigation>

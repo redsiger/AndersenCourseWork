@@ -15,7 +15,6 @@
 
     <!--  Appearance List Item  -->
     <string name="appearance_list_item_season">Season %1$s</string>
-    <string name="appearance_list_item_episode">Episode %1$s</string>
 
     <!--  Episodes  -->
     <string name="episodes_nav_graph_title">Episodes</string>
@@ -38,7 +37,7 @@
     <!--  Seasons  -->
     <string name="seasons_fragment_title">Seasons</string>
     <string name="seasons_fragment_details_title">Season %1$s</string>
-    <string name="season_list_item_title">Season %1$d</string>
+    <string name="season_list_item_title">Season %1$s</string>
     <string name="fragment_seasons_list_all_episodes">All episodes</string>
 
 </resources>

@@ -6,41 +6,49 @@
     app:cardCornerRadius="@dimen/app_card_radius_small"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_width="@dimen/list_item_appearance_width"
+    <TextView
+        android:id="@+id/list_item_season_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/app_offset_medium_small">
+        android:padding="@dimen/app_offset_medium"
+        style="@style/PrimaryText.AppearanceListItem"
+        tools:text="Season" />
 
-        <TextView
-            android:id="@+id/list_item_episode_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/app_offset_small"
-            style="@style/PrimaryText.AppearanceListItem"
-            tools:text="Episode1231112323"/>
+<!--    <LinearLayout-->
+<!--        android:layout_width="@dimen/list_item_appearance_width"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:padding="@dimen/app_offset_medium_small">-->
 
-        <TextView
-            android:id="@+id/list_item_episode_season"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/SecondaryText.AppearanceListItem"
-            tools:text="Season 1"/>
+<!--        <TextView-->
+<!--            android:id="@+id/list_item_episode_title"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="@dimen/app_offset_small"-->
+<!--            style="@style/PrimaryText.AppearanceListItem"-->
+<!--            tools:text="Episode1231112323"/>-->
 
-        <TextView
-            android:id="@+id/list_item_episode_episode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/SecondaryText.AppearanceListItem"
-            tools:text="Episode 4"/>
+<!--        <TextView-->
+<!--            android:id="@+id/list_item_episode_season"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            style="@style/SecondaryText.AppearanceListItem"-->
+<!--            tools:text="Season 1"/>-->
 
-        <TextView
-            android:id="@+id/list_item_episode_airDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/SecondaryText.AppearanceListItem"
-            tools:text="01-20-2008"/>
+<!--        <TextView-->
+<!--            android:id="@+id/list_item_episode_episode"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            style="@style/SecondaryText.AppearanceListItem"-->
+<!--            tools:text="Episode 4"/>-->
 
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/list_item_episode_airDate"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            style="@style/SecondaryText.AppearanceListItem"-->
+<!--            tools:text="01-20-2008"/>-->
+
+<!--    </LinearLayout>-->
 
 </androidx.cardview.widget.CardView>

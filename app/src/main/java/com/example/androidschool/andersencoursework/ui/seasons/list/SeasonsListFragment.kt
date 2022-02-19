@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,8 +48,8 @@ class SeasonsListFragment :
     }
 
     private fun navigateToDetails(season: Int) {
-        val action = SeasonsListFragmentDirections.fromListToDetails(season.toString())
-        navController.navigate(action)
+        val bundle = bundleOf("season" to season.toString())
+        navController.navigate(R.id.action_global_to_season_details, bundle)
     }
 
     override fun onAttach(context: Context) {
@@ -75,9 +76,7 @@ class SeasonsListFragment :
             onItemClick = { item: MenuItem ->
                 when (item.itemId) {
                     R.id.menu_item_search -> {
-                        val action =
-                            EpisodesListFragmentDirections.actionGlobalToSearch()
-                        navController.navigate(action)
+                        navController.navigate(R.id.action_global_to_search)
                         true
                     }
                     else -> false

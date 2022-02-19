@@ -7,4 +7,7 @@ import com.example.androidschool.util.NetworkResponse
 interface SeasonsRepository {
 
     suspend fun getSeasons(): NetworkResponse<List<SeasonListItem>>
+
+    suspend fun getSeasonsByAppearance(appearanceList: List<String>): NetworkResponse<List<SeasonListItem>>
+
 }

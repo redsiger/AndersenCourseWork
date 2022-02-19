@@ -40,10 +40,10 @@ class SeasonsListDelegateAdapter @AssistedInject constructor(
                 listItemSeasonTitle.text =
                     resourceProvider.resources.getString(
                         R.string.season_list_item_title,
-                        item.season_number
+                        item.season
                     )
             }
-            itemView.setOnClickListener { onItemClick.invoke(item.season_number) }
+            itemView.setOnClickListener { onItemClick.invoke(item.season.toInt()) }
         }
     }
 

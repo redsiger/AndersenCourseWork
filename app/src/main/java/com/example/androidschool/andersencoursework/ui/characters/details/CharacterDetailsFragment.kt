@@ -2,6 +2,7 @@ package com.example.androidschool.andersencoursework.ui.characters.details
 
 import android.content.Context
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -19,23 +20,34 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
-class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.layout.fragment_character_details) {
+class CharacterDetailsFragment :
+    BaseFragment<FragmentCharacterDetailsBinding>(R.layout.fragment_character_details) {
 
-    @Inject lateinit var resourceProvider: ResourceProvider
-    @Inject lateinit var mContext: Context
-    @Inject lateinit var glide: RequestManager
+    @Inject
+    lateinit var resourceProvider: ResourceProvider
+    @Inject
+    lateinit var mContext: Context
+    @Inject
+    lateinit var glide: RequestManager
 
     private val args: CharacterDetailsFragmentArgs by navArgs()
     private val characterId by lazy { args.characterId }
 
-    @Inject lateinit var viewModelFactory: CharacterDetailsViewModel.Factory
+    @Inject
+    lateinit var viewModelFactory: CharacterDetailsViewModel.Factory
     private val viewModel: CharacterDetailsViewModel by viewModels { viewModelFactory }
 
-    @Inject lateinit var appearanceAdapter: CharacterAppearanceDelegateAdapter
+    @Inject
+    lateinit var appearanceAdapter: CharacterAppearanceDelegateAdapter.Factory
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter.Builder()
-            .add(appearanceAdapter)
+            .add(appearanceAdapter.create(::navigateToSeason))
             .build()
+    }
+
+    private fun navigateToSeason(season: String) {
+        val bundle = bundleOf("season" to season)
+        navController.navigate(R.id.action_global_to_season_details, bundle)
     }
 
     override fun initBinding(view: View): FragmentCharacterDetailsBinding =
@@ -60,7 +72,7 @@ class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.
             layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(
                 OffsetRecyclerDecorator(
-                    margin =  resourceProvider.resources.getDimension(
+                    margin = resourceProvider.resources.getDimension(
                         R.dimen.app_offset_small
                     ).toInt(),
                     layoutManager = layoutManager as LinearLayoutManager,
@@ -74,24 +86,24 @@ class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.
         when (state) {
             is UIState.Success -> handleSuccess(state)
             is UIState.Error -> handleError(state)
-            is UIState.EmptyError -> handleEmptyError(state)
-            is UIState.InitialLoading -> handleInitialLoading(state)
-            is UIState.Refresh -> handleRefresh(state)
+            is UIState.EmptyError -> handleEmptyError()
+            is UIState.InitialLoading -> handleInitialLoading()
+            is UIState.Refresh -> handleRefresh()
         }
     }
 
-    private fun handleEmptyError(state: UIState.EmptyError) {
+    private fun handleEmptyError() {
         hideAll()
-        showError(state.error)
+        showError()
     }
 
-    private fun handleInitialLoading(state: UIState.InitialLoading) {
+    private fun handleInitialLoading() {
         hideAll()
         showLoading()
         viewModel.load(characterId)
     }
 
-    private fun handleRefresh(state: UIState.Refresh) {
+    private fun handleRefresh() {
         showLoading()
         viewModel.load(characterId)
     }
@@ -108,25 +120,20 @@ class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.
         hideLoading()
         hideAll()
         showContent(state.data)
-        showErrorMessage(state)
+        showErrorMessage()
         viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
             viewModel.refresh(characterId)
         }
     }
 
-    private fun showErrorMessage(state: UIState.Error<CharacterDetailsState>) {
+    private fun showErrorMessage() {
         Snackbar.make(
             viewBinding.root,
-            resourceProvider.resources. getString(R.string.default_error_message),
+            resourceProvider.resources.getString(R.string.default_error_message),
             Snackbar.LENGTH_LONG
         ).setAction(
-            R.string.refresh_btn_title,
-            object: View.OnClickListener {
-                override fun onClick(p0: View?) {
-                    viewModel.refresh(characterId)
-                }
-            }
-        ).show()
+            R.string.refresh_btn_title
+        ) { viewModel.refresh(characterId) }.show()
     }
 
     private fun hideAll() {
@@ -170,12 +177,12 @@ class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.
         }
     }
 
-    private fun showError(error: Exception) {
+    private fun showError() {
         hideAll()
-        showErrorBlock(error)
+        showErrorBlock()
     }
 
-    private fun showErrorBlock(error: Exception) {
+    private fun showErrorBlock() {
         hideLoading()
         viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE
         viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
@@ -187,6 +194,7 @@ class CharacterDetailsFragment: BaseFragment<FragmentCharacterDetailsBinding>(R.
     }
 
     private fun initBackBtn() {
-        viewBinding.fragmentCharacterDetailsBackBtn.setOnClickListener { navController.navigateUp() }
+        viewBinding.fragmentCharacterDetailsBackBtn
+            .setOnClickListener { navController.navigateUp() }
     }
 }

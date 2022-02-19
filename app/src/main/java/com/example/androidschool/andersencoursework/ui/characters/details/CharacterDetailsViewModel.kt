@@ -1,25 +1,23 @@
 package com.example.androidschool.andersencoursework.ui.characters.details
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.androidschool.andersencoursework.di.dispatchers.DispatcherIO
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterDetailsUI
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
-import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
+import com.example.androidschool.andersencoursework.ui.seasons.model.SeasonListItemUI
 import com.example.androidschool.andersencoursework.util.UIState
 import com.example.androidschool.domain.characters.interactor.CharacterDetailsInteractor
-import com.example.androidschool.domain.episode.interactor.EpisodesListInteractor
+import com.example.androidschool.domain.seasons.interactor.SeasonsInteractor
 import com.example.androidschool.util.NetworkResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Named
 
 class CharacterDetailsViewModel constructor(
     private val defaultDispatcher: CoroutineDispatcher,
     private val characterInteractor: CharacterDetailsInteractor,
-    private val episodesListInteractor: EpisodesListInteractor,
+    private val seasonsInteractor: SeasonsInteractor,
     private val mapper: UIMapper
 ): ViewModel() {
 
@@ -46,7 +44,8 @@ class CharacterDetailsViewModel constructor(
 
             when (val characterDetails = loadCharacterDetails(characterId)) {
                 is NetworkResponse.Success -> {
-                    val appearanceList = loadAppearance(characterDetails.data!!.appearance)
+                    val appearanceList =
+                        loadAppearance(characterDetails.data!!.appearance.map { it.toString() })
                     _uiState.value = UIState.Success(
                         data = CharacterDetailsState(
                             character = characterDetails.data!!,
@@ -56,7 +55,8 @@ class CharacterDetailsViewModel constructor(
                 }
                 is NetworkResponse.Error -> {
                     characterDetails.data?.let { character ->
-                        val appearanceList = loadAppearance(character.appearance)
+                        val appearanceList =
+                            loadAppearance(character.appearance.map { it.toString() })
                         _uiState.value = UIState.Error(
                             data = CharacterDetailsState(
                                 character = character,
@@ -87,16 +87,16 @@ class CharacterDetailsViewModel constructor(
         }
     }
 
-    private suspend fun loadAppearance(appearanceList: List<Int>): List<EpisodeListItemUI> {
-        val response = episodesListInteractor.getCharacterAppearance(appearanceList)
-        return mapper.mapListEpisodeListItem(response.data)
+    private suspend fun loadAppearance(appearanceList: List<String>): List<SeasonListItemUI> {
+        val response = seasonsInteractor.getSeasonsByAppearance(appearanceList)
+        return mapper.mapListSeasonListItem(response.data)
     }
 
     class Factory @Inject constructor(
         @DispatcherIO
         private val defaultDispatcher: CoroutineDispatcher,
         private val characterInteractor: CharacterDetailsInteractor,
-        private val episodesListInteractor: EpisodesListInteractor,
+        private val seasonsInteractor: SeasonsInteractor,
         private val mapper: UIMapper
     ): ViewModelProvider.Factory {
 
@@ -106,7 +106,7 @@ class CharacterDetailsViewModel constructor(
             return CharacterDetailsViewModel(
                 defaultDispatcher,
                 characterInteractor,
-                episodesListInteractor,
+                seasonsInteractor,
                 mapper
             ) as T
         }
@@ -115,5 +115,5 @@ class CharacterDetailsViewModel constructor(
 
 data class CharacterDetailsState(
     val character: CharacterDetailsUI,
-    val appearance: List<EpisodeListItemUI>
+    val appearance: List<SeasonListItemUI>
 )

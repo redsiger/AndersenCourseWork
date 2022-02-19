@@ -25,11 +25,14 @@ import com.example.androidschool.andersencoursework.util.UIStatePaging
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
-class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.fragment_episodes_list) {
+class EpisodesListFragment :
+    BaseFragment<FragmentEpisodesListBinding>(R.layout.fragment_episodes_list) {
 
-    @Inject lateinit var resourceProvider: ResourceProvider
+    @Inject
+    lateinit var resourceProvider: ResourceProvider
 
-    @Inject lateinit var viewModelFactory: EpisodesListViewModel.Factory
+    @Inject
+    lateinit var viewModelFactory: EpisodesListViewModel.Factory
     private val viewModel: EpisodesListViewModel by viewModels { viewModelFactory }
 
     private var _toolbarBinding: MergeToolbarBinding? = null
@@ -42,12 +45,13 @@ class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.f
         )
     }
 
-    @Inject lateinit var episodesListAdapter: EpisodesListDelegateAdapter.Factory
+    @Inject
+    lateinit var episodesListAdapter: EpisodesListDelegateAdapter.Factory
 
     private val mPagingAdapter: CompositeAdapter by lazy {
         CompositeAdapter.Builder()
             .add(episodesListAdapter.create(::navigateToDetails))
-            .add(DefaultErrorDelegateAdapter( onTryAgain = { viewModel.loadNewPage() } ))
+            .add(DefaultErrorDelegateAdapter(onTryAgain = { viewModel.loadNewPage() }))
             .add(DefaultLoadingDelegateAdapter())
             .build()
     }
@@ -74,16 +78,14 @@ class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.f
 
     private fun initToolbar() {
 
-        setupMainToolbar(
+        setupToolbar(
             toolbar = toolbarBinding.toolbar,
             title = getString(R.string.episodes_fragment_title),
             menuId = R.menu.search_menu,
             onItemClick = { item: MenuItem ->
-                when(item.itemId) {
+                when (item.itemId) {
                     R.id.menu_item_search -> {
-                        val action =
-                            EpisodesListFragmentDirections.actionGlobalToSearch()
-                        navController.navigate(action)
+                        navController.navigate(R.id.search_nav_graph)
                         true
                     }
                     else -> false
@@ -99,13 +101,15 @@ class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.f
         with(viewBinding.fragmentEpisodesListRecycler) {
             adapter = mPagingAdapter
             layoutManager = linearLayoutManager
-            addItemDecoration(OffsetRecyclerDecorator(
-                itemPadding,
-                linearLayoutManager,
-                false
-            ))
+            addItemDecoration(
+                OffsetRecyclerDecorator(
+                    itemPadding,
+                    linearLayoutManager,
+                    false
+                )
+            )
         }
-        
+
         addScrollListener()
         collectStates()
         addListRefresher()
@@ -183,12 +187,12 @@ class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.f
 
     private fun handleLoadingPartialDataError(state: UIStatePaging.LoadingPartialDataError<DiffComparable>) {
         hideLoading()
-        showPartialDataError(state.data  as List<EpisodeListItemUI>)
+        showPartialDataError(state.data as List<EpisodeListItemUI>)
     }
 
     private fun handleAllData(state: UIStatePaging.AllData<DiffComparable>) {
         hideLoading()
-        showAllData(state.data  as List<EpisodeListItemUI>)
+        showAllData(state.data as List<EpisodeListItemUI>)
     }
 
     private fun handleRefresh(state: UIStatePaging.Refresh<DiffComparable>) {
@@ -200,7 +204,7 @@ class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.f
 
     private fun hideAll() {
         hideLoading()
-        viewBinding.fragmentEpisodesListRefreshContainer .children.forEach {
+        viewBinding.fragmentEpisodesListRefreshContainer.children.forEach {
             it.visibility = View.GONE
         }
     }
@@ -217,14 +221,16 @@ class EpisodesListFragment: BaseFragment<FragmentEpisodesListBinding>(R.layout.f
         viewBinding.errorBlock.root.visibility = View.VISIBLE
         viewBinding.errorBlock.fragmentEmptyError.visibility = View.GONE
         viewBinding.errorBlock.fragmentEmptyDataMessage.visibility = View.VISIBLE
-        viewBinding.errorBlock.fragmentEmptyDataMessage.text = getString(R.string.default_emptyData_message)
+        viewBinding.errorBlock.fragmentEmptyDataMessage.text =
+            getString(R.string.default_emptyData_message)
     }
 
     private fun showEmptyError(error: Exception) {
         viewBinding.errorBlock.root.visibility = View.VISIBLE
         viewBinding.errorBlock.fragmentEmptyDataMessage.visibility = View.GONE
         viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE
-        viewBinding.errorBlock.fragmentEmptyErrorTitle.text = getString(R.string.default_error_message)
+        viewBinding.errorBlock.fragmentEmptyErrorTitle.text =
+            getString(R.string.default_error_message)
     }
 
     private fun showPartialData(data: List<EpisodeListItemUI>) {

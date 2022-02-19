@@ -74,16 +74,14 @@ class SeasonDetailsFragment :
     private fun initToolbar() {
         _toolbarBinding = MergeToolbarBinding.bind(viewBinding.root)
 
-        setupMainToolbar(
+        setupToolbar(
             toolbar = toolbarBinding.toolbar,
             title = getString(R.string.seasons_fragment_details_title, season),
             menuId = R.menu.search_menu,
             onItemClick = { item: MenuItem ->
                 when (item.itemId) {
                     R.id.menu_item_search -> {
-                        val action =
-                            EpisodesListFragmentDirections.actionGlobalToSearch()
-                        navController.navigate(action)
+                        navController.navigate(R.id.search_nav_graph)
                         true
                     }
                     else -> false

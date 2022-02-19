@@ -9,11 +9,20 @@ import com.example.androidschool.andersencoursework.databinding.ListItemAppearan
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
 import com.example.androidschool.andersencoursework.ui.core.recycler.DelegateAdapter
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
+import com.example.androidschool.andersencoursework.ui.seasons.list.SeasonsListDelegateAdapter
+import com.example.androidschool.andersencoursework.ui.seasons.model.SeasonListItemUI
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import javax.inject.Inject
 
-class CharacterAppearanceDelegateAdapter@Inject constructor(
+class CharacterAppearanceDelegateAdapter @AssistedInject constructor(
+    @Assisted("onItemClick")
+    private val onItemClick: (season: String) -> Unit,
     private val resourceProvider: ResourceProvider
-): DelegateAdapter<EpisodeListItemUI, CharacterAppearanceDelegateAdapter.ViewHolder>(EpisodeListItemUI::class.java) {
+) : DelegateAdapter<SeasonListItemUI, CharacterAppearanceDelegateAdapter.ViewHolder>(
+    SeasonListItemUI::class.java
+) {
 
     override fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -21,27 +30,32 @@ class CharacterAppearanceDelegateAdapter@Inject constructor(
         return ViewHolder(itemView)
     }
 
-    override fun bindViewHolder(model: EpisodeListItemUI, viewHolder: CharacterAppearanceDelegateAdapter.ViewHolder) {
+    override fun bindViewHolder(
+        model: SeasonListItemUI,
+        viewHolder: CharacterAppearanceDelegateAdapter.ViewHolder
+    ) {
         viewHolder.bind(model)
     }
 
-    inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val viewBinding = ListItemAppearanceBinding.bind(itemView)
 
-        fun bind(item: EpisodeListItemUI) {
+        fun bind(item: SeasonListItemUI) {
             with(viewBinding) {
-                listItemEpisodeTitle.text = item.title
-                listItemEpisodeEpisode.text = resourceProvider.resources.getString(
-                    R.string.appearance_list_item_episode,
-                    item.episode
-                )
-                listItemEpisodeSeason.text = resourceProvider.resources.getString(
+                listItemSeasonTitle.text = resourceProvider.resources.getString(
                     R.string.appearance_list_item_season,
                     item.season
                 )
-                listItemEpisodeAirDate.text = item.airDate
             }
+            itemView.setOnClickListener { onItemClick.invoke(item.season) }
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            @Assisted("onItemClick") onItemClick: (season: String) -> Unit
+        ): CharacterAppearanceDelegateAdapter
     }
 }

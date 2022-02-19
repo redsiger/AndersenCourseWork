@@ -8,9 +8,14 @@ interface SeasonsInteractor {
 
     suspend fun getSeasons(): NetworkResponse<List<SeasonListItem>>
 
-    class Base(private val repository: SeasonsRepository): SeasonsInteractor {
+    suspend fun getSeasonsByAppearance(appearanceList: List<String>): NetworkResponse<List<SeasonListItem>>
+
+    class Base(private val repository: SeasonsRepository) : SeasonsInteractor {
 
         override suspend fun getSeasons(): NetworkResponse<List<SeasonListItem>> =
             repository.getSeasons()
+
+        override suspend fun getSeasonsByAppearance(appearanceList: List<String>): NetworkResponse<List<SeasonListItem>> =
+            repository.getSeasonsByAppearance(appearanceList)
     }
 }

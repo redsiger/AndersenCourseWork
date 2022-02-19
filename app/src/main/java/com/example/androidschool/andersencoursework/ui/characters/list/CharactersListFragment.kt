@@ -6,8 +6,6 @@ import android.view.View
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentCharactersListBinding
@@ -21,10 +19,12 @@ import com.example.androidschool.andersencoursework.util.InfiniteScrollListener
 import com.example.androidschool.andersencoursework.util.UIStatePaging
 import javax.inject.Inject
 
-//@Suppress("UNCHECKED_CAST")
-class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layout.fragment_characters_list) {
+@Suppress("UNCHECKED_CAST")
+class CharactersListFragment :
+    BaseFragment<FragmentCharactersListBinding>(R.layout.fragment_characters_list) {
 
-    override fun initBinding(view: View): FragmentCharactersListBinding = FragmentCharactersListBinding.bind(view)
+    override fun initBinding(view: View): FragmentCharactersListBinding =
+        FragmentCharactersListBinding.bind(view)
 
     private var _toolbarBinding: MergeToolbarBinding? = null
     private val toolbarBinding get() = _toolbarBinding!!
@@ -40,12 +40,13 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
         )
     }
 
-    @Inject lateinit var charactersListAdapter: CharactersListDelegateAdapter.Factory
+    @Inject
+    lateinit var charactersListAdapter: CharactersListDelegateAdapter.Factory
 
     private val mPagingAdapter: CompositeAdapter by lazy {
         CompositeAdapter.Builder()
             .add(charactersListAdapter.create(::navigateToDetails))
-            .add(DefaultErrorDelegateAdapter( onTryAgain = {} ))
+            .add(DefaultErrorDelegateAdapter(onTryAgain = {}))
             .add(DefaultLoadingDelegateAdapter())
             .build()
     }
@@ -76,11 +77,9 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
             title = getString(R.string.characters_fragment_title),
             menuId = R.menu.search_menu,
             onItemClick = { item: MenuItem ->
-                when(item.itemId) {
+                when (item.itemId) {
                     R.id.menu_item_search -> {
-                        val action =
-                            CharactersListFragmentDirections.actionGlobalToSearch()
-                        navController.navigate(action)
+                        navController.navigate(R.id.action_global_to_search)
                         true
                     }
                     else -> false
@@ -92,7 +91,8 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
     private fun initList() {
         with(viewBinding.fragmentCharactersListRecycler) {
             adapter = mPagingAdapter
-            initRecyclerPaging(R.dimen.list_item_character_img_width, requireContext()
+            initRecyclerPaging(
+                R.dimen.list_item_character_img_width, requireContext()
             ) { viewModel.loadNewPage() }
         }
 
@@ -129,9 +129,9 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
 
     private fun handleState(state: UIStatePaging<DiffComparable>) =
         when (state) {
-            is UIStatePaging.EmptyLoading -> handleEmptyLoading(state)
-            is UIStatePaging.EmptyData -> handleEmptyData(state)
-            is UIStatePaging.EmptyError -> handleEmptyError(state)
+            is UIStatePaging.EmptyLoading -> handleEmptyLoading()
+            is UIStatePaging.EmptyData -> handleEmptyData()
+            is UIStatePaging.EmptyError -> handleEmptyError()
             is UIStatePaging.PartialData -> handlePartialData(state)
             is UIStatePaging.LoadingPartialData -> handleLoadingPartialData(state)
             is UIStatePaging.AllData -> handleAllData(state)
@@ -139,18 +139,18 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
             is UIStatePaging.Refresh -> handleRefresh(state)
         }
 
-    private fun handleEmptyLoading(state: UIStatePaging.EmptyLoading<DiffComparable>) {
+    private fun handleEmptyLoading() {
         hideAll()
         showLoading()
         viewModel.refresh()
     }
 
-    private fun handleEmptyError(state: UIStatePaging.EmptyError<DiffComparable>) {
+    private fun handleEmptyError() {
         hideAll()
-        showEmptyError(state.error)
+        showEmptyError()
     }
 
-    private fun handleEmptyData(state: UIStatePaging.EmptyData<DiffComparable>) {
+    private fun handleEmptyData() {
         hideAll()
         showEmptyData()
     }
@@ -168,12 +168,12 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
 
     private fun handleLoadingPartialDataError(state: UIStatePaging.LoadingPartialDataError<DiffComparable>) {
         hideLoading()
-        showPartialDataError(state.data  as List<CharacterListItemUI>)
+        showPartialDataError(state.data as List<CharacterListItemUI>)
     }
 
     private fun handleAllData(state: UIStatePaging.AllData<DiffComparable>) {
         hideLoading()
-        showAllData(state.data  as List<CharacterListItemUI>)
+        showAllData(state.data as List<CharacterListItemUI>)
     }
 
     private fun handleRefresh(state: UIStatePaging.Refresh<DiffComparable>) {
@@ -202,14 +202,16 @@ class CharactersListFragment: BaseFragment<FragmentCharactersListBinding>(R.layo
         viewBinding.errorBlock.root.visibility = View.VISIBLE
         viewBinding.errorBlock.fragmentEmptyError.visibility = View.GONE
         viewBinding.errorBlock.fragmentEmptyDataMessage.visibility = View.VISIBLE
-        viewBinding.errorBlock.fragmentEmptyDataMessage.text = getString(R.string.default_emptyData_message)
+        viewBinding.errorBlock.fragmentEmptyDataMessage.text =
+            getString(R.string.default_emptyData_message)
     }
 
-    private fun showEmptyError(error: Exception) {
+    private fun showEmptyError() {
         viewBinding.errorBlock.root.visibility = View.VISIBLE
         viewBinding.errorBlock.fragmentEmptyDataMessage.visibility = View.GONE
         viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE
-        viewBinding.errorBlock.fragmentEmptyErrorTitle.text = getString(R.string.default_error_message)
+        viewBinding.errorBlock.fragmentEmptyErrorTitle.text =
+            getString(R.string.default_error_message)
     }
 
     private fun showPartialData(data: List<CharacterListItemUI>) {

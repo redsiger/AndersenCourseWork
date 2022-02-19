@@ -4,31 +4,15 @@
     android:id="@+id/seasons_nav_graph"
     app:startDestination="@id/seasonsListFragment">
 
-    <include app:graph="@navigation/search_nav_graph" />
-    <action
-        android:id="@+id/action_global_to_search"
-        app:destination="@id/search_nav_graph" />
-
-    <include app:graph="@navigation/season_details_nav_graph" />
-
     <fragment
         android:id="@+id/seasonsListFragment"
         android:name="com.example.androidschool.andersencoursework.ui.seasons.list.SeasonsListFragment"
         android:label="SeasonsListFragment">
-        <action
-            android:id="@+id/fromListToDetails"
-            app:destination="@id/season_details_nav_graph">
-            <argument
-                android:name="season"
-                app:argType="string"
-                app:nullable="false" />
-        </action>
         <action
             android:id="@+id/toAllEpisodes"
             app:destination="@id/episodes_nav_graph" />
     </fragment>
 
     <include app:graph="@navigation/episodes_nav_graph" />
-
 
 </navigation>
