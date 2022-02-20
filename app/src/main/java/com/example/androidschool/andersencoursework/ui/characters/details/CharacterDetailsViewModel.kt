@@ -5,15 +5,14 @@ import com.example.androidschool.andersencoursework.di.dispatchers.DispatcherIO
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterDetailsUI
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.seasons.model.SeasonListItemUI
-import com.example.androidschool.andersencoursework.util.UIState
 import com.example.androidschool.domain.characters.interactor.CharacterDetailsInteractor
 import com.example.androidschool.domain.seasons.interactor.SeasonsInteractor
 import com.example.androidschool.util.Status
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 class CharacterDetailsViewModel constructor(
     private val defaultDispatcher: CoroutineDispatcher,
@@ -23,11 +22,14 @@ class CharacterDetailsViewModel constructor(
 ) : ViewModel() {
 
     private val _character = MutableStateFlow<Status<CharacterDetailsUI>>(Status.Empty)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     private val _appearance: Flow<Status<List<SeasonListItemUI>>> =
         _character.flatMapLatest { character ->
             flowOf(
                 when (character) {
                     is Status.Empty -> Status.Empty
+                    is Status.EmptyError -> Status.EmptyError
                     else -> {
                         seasonsInteractor
                             .getSeasonsByAppearance(character.extractData.appearance.map { it.toString() })

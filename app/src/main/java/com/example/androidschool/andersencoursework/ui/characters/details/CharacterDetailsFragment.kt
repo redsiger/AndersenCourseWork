@@ -21,7 +21,6 @@ import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
 import com.example.androidschool.util.Status
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
-import java.lang.Error
 import javax.inject.Inject
 
 class CharacterDetailsFragment :
@@ -104,9 +103,6 @@ class CharacterDetailsFragment :
 
     private fun handleAppearance(appearance: Status<List<SeasonListItemUI>>) {
         when (appearance) {
-            is Status.Empty -> {
-                showNoAppearance()
-            }
             is Status.Success -> {
                 showAppearance(appearance.extractData)
             }
@@ -114,6 +110,7 @@ class CharacterDetailsFragment :
                 showAppearance(appearance.extractData)
                 showErrorMessage()
             }
+            else -> showNoAppearance()
         }
     }
 
@@ -137,6 +134,12 @@ class CharacterDetailsFragment :
                 showLoading()
                 viewModel.load(characterId)
             }
+            is Status.EmptyError -> {
+                hideAll()
+                showNoData()
+                hideLoading()
+                showErrorMessage()
+            }
             is Status.Success -> {
                 hideLoading()
                 showContent(character.extractData)
@@ -149,20 +152,27 @@ class CharacterDetailsFragment :
         }
     }
 
+    private fun showNoData() {
+        viewBinding.errorBlock.visibility = View.VISIBLE
+    }
+
     private fun showErrorMessage() {
-        Snackbar.make(viewBinding.root, R.string.default_error_message, Snackbar.LENGTH_INDEFINITE)
-            .setAction(R.string.retry_btn_title) { viewModel.load(characterId) }
+        Snackbar.make(
+            viewBinding.characterDetailsCoordinator,
+            R.string.default_error_message,
+            Snackbar.LENGTH_INDEFINITE
+        )
+            .setAction(R.string.retry_btn_title) { viewModel.retry() }
             .show()
     }
 
     private fun hideAll() {
-        hideErrorBlock()
+        hideNoData()
         viewBinding.characterDetailsMainContent.visibility = View.GONE
     }
 
-    private fun hideErrorBlock() {
-        viewBinding.errorBlock.fragmentEmptyDataMessage.visibility = View.GONE
-        viewBinding.errorBlock.fragmentEmptyError.visibility = View.GONE
+    private fun hideNoData() {
+        viewBinding.errorBlock.visibility = View.GONE
     }
 
     private fun showLoading() {
@@ -174,7 +184,7 @@ class CharacterDetailsFragment :
     }
 
     private fun showContent(data: CharacterDetailsUI) {
-        hideErrorBlock()
+        hideNoData()
         viewBinding.characterDetailsMainContent.visibility = View.VISIBLE
         with(viewBinding) {
             with(data) {

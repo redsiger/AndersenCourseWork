@@ -24,13 +24,13 @@ class CharacterDetailsRepositoryImpl(
                 val localCharacter = localStorage.getCharacterDetails(id)
                 if (localCharacter != null) {
                     Status.Error(localCharacter, response.errorBody() as HttpException)
-                } else Status.Empty
+                } else Status.EmptyError
             }
         } catch (e: Exception) {
             val localCharacter = localStorage.getCharacterDetails(id)
             if (localCharacter != null) {
                 Status.Error(localCharacter, e)
-            } else Status.Empty
+            } else Status.EmptyError
         }
     }
 }

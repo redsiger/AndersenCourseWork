@@ -85,6 +85,8 @@ class EpisodeDetailsViewModel @Inject constructor(
                 exception = response.exception
             )
             is Status.Empty -> Status.Empty
+            is Status.EmptyError -> Status.EmptyError
+
         }
     }
 
@@ -94,6 +96,7 @@ class EpisodeDetailsViewModel @Inject constructor(
             is Status.Success -> mapper.mapListCharacterInEpisode(response.data)
             is Status.Error -> mapper.mapListCharacterInEpisode(response.data)
             is Status.Empty -> emptyList()
+            is Status.EmptyError -> emptyList()
         }
     }
 
