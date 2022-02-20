@@ -100,6 +100,21 @@ abstract class BaseFragment<B: ViewBinding>(resId: Int): Fragment(resId) {
         toolbar.inflateMenu(menuId)
         toolbar.setOnMenuItemClickListener(onClickListener)
     }
+
+//     Fragment State Management ------------------------------------------------
+
+//    fun hideAll(mainContainer: ViewGroup) {
+//        hideNoData()
+//        mainContainer.visibility = View.GONE
+//    }
+//
+//    fun hideNoData(noData: View) {
+//        noData.visibility = View.GONE
+//    }
+
+
+//     ------------------------------------------------
+
 }
 
 fun RecyclerView.initRecyclerPaging(

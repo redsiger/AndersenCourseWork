@@ -155,6 +155,10 @@ class CharacterDetailsFragment :
         viewBinding.errorBlock.visibility = View.VISIBLE
     }
 
+    private fun hideNoData() {
+        viewBinding.errorBlock.visibility = View.GONE
+    }
+
     private fun showErrorMessage() {
         Snackbar.make(
             viewBinding.characterDetailsCoordinator,
@@ -168,10 +172,6 @@ class CharacterDetailsFragment :
     private fun hideAll() {
         hideNoData()
         viewBinding.characterDetailsMainContent.visibility = View.GONE
-    }
-
-    private fun hideNoData() {
-        viewBinding.errorBlock.visibility = View.GONE
     }
 
     private fun showLoading() {

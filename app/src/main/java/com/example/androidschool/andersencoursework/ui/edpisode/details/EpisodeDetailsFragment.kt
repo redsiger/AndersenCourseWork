@@ -22,18 +22,23 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
-class EpisodeDetailsFragment: BaseFragment<FragmentEpisodeDetailsBinding>(R.layout.fragment_episode_details) {
+class EpisodeDetailsFragment :
+    BaseFragment<FragmentEpisodeDetailsBinding>(R.layout.fragment_episode_details) {
 
-    @Inject lateinit var resourceProvider: ResourceProvider
-    @Inject lateinit var mContext: Context
+    @Inject
+    lateinit var resourceProvider: ResourceProvider
+    @Inject
+    lateinit var mContext: Context
 
     private val args: EpisodeDetailsFragmentArgs by navArgs()
     private val episodeId by lazy { args.episodeId }
 
-    @Inject lateinit var viewModelFactory: EpisodeDetailsViewModel.Factory
+    @Inject
+    lateinit var viewModelFactory: EpisodeDetailsViewModel.Factory
     private val viewModel: EpisodeDetailsViewModel by viewModels { viewModelFactory }
 
-    @Inject lateinit var charactersAdapter: CharactersListDelegateAdapter.Factory
+    @Inject
+    lateinit var charactersAdapter: CharactersListDelegateAdapter.Factory
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter.Builder()
             .add(charactersAdapter.create(::toCharacterDetails))
@@ -69,7 +74,7 @@ class EpisodeDetailsFragment: BaseFragment<FragmentEpisodeDetailsBinding>(R.layo
             layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(
                 OffsetRecyclerDecorator(
-                    margin =  resourceProvider.resources.getDimension(
+                    margin = resourceProvider.resources.getDimension(
                         R.dimen.app_offset_small
                     ).toInt(),
                     layoutManager = layoutManager as LinearLayoutManager,

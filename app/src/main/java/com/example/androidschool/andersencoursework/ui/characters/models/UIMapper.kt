@@ -1,6 +1,5 @@
 package com.example.androidschool.andersencoursework.ui.characters.models
 
-import com.example.androidschool.andersencoursework.ui.core.recycler.ListItem
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeDetailsUI
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
 import com.example.androidschool.andersencoursework.ui.seasons.model.SeasonListItemUI
@@ -13,7 +12,7 @@ import com.example.androidschool.domain.seasons.model.SeasonListItem
 
 class UIMapper {
 
-    fun mapSeasonListItem(entity: SeasonListItem): SeasonListItemUI =
+    private fun mapSeasonListItem(entity: SeasonListItem): SeasonListItemUI =
         SeasonListItemUI(season = entity.season)
 
     fun mapListSeasonListItem(list: List<SeasonListItem>): List<SeasonListItemUI> =
@@ -42,9 +41,6 @@ class UIMapper {
             title = entity.title
         )
     }
-
-    fun mapListEpisodeListItem(list: List<EpisodeListItem>): List<EpisodeListItemUI> =
-        list.map(::mapEpisodeListItem)
 
     fun mapCharacterDetails(entity: CharacterDetails): CharacterDetailsUI {
         return CharacterDetailsUI(
@@ -78,7 +74,7 @@ class UIMapper {
         )
     }
 
-    fun mapCharacterInEpisode(entity: CharacterInEpisode): CharacterListItemUI {
+    private fun mapCharacterInEpisode(entity: CharacterInEpisode): CharacterListItemUI {
         return CharacterListItemUI(
             appearance = entity.appearance,
             betterCallSaulAppearance = entity.betterCallSaulAppearance,

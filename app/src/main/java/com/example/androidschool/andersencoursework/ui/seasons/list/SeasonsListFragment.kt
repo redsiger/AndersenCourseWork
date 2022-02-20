@@ -1,7 +1,6 @@
 package com.example.androidschool.andersencoursework.ui.seasons.list
 
 import android.content.Context
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
@@ -15,9 +14,9 @@ import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.recycler.CompositeAdapter
-import com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListFragmentDirections
+import com.example.androidschool.andersencoursework.ui.seasons.model.SeasonListItemUI
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
-import com.example.androidschool.andersencoursework.util.UIState
+import com.example.androidschool.util.Status
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
@@ -91,13 +90,6 @@ class SeasonsListFragment :
             viewModel.uiState.collectLatest { state -> handleState(state) }
         }
 
-        with(viewBinding) {
-            fragmentSeasonsListAllEpisodes.setOnClickListener {
-                val action = SeasonsListFragmentDirections.toAllEpisodes()
-                navController.navigate(action)
-            }
-        }
-
         with(viewBinding.fragmentSeasonsListRecycler) {
             adapter = mAdapter
             layoutManager = LinearLayoutManager(
@@ -114,70 +106,40 @@ class SeasonsListFragment :
                 )
             )
         }
+
+        with(viewBinding) {
+            fragmentSeasonsListAllEpisodes.setOnClickListener {
+                val action = SeasonsListFragmentDirections.toAllEpisodes()
+                navController.navigate(action)
+            }
+        }
+
+        viewBinding.fragmentSeasonsListRefresh.setOnRefreshListener { viewModel.retry() }
     }
 
-    private fun handleState(state: UIState<SeasonListState>) {
+    private fun handleState(state: Status<List<SeasonListItemUI>>) {
         when (state) {
-            is UIState.Success -> handleSuccess(state)
-            is UIState.Error -> handleError(state)
-            is UIState.EmptyError -> handleEmptyError()
-            is UIState.InitialLoading -> handleInitialLoading()
-            is UIState.Refresh -> handleRefresh()
+            is Status.Empty -> {
+                hideAll()
+                showLoading()
+                viewModel.load()
+            }
+            is Status.EmptyError -> {
+                hideAll()
+                showNoData()
+                hideLoading()
+                showErrorMessage()
+            }
+            is Status.Success -> {
+                hideLoading()
+                showContent(state.extractData)
+            }
+            is Status.Error -> {
+                hideLoading()
+                showContent(state.extractData)
+                showErrorMessage()
+            }
         }
-    }
-
-    private fun handleEmptyError() {
-        hideAll()
-        showError()
-    }
-
-    private fun handleInitialLoading() {
-        hideAll()
-        showLoading()
-        viewModel.load()
-    }
-
-    private fun handleRefresh() {
-        showLoading()
-        viewModel.load()
-    }
-
-    private fun handleSuccess(state: UIState.Success<SeasonListState>) {
-        hideLoading()
-        showContent(state.data)
-        viewBinding.fragmentSeasonsListRefresh.setOnRefreshListener {
-            viewModel.refresh()
-        }
-    }
-
-    private fun handleError(state: UIState.Error<SeasonListState>) {
-        hideLoading()
-        hideAll()
-        showContent(state.data)
-        showErrorMessage()
-        viewBinding.fragmentSeasonsListRefresh.setOnRefreshListener {
-            viewModel.refresh()
-        }
-    }
-
-    private fun showErrorMessage() {
-        Snackbar.make(
-            viewBinding.root,
-            resourceProvider.resources.getString(R.string.default_error_message),
-            Snackbar.LENGTH_LONG
-        ).setAction(
-            R.string.refresh_btn_title
-        ) { viewModel.refresh() }.show()
-    }
-
-    private fun hideAll() {
-        hideErrorBlock()
-        viewBinding.fragmentSeasonsListRefreshContainer.visibility = View.GONE
-    }
-
-    private fun hideErrorBlock() {
-        viewBinding.errorBlock.fragmentEmptyDataMessage.visibility = View.GONE
-        viewBinding.errorBlock.fragmentEmptyError.visibility = View.GONE
     }
 
     private fun showLoading() {
@@ -188,27 +150,33 @@ class SeasonsListFragment :
         viewBinding.fragmentSeasonsListRefresh.isRefreshing = false
     }
 
-    private fun showContent(data: SeasonListState) {
-        hideErrorBlock()
-        viewBinding.fragmentSeasonsListRefreshContainer.visibility = View.VISIBLE
-        Log.e("SeasonsListFragment", "${data.seasons}")
-        mAdapter.submitList(data.seasons)
+    private fun hideAll() {
+        hideNoData()
+        viewBinding.fragmentSeasonsListMainContent.visibility = View.GONE
     }
 
-    private fun showError() {
-        hideAll()
-        showErrorBlock()
+    private fun showErrorMessage() {
+        Snackbar.make(
+            viewBinding.seasonsListCoordinator,
+            R.string.default_error_message,
+            Snackbar.LENGTH_INDEFINITE
+        )
+            .setAction(R.string.retry_btn_title) { viewModel.retry() }
+            .show()
     }
 
-    private fun showErrorBlock() {
-        hideLoading()
-        viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE
-        viewBinding.fragmentSeasonsListRefresh.setOnRefreshListener {
-            viewModel.retry()
-        }
-        viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener {
-            viewModel.retry()
-        }
+    private fun showNoData() {
+        viewBinding.errorBlock.visibility = View.VISIBLE
+    }
+
+    private fun hideNoData() {
+        viewBinding.errorBlock.visibility = View.GONE
+    }
+
+    private fun showContent(data: List<SeasonListItemUI>) {
+        hideNoData()
+        viewBinding.fragmentSeasonsListMainContent.visibility = View.VISIBLE
+        mAdapter.submitList(data)
     }
 
     override fun onDestroyView() {
