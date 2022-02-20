@@ -1,37 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_season_details_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/merge_toolbar" />
-
-    <include layout="@layout/merge_decor_line" />
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/fragment_seasons_details_refresh"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurface">
+        android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/fragment_seasons_details_refresh_container"
+        <include layout="@layout/merge_toolbar" />
+
+        <include layout="@layout/merge_decor_line" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/fragment_seasons_details_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSurface">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/fragment_seasons_details_recycler"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingBottom="@dimen/app_offset_extra_large" />
+                android:layout_height="wrap_content">
 
-            <include
-                android:id="@+id/errorBlock"
-                layout="@layout/include_default_empty_error" />
+                <FrameLayout
+                    android:id="@+id/fragment_seasons_details_main_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-        </FrameLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/fragment_seasons_details_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clipToPadding="false"
+                        android:paddingBottom="@dimen/app_offset_extra_large" />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                </FrameLayout>
 
-</LinearLayout>
+                <TextView
+                    android:id="@+id/errorBlock"
+                    style="@style/AppDefaultSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/default_emptyData_message" />
+
+            </FrameLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

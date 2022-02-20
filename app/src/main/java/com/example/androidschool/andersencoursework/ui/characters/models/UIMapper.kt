@@ -42,6 +42,9 @@ class UIMapper {
         )
     }
 
+    fun mapListEpisodeListItem(list: List<EpisodeListItem>): List<EpisodeListItemUI> =
+        list.map(::mapEpisodeListItem)
+
     fun mapCharacterDetails(entity: CharacterDetails): CharacterDetailsUI {
         return CharacterDetailsUI(
                 appearance = entity.appearance,

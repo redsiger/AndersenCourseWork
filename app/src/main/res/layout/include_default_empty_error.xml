@@ -9,7 +9,7 @@
         android:id="@+id/fragment_empty_data_message"
         android:text="Nothing to show here"
         android:layout_gravity="center"
-        android:textColor="@color/white"
+        android:textColor="?defaultAppTextColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -23,7 +23,7 @@
         <TextView
             android:id="@+id/fragment_empty_error_title"
             android:text="Something went wrong"
-            android:textColor="@color/white"
+            android:textColor="?defaultAppTextColor"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

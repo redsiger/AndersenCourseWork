@@ -1,7 +1,6 @@
 package com.example.androidschool.andersencoursework.ui.seasons.details
 
 import android.content.Context
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -16,10 +15,9 @@ import com.example.androidschool.andersencoursework.di.util.ResourceProvider
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.recycler.CompositeAdapter
 import com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListDelegateAdapter
-import com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListFragmentDirections
-import com.example.androidschool.andersencoursework.ui.seasons.list.SeasonsListFragmentDirections
+import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
-import com.example.androidschool.andersencoursework.util.UIState
+import com.example.androidschool.util.Status
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
@@ -91,9 +89,11 @@ class SeasonDetailsFragment :
     }
 
     private fun initPage() {
+
         lifecycleScope.launchWhenStarted {
             viewModel.uiState.collectLatest { state -> handleState(state) }
         }
+
         with(viewBinding.fragmentSeasonsDetailsRecycler) {
             adapter = mAdapter
             layoutManager = LinearLayoutManager(
@@ -110,70 +110,33 @@ class SeasonDetailsFragment :
                 )
             )
         }
+
+        viewBinding.fragmentSeasonsDetailsRefresh.setOnRefreshListener { viewModel.retry() }
     }
 
-    private fun handleState(state: UIState<SeasonDetailsState>) {
+    private fun handleState(state: Status<List<EpisodeListItemUI>>) {
         when (state) {
-            is UIState.Success -> handleSuccess(state)
-            is UIState.Error -> handleError(state)
-            is UIState.EmptyError -> handleEmptyError()
-            is UIState.InitialLoading -> handleInitialLoading()
-            is UIState.Refresh -> handleRefresh()
+            is Status.Empty -> {
+                hideAll()
+                showLoading()
+                viewModel.load(season)
+            }
+            is Status.EmptyError -> {
+                hideAll()
+                showNoData()
+                hideLoading()
+                showErrorMessage()
+            }
+            is Status.Success -> {
+                hideLoading()
+                showContent(state.extractData)
+            }
+            is Status.Error -> {
+                hideLoading()
+                showContent(state.extractData)
+                showErrorMessage()
+            }
         }
-    }
-
-    private fun handleEmptyError() {
-        hideAll()
-        showError()
-    }
-
-    private fun handleInitialLoading() {
-        hideAll()
-        showLoading()
-        viewModel.load(season)
-    }
-
-    private fun handleRefresh() {
-        showLoading()
-        viewModel.load(season)
-    }
-
-    private fun handleSuccess(state: UIState.Success<SeasonDetailsState>) {
-        hideLoading()
-        showContent(state.data)
-        viewBinding.fragmentSeasonsDetailsRefresh.setOnRefreshListener {
-            viewModel.refresh(season)
-        }
-    }
-
-    private fun handleError(state: UIState.Error<SeasonDetailsState>) {
-        hideLoading()
-        hideAll()
-        showContent(state.data)
-        showErrorMessage()
-        viewBinding.fragmentSeasonsDetailsRefresh.setOnRefreshListener {
-            viewModel.refresh(season)
-        }
-    }
-
-    private fun showErrorMessage() {
-        Snackbar.make(
-            viewBinding.root,
-            resourceProvider.resources.getString(R.string.default_error_message),
-            Snackbar.LENGTH_LONG
-        ).setAction(
-            R.string.refresh_btn_title
-        ) { viewModel.refresh(season) }.show()
-    }
-
-    private fun hideAll() {
-        hideErrorBlock()
-        viewBinding.fragmentSeasonsDetailsRefreshContainer.visibility = View.GONE
-    }
-
-    private fun hideErrorBlock() {
-        viewBinding.errorBlock.fragmentEmptyDataMessage.visibility = View.GONE
-        viewBinding.errorBlock.fragmentEmptyError.visibility = View.GONE
     }
 
     private fun showLoading() {
@@ -184,28 +147,37 @@ class SeasonDetailsFragment :
         viewBinding.fragmentSeasonsDetailsRefresh.isRefreshing = false
     }
 
-    private fun showContent(data: SeasonDetailsState) {
-        hideErrorBlock()
-        viewBinding.fragmentSeasonsDetailsRefreshContainer.visibility = View.VISIBLE
-        Log.e("SeasonsListFragment", "${data.episodes}")
-        mAdapter.submitList(data.episodes)
+    private fun hideAll() {
+        hideNoData()
+        viewBinding.fragmentSeasonsDetailsMainContent.visibility = View.GONE
     }
 
-    private fun showError() {
-        hideAll()
-        showErrorBlock()
+    private fun showErrorMessage() {
+        Snackbar.make(
+            viewBinding.fragmentSeasonDetailsCoordinator,
+            R.string.default_error_message,
+            Snackbar.LENGTH_INDEFINITE
+        )
+            .setAction(R.string.retry_btn_title) { viewModel.retry() }
+            .show()
     }
 
-    private fun showErrorBlock() {
-        hideLoading()
-        viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE
-        viewBinding.fragmentSeasonsDetailsRefresh.setOnRefreshListener {
-            viewModel.retry(season)
-        }
-        viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener {
-            viewModel.retry(season)
-        }
+    private fun showNoData() {
+        viewBinding.errorBlock.visibility = View.VISIBLE
     }
+
+    private fun hideNoData() {
+        viewBinding.errorBlock.visibility = View.GONE
+    }
+
+    private fun showContent(data: List<EpisodeListItemUI>) {
+        hideNoData()
+        if (data.isNotEmpty()) {
+            viewBinding.fragmentSeasonsDetailsMainContent.visibility = View.VISIBLE
+            mAdapter.submitList(data)
+        } else showNoData()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

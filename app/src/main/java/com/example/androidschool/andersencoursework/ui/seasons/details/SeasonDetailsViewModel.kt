@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.androidschool.andersencoursework.di.dispatchers.DispatcherIO
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
-import com.example.androidschool.andersencoursework.util.UIState
 import com.example.androidschool.domain.episode.interactor.EpisodesListInteractor
 import com.example.androidschool.domain.episode.model.EpisodeListItem
 import com.example.androidschool.util.Status
@@ -18,63 +17,45 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SeasonDetailsViewModel(
-    private val mapToListItemUI: (EpisodeListItem) -> EpisodeListItemUI,
+    private val mapToListItemUI: (List<EpisodeListItem>) -> List<EpisodeListItemUI>,
     private val dispatcher: CoroutineDispatcher,
     private val interactor: EpisodesListInteractor
-): ViewModel() {
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<UIState<SeasonDetailsState>>(UIState.InitialLoading)
-    val uiState: StateFlow<UIState<SeasonDetailsState>> get() = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<Status<List<EpisodeListItemUI>>>(Status.Empty)
+    val uiState: StateFlow<Status<List<EpisodeListItemUI>>> get() = _uiState.asStateFlow()
 
     fun load(season: String) {
-        _uiState.value = UIState.InitialLoading
         loadUIState(season)
     }
 
-    fun refresh(season: String) {
-        _uiState.value = UIState.Refresh
-        loadUIState(season)
-    }
-
-    fun retry(season: String) {
-        _uiState.value = UIState.InitialLoading
-        loadUIState(season)
+    fun retry() {
+        _uiState.value = Status.Empty
     }
 
     private fun loadUIState(season: String) {
 
         viewModelScope.launch(dispatcher) {
-            when (val episodes = interactor.getEpisodesBySeason(season)) {
-                is Status.Success -> {
-                    _uiState.value = UIState.Success(
-                        SeasonDetailsState(
-                            episodes = episodes.data.map(mapToListItemUI)
-                        )
-                    )
-                }
-            }
+            _uiState.value = interactor.getEpisodesBySeason(season)
+                .map(mapToListItemUI)
         }
     }
 
-    class Factory @Inject constructor (
+    class Factory @Inject constructor(
         @DispatcherIO
         private val dispatcher: CoroutineDispatcher,
         private val interactor: EpisodesListInteractor,
         private val mapper: UIMapper
-    ): ViewModelProvider.Factory {
+    ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             require(modelClass == SeasonDetailsViewModel::class.java)
             return SeasonDetailsViewModel(
-                mapper::mapEpisodeListItem,
+                mapper::mapListEpisodeListItem,
                 dispatcher,
                 interactor
             ) as T
         }
     }
 }
-
-data class SeasonDetailsState(
-    val episodes: List<EpisodeListItemUI>
-)

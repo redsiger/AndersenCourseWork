@@ -8,6 +8,7 @@ import com.example.androidschool.util.Status
 import retrofit2.HttpException
 import java.lang.Exception
 
+@Suppress("CAST_NEVER_SUCCEEDS")
 class EpisodesListRepositoryImpl(
     private val service: EpisodesService,
     private val localStorage: EpisodesListLocalStorage
