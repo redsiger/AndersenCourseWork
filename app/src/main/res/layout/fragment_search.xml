@@ -28,11 +28,21 @@
                 android:id="@+id/fragment_search_clear_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/app_offset_medium_small"
+                android:padding="@dimen/app_offset_medium_small"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:src="@drawable/ic_delete_text"
                 android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/fragment_search_filter_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_filter"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:padding="@dimen/app_offset_medium_small"
+                />
 
         </LinearLayout>
 

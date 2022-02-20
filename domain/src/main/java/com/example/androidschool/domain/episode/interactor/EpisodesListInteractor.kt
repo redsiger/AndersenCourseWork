@@ -5,13 +5,13 @@ import com.example.androidschool.domain.episode.repository.EpisodesListRepositor
 import com.example.androidschool.domain.episode.model.EpisodeListItem
 import com.example.androidschool.util.Status
 
-interface EpisodesListInteractor: BasePagingInteractor<EpisodeListItem> {
+interface EpisodesListInteractor : BasePagingInteractor<EpisodeListItem> {
 
     suspend fun getCharacterAppearance(appearanceList: List<Int>): Status<List<EpisodeListItem>>
 
     suspend fun getEpisodesBySeason(season: String): Status<List<EpisodeListItem>>
 
-    class Base(private val repository: EpisodesListRepository): EpisodesListInteractor {
+    class Base(private val repository: EpisodesListRepository) : EpisodesListInteractor {
 
         override suspend fun getCharacterAppearance(appearanceList: List<Int>): Status<List<EpisodeListItem>> =
             repository.getCharacterAppearance(appearanceList)
@@ -24,6 +24,6 @@ interface EpisodesListInteractor: BasePagingInteractor<EpisodeListItem> {
             limit: Int
         ): Status<List<EpisodeListItem>> =
             repository.getEpisodesPaging(offset, limit)
-        }
+    }
 
 }

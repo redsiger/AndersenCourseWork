@@ -5,15 +5,14 @@ import com.example.androidschool.data.network.characters.model.CharacterNetworkE
 import com.example.androidschool.domain.characters.model.CharacterInEpisode
 import com.example.androidschool.domain.characters.repository.CharactersListRepository
 import com.example.androidschool.domain.characters.model.CharacterListItem
+import com.example.androidschool.domain.search.model.SearchItem
 import com.example.androidschool.util.Status
-import kotlinx.coroutines.flow.Flow
-import retrofit2.HttpException
 import kotlin.Exception
 
 class CharactersListRepositoryImpl(
     private val service: CharactersService,
     private val localStorage: CharactersListLocalStorage,
-    ): CharactersListRepository {
+) : CharactersListRepository {
 
     override suspend fun getCharactersInEpisode(charactersName: List<String>): Status<List<CharacterInEpisode>> {
         return try {
@@ -25,14 +24,14 @@ class CharactersListRepositoryImpl(
 
                 // save all characters as CharacterInEpisode
                 val charactersByName = localStorage.insertAndReturnCharactersInEpisode(characters)
-                        // filter characters
+                    // filter characters
                     .filter { charactersName.contains(it.name) }
 
                 Status.Success(charactersByName)
             } else {
                 val localCharactersByName = localStorage.getCharactersInEpisode()
                     .filter { charactersName.contains(it.name) }
-                Status.Error(localCharactersByName, response.errorBody() as HttpException)
+                Status.Error(localCharactersByName, Exception(response.errorBody().toString()))
             }
         } catch (e: Exception) {
             val localCharactersByName = localStorage.getCharactersInEpisode()
@@ -55,10 +54,9 @@ class CharactersListRepositoryImpl(
                     offset, limit
                 )
                 Status.Success(data)
-            }
-            else {
+            } else {
                 val localData = localStorage.getCharactersPaging(offset, limit)
-                val exception = response.errorBody() as HttpException
+                val exception = Exception(response.errorBody().toString())
                 Status.Error(localData, exception)
             }
         } catch (e: Exception) {
@@ -67,6 +65,26 @@ class CharactersListRepositoryImpl(
         }
     }
 
-    override fun searchCharactersByNameOrNickName(query: String): Flow<List<CharacterListItem>>
-        = localStorage.searchCharacters(query)
+    override suspend fun searchCharactersByNameOrNickName(query: String): Status<List<SearchItem>> {
+        return try {
+            val response = service.getAllCharacters()
+            if (response.isSuccessful) {
+                (response.body() as List<CharacterNetworkEntity>)
+                    .map { it.toDomainModel() }
+                    // to save pagination
+                    .chunked(10)
+                    .forEachIndexed { index, list ->
+                        localStorage.insertCharacters(list, index * 10)
+                    }
+                val searchResult = localStorage.searchCharacters(query)
+                Status.Success(searchResult)
+            } else {
+                val searchResult = localStorage.searchCharacters(query)
+                Status.Error(searchResult, Exception(response.errorBody().toString()))
+            }
+        } catch (e: Exception) {
+            val searchResult = localStorage.searchCharacters(query)
+            Status.Error(searchResult, e)
+        }
+    }
 }

@@ -35,10 +35,10 @@ class CharacterDetailsViewModel constructor(
             )
                 .flowOn(defaultDispatcher)
                 .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(0),
-                initialValue = Status.Empty
-            )
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(0),
+                    initialValue = Status.Empty
+                )
         }
 
     val uiState: Flow<CharacterDetailsState> =

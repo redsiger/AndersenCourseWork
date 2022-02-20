@@ -37,7 +37,6 @@ interface EpisodesListDao {
         appearanceList: List<Int>
     ): List<EpisodeListItemRoom> {
         insertEpisodes(episodes)
-        val list = mutableListOf<EpisodeListItemRoom>()
         return getAppearanceList(appearanceList)
     }
 
@@ -64,4 +63,7 @@ interface EpisodesListDao {
 
     @Query("SELECT * FROM episodes_list_items WHERE season LIKE :season AND series LIKE \"Breaking Bad\"")
     suspend fun getEpisodesBySeason(season: String): List<EpisodeListItemRoom>
+
+    @Query("SELECT * FROM episodes_list_items WHERE title LIKE :query OR characters LIKE :query")
+    suspend fun searchEpisodesByNameOrAppearance(query: String): List<EpisodeListItemRoom>
 }

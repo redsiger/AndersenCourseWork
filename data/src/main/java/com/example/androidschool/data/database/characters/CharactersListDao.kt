@@ -60,7 +60,7 @@ interface CharactersListDao {
     fun getAll(): Flow<List<CharacterListItemRoom>>
 
     @Query("SELECT * FROM characters WHERE name LIKE '%' || :query || '%' OR nickname LIKE '%' || :query || '%'")
-    fun searchCharacters(query: String): Flow<List<CharacterListItemRoom>>
+    fun searchCharacters(query: String): List<CharacterListItemRoom>
 
     @Query("DELETE FROM characters")
     suspend fun clearAllCharacters()

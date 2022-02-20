@@ -1,5 +1,8 @@
 package com.example.androidschool.domain.characters.model
 
+import com.example.androidschool.domain.search.model.SearchItem
+import com.example.androidschool.domain.search.model.TYPE_CHARACTER
+
 data class CharacterListItem(
     val appearance: List<Int> = emptyList(),
     val betterCallSaulAppearance: List<Int> = emptyList(),
@@ -12,4 +15,5 @@ data class CharacterListItem(
     val occupation: List<String> = emptyList(),
     val portrayed: String = "",
     val status: String = "",
-)
+    override val type: String = TYPE_CHARACTER,
+): SearchItem

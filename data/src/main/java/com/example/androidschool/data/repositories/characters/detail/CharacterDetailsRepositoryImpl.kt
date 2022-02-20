@@ -5,8 +5,7 @@ import com.example.androidschool.data.network.characters.model.CharacterNetworkE
 import com.example.androidschool.domain.characters.model.CharacterDetails
 import com.example.androidschool.domain.characters.repository.CharacterDetailsRepository
 import com.example.androidschool.util.Status
-import retrofit2.HttpException
-import java.lang.Exception
+import kotlin.Exception
 
 class CharacterDetailsRepositoryImpl(
     private val service: CharactersService,
@@ -23,7 +22,7 @@ class CharacterDetailsRepositoryImpl(
             } else {
                 val localCharacter = localStorage.getCharacterDetails(id)
                 if (localCharacter != null) {
-                    Status.Error(localCharacter, response.errorBody() as HttpException)
+                    Status.Error(localCharacter, Exception(response.errorBody().toString()))
                 } else Status.EmptyError
             }
         } catch (e: Exception) {

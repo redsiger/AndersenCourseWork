@@ -15,6 +15,8 @@ interface EpisodesListLocalStorage {
         limit: Int
     ): List<EpisodeListItem>
 
+    suspend fun insertEpisodes(episodes: List<EpisodeListItem>)
+
     suspend fun getAppearanceList(appearanceList: List<Int>): List<EpisodeListItem>
 
     suspend fun insertAndReturnAppearance(
@@ -29,13 +31,16 @@ interface EpisodesListLocalStorage {
         season: String
     ): List<EpisodeListItem>
 
+    suspend fun searchEpisodesByNameOrAppearance(query: String): List<EpisodeListItem>
+
     class Base(
         private val dao: EpisodesListDao,
         private val mapper: DatabaseMapper
-    ): EpisodesListLocalStorage {
+    ) : EpisodesListLocalStorage {
 
         override suspend fun getEpisodesPaging(offset: Int, limit: Int): List<EpisodeListItem> =
-            dao.getEpisodesPaging(offset, limit, "Breaking Bad").map(EpisodeListItemRoom::toDomainModel)
+            dao.getEpisodesPaging(offset, limit, "Breaking Bad")
+                .map(EpisodeListItemRoom::toDomainModel)
 
 
         override suspend fun insertAndReturnEpisodesPaging(
@@ -49,6 +54,9 @@ interface EpisodesListLocalStorage {
                 limit
             ).map(EpisodeListItemRoom::toDomainModel)
         }
+
+        override suspend fun insertEpisodes(episodes: List<EpisodeListItem>) =
+            dao.insertEpisodes(episodes.map(mapper::toRoomEntity))
 
         override suspend fun getAppearanceList(appearanceList: List<Int>): List<EpisodeListItem> =
             dao.getAppearanceList(appearanceList).map(EpisodeListItemRoom::toDomainModel)
@@ -73,6 +81,9 @@ interface EpisodesListLocalStorage {
                 episodes.map(mapper::toRoomEntity),
                 season
             ).map(EpisodeListItemRoom::toDomainModel)
+
+        override suspend fun searchEpisodesByNameOrAppearance(query: String): List<EpisodeListItem> =
+            dao.searchEpisodesByNameOrAppearance(query).map(EpisodeListItemRoom::toDomainModel)
 
 
     }

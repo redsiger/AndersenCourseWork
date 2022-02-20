@@ -17,14 +17,14 @@ class DefaultLoadingDelegateAdapter
     }
 
     override fun bindViewHolder(model: DefaultRecyclerLoading, viewHolder: ViewHolder) {
-        viewHolder.bind(model)
+        viewHolder.bind()
     }
 
     inner class ViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val viewBinding = IncludeDefaultLoadStateBinding.bind(itemView)
 
-        fun bind(item: DefaultRecyclerLoading) {
+        fun bind() {
             with(viewBinding) {
                 messageTextView.visibility = View.GONE
                 tryAgainButton.visibility = View.GONE

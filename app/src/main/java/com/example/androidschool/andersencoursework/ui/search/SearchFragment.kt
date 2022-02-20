@@ -20,12 +20,18 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SearchFragment: BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
+class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
 
-    @Inject lateinit var viewModelFactory: SearchViewModel.Factory
+    @Inject
+    lateinit var viewModelFactory: SearchViewModel.Factory
     private val viewModel: SearchViewModel by viewModels { viewModelFactory }
 
     private val mAdapter: SearchAdapter by lazy { SearchAdapter() }
+
+    override fun onAttach(context: Context) {
+        requireActivity().appComponent.inject(this)
+        super.onAttach(context)
+    }
 
     override fun initBinding(view: View): FragmentSearchBinding = FragmentSearchBinding.bind(view)
 
@@ -40,11 +46,26 @@ class SearchFragment: BaseFragment<FragmentSearchBinding>(R.layout.fragment_sear
                 this@SearchFragment::search
             )
         }
+
+        viewBinding.fragmentSearchFilterBtn.setOnClickListener { toFilter() }
     }
 
-    override fun onAttach(context: Context) {
-        requireActivity().appComponent.inject(this)
-        super.onAttach(context)
+    override fun onPause() {
+        Log.e("$this", "PAUSE")
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.e("$this", "RESUME")
+        val input = viewBinding.fragmentSearchInput
+        input.requestFocus()
+        showSoftKeyboard(input, input.context)
+    }
+
+    private fun toFilter() {
+        val action = SearchFragmentDirections.toFilter()
+        navController.navigate(action)
     }
 
     private fun initSearchResultList() {
@@ -66,11 +87,15 @@ class SearchFragment: BaseFragment<FragmentSearchBinding>(R.layout.fragment_sear
         }
     }
 
-    private fun initSearch(searchEditText: EditText, clearBtn: View, actionSearch: (String) -> Unit) {
+    private fun initSearch(
+        searchEditText: EditText,
+        clearBtn: View,
+        actionSearch: (String) -> Unit
+    ) {
 
         searchEditText.requestFocus()
         showSoftKeyboard(searchEditText, searchEditText.context)
-        searchEditText.addTextChangedListener(object: TextWatcher {
+        searchEditText.addTextChangedListener(object : TextWatcher {
             private var _query = ""
             override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
 
@@ -87,7 +112,14 @@ class SearchFragment: BaseFragment<FragmentSearchBinding>(R.layout.fragment_sear
                     }
                 }
             }
-            override fun beforeTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+            override fun beforeTextChanged(
+                text: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) = Unit
+
             override fun afterTextChanged(text: Editable?) {
                 clearBtn.visibility = if (text.isNullOrEmpty()) View.GONE else View.VISIBLE
             }

@@ -23,7 +23,7 @@ class EpisodeDetailsRepositoryImpl(
             } else {
                 val localEpisode = localStorage.getEpisodeDetails(id)
                 if (localEpisode != null) {
-                    Status.Error(localEpisode, response.errorBody() as HttpException)
+                    Status.Error(localEpisode, Exception(response.errorBody().toString()))
                 } else Status.EmptyError
             }
         } catch (e: Exception) {

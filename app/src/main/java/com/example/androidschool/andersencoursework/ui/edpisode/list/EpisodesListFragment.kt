@@ -12,7 +12,6 @@ import com.example.androidschool.andersencoursework.databinding.FragmentEpisodes
 import com.example.androidschool.andersencoursework.databinding.MergeToolbarBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
-import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragmentDirections
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.recycler.CompositeAdapter
 import com.example.androidschool.andersencoursework.ui.core.recycler.DefaultErrorDelegateAdapter
@@ -148,9 +147,9 @@ class EpisodesListFragment :
 
     private fun handleState(state: UIStatePaging<DiffComparable>) =
         when (state) {
-            is UIStatePaging.EmptyLoading -> handleEmptyLoading(state)
-            is UIStatePaging.EmptyData -> handleEmptyData(state)
-            is UIStatePaging.EmptyError -> handleEmptyError(state)
+            is UIStatePaging.EmptyLoading -> handleEmptyLoading()
+            is UIStatePaging.EmptyData -> handleEmptyData()
+            is UIStatePaging.EmptyError -> handleEmptyError()
             is UIStatePaging.PartialData -> handlePartialData(state)
             is UIStatePaging.LoadingPartialData -> handleLoadingPartialData(state)
             is UIStatePaging.AllData -> handleAllData(state)
@@ -158,18 +157,18 @@ class EpisodesListFragment :
             is UIStatePaging.Refresh -> handleRefresh(state)
         }
 
-    private fun handleEmptyLoading(state: UIStatePaging.EmptyLoading<DiffComparable>) {
+    private fun handleEmptyLoading() {
         hideAll()
         showLoading()
         viewModel.refresh()
     }
 
-    private fun handleEmptyError(state: UIStatePaging.EmptyError<DiffComparable>) {
+    private fun handleEmptyError() {
         hideAll()
-        showEmptyError(state.error)
+        showEmptyError()
     }
 
-    private fun handleEmptyData(state: UIStatePaging.EmptyData<DiffComparable>) {
+    private fun handleEmptyData() {
         hideAll()
         showEmptyData()
     }
@@ -225,7 +224,7 @@ class EpisodesListFragment :
             getString(R.string.default_emptyData_message)
     }
 
-    private fun showEmptyError(error: Exception) {
+    private fun showEmptyError() {
         viewBinding.errorBlock.root.visibility = View.VISIBLE
         viewBinding.errorBlock.fragmentEmptyDataMessage.visibility = View.GONE
         viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE

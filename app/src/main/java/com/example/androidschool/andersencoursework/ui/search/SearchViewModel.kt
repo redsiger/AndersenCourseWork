@@ -3,17 +3,12 @@ package com.example.androidschool.andersencoursework.ui.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.androidschool.andersencoursework.di.dispatchers.DispatcherIO
-import com.example.androidschool.andersencoursework.ui.characters.models.CharacterListItemUI
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.core.recycler.DiffComparable
-import com.example.androidschool.andersencoursework.ui.search.models.CharacterSearchEntity
-import com.example.androidschool.andersencoursework.ui.search.models.SearchMapper
 import com.example.androidschool.andersencoursework.util.UIState
 import com.example.androidschool.domain.characters.interactor.CharactersListInteractor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -23,19 +18,8 @@ class SearchViewModel(
     private val dispatcher: CoroutineDispatcher
 ): ViewModel() {
 
-//    private val _characters = MutableStateFlow<CharacterListItemUI>()
-
     private val _uiState = MutableStateFlow<UIState<SearchState>>(UIState.InitialLoading)
     val uiState: StateFlow<UIState<SearchState>> get() = _uiState.asStateFlow()
-
-    fun getSearchResults(query: String): Flow<List<CharacterListItemUI>> {
-        return charactersListInteractor
-            .searchCharactersByNameOrNickName(query)
-            .map { list ->
-                list.map(mapper::mapCharacterListItem)
-            }
-            .flowOn(dispatcher)
-    }
 
     class Factory @Inject constructor(
         private val charactersListInteractor: CharactersListInteractor,

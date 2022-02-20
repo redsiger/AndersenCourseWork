@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.map
 
 interface CharactersListLocalStorage {
 
-    fun searchCharacters(query: String): Flow<List<CharacterListItem>>
+    fun searchCharacters(query: String): List<CharacterListItem>
 
     suspend fun insertCharacters(characters: List<CharacterListItem>, offset: Int)
 
@@ -35,13 +35,13 @@ interface CharactersListLocalStorage {
     class Base(
         private val dao: CharactersListDao,
         private val mapper: DatabaseMapper
-    ): CharactersListLocalStorage {
+    ) : CharactersListLocalStorage {
 
-        override fun searchCharacters(query: String): Flow<List<CharacterListItem>>
-                = dao.searchCharacters(query).map { it.toDomainList() }
+        override fun searchCharacters(query: String): List<CharacterListItem> =
+            dao.searchCharacters(query).map(CharacterListItemRoom::toDomainModel)
 
-        override suspend fun getCharactersPaging(offset: Int, limit: Int): List<CharacterListItem>
-            = dao.getCharactersPaging(offset).map(CharacterListItemRoom::toDomainModel)
+        override suspend fun getCharactersPaging(offset: Int, limit: Int): List<CharacterListItem> =
+            dao.getCharactersPaging(offset).map(CharacterListItemRoom::toDomainModel)
 
         override suspend fun insertAndReturnPage(
             characters: List<CharacterListItem>,
@@ -50,8 +50,7 @@ interface CharactersListLocalStorage {
         ): List<CharacterListItem> {
             return dao
                 .insertAndReturnPage(
-                    characters.map { mapper.toRoomEntity(it, offset) }
-                    , offset, limit
+                    characters.map { mapper.toRoomEntity(it, offset) }, offset, limit
                 )
                 .map(CharacterListItemRoom::toDomainModel)
         }
@@ -65,8 +64,8 @@ interface CharactersListLocalStorage {
             dao.insertAndReturnCharactersInEpisode(characters.map(mapper::toRoomEntity))
                 .map(CharacterInEpisodeRoom::toDomainModel)
 
-        override suspend fun insertCharacters(characters: List<CharacterListItem>, offset: Int)
-            = dao.insertCharacters(characters.map { mapper.toRoomEntity(it, offset) })
+        override suspend fun insertCharacters(characters: List<CharacterListItem>, offset: Int) =
+            dao.insertCharacters(characters.map { mapper.toRoomEntity(it, offset) })
 
     }
 }

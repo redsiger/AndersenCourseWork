@@ -11,15 +11,10 @@ interface CharactersListInteractor: BasePagingInteractor<CharacterListItem> {
 
     suspend fun getCharactersInEpisode(charactersList: List<String>): Status<List<CharacterInEpisode>>
 
-    fun searchCharactersByNameOrNickName(query: String): Flow<List<CharacterListItem>>
-
     class Base(private val repository: CharactersListRepository): CharactersListInteractor, BasePagingInteractor<CharacterListItem> {
 
         override suspend fun getCharactersInEpisode(charactersList: List<String>): Status<List<CharacterInEpisode>> =
             repository.getCharactersInEpisode(charactersList)
-
-        override fun searchCharactersByNameOrNickName(query: String): Flow<List<CharacterListItem>> =
-            repository.searchCharactersByNameOrNickName(query)
 
         override suspend fun getItemsPaging(offset: Int, limit: Int): Status<List<CharacterListItem>> =
             repository.getCharactersPagingState(offset, limit)

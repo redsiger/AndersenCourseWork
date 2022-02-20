@@ -16,14 +16,15 @@ import kotlinx.coroutines.launch
 
 const val LIMIT = 10
 
-abstract class BasePagingViewModel<T, R: DiffComparable>: ViewModel() {
+abstract class BasePagingViewModel<T, R : DiffComparable> : ViewModel() {
 
     abstract val itemClass: Class<R>
     abstract val mapToListItemUI: (T) -> R
     abstract val defaultDispatcher: CoroutineDispatcher
     abstract val interactor: BasePagingInteractor<T>
 
-    private val _uiState = MutableStateFlow<UIStatePaging<DiffComparable>>(UIStatePaging.EmptyLoading())
+    private val _uiState =
+        MutableStateFlow<UIStatePaging<DiffComparable>>(UIStatePaging.EmptyLoading())
     val uiState: StateFlow<UIStatePaging<DiffComparable>> get() = _uiState.asStateFlow()
 
     private val currentOffset get() = uiState.value.offset
@@ -50,13 +51,15 @@ abstract class BasePagingViewModel<T, R: DiffComparable>: ViewModel() {
                 // check for local data
                 is Status.Error -> {
                     val data = response.data.map(mapToListItemUI)
-                    if (data.isEmpty()) _uiState.value = UIStatePaging.EmptyError(currentData, currentOffset, response.exception)
+                    if (data.isEmpty()) _uiState.value =
+                        UIStatePaging.EmptyError(currentData, currentOffset, response.exception)
                     else _uiState.value = UIStatePaging.LoadingPartialDataError(
                         data,
                         currentOffset,
                         response.exception
                     )
                 }
+                else -> Unit
             }
         }
     }
@@ -93,8 +96,8 @@ abstract class BasePagingViewModel<T, R: DiffComparable>: ViewModel() {
                             error = error
                         )
                     }
+                    else -> Unit
                 }
-
             }
         }
     }
