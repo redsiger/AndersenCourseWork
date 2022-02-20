@@ -9,7 +9,7 @@ import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeLi
 import com.example.androidschool.andersencoursework.util.UIState
 import com.example.androidschool.domain.episode.interactor.EpisodesListInteractor
 import com.example.androidschool.domain.episode.model.EpisodeListItem
-import com.example.androidschool.util.NetworkResponse
+import com.example.androidschool.util.Status
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -45,7 +45,7 @@ class SeasonDetailsViewModel(
 
         viewModelScope.launch(dispatcher) {
             when (val episodes = interactor.getEpisodesBySeason(season)) {
-                is NetworkResponse.Success -> {
+                is Status.Success -> {
                     _uiState.value = UIState.Success(
                         SeasonDetailsState(
                             episodes = episodes.data.map(mapToListItemUI)

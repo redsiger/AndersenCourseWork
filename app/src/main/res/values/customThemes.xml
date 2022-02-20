@@ -11,7 +11,7 @@
         <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
         <item name="bottomNavigationStyle">@style/bottom</item>
         <item name="android:fontFamily">@font/montserrat</item>
-        <item name="android:textColorHint">@color/white</item>
+<!--        <item name="android:textColorHint">@color/white</item>-->
         <!--   toolbar back arrow     -->
         <item name="drawerArrowStyle">@style/MyDrawerArrowToggle</item>
     </style>

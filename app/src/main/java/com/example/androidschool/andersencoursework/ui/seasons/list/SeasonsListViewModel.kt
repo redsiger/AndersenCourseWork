@@ -9,14 +9,13 @@ import com.example.androidschool.andersencoursework.ui.seasons.model.SeasonListI
 import com.example.androidschool.andersencoursework.util.UIState
 import com.example.androidschool.domain.seasons.interactor.SeasonsInteractor
 import com.example.androidschool.domain.seasons.model.SeasonListItem
-import com.example.androidschool.util.NetworkResponse
+import com.example.androidschool.util.Status
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Named
 
 class SeasonsListViewModel(
     private val mapToListItemUI: (SeasonListItem) -> SeasonListItemUI,
@@ -46,7 +45,7 @@ class SeasonsListViewModel(
 
         viewModelScope.launch(dispatcher) {
             when (val seasons = interactor.getSeasons()) {
-                is NetworkResponse.Success -> {
+                is Status.Success -> {
                     _uiState.value = UIState.Success(
                         SeasonListState(
                             seasons = seasons.data.map(mapToListItemUI)

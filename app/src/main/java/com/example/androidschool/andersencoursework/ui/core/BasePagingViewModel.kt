@@ -7,7 +7,7 @@ import com.example.androidschool.andersencoursework.ui.core.recycler.DefaultRecy
 import com.example.androidschool.andersencoursework.ui.core.recycler.DiffComparable
 import com.example.androidschool.andersencoursework.util.UIStatePaging
 import com.example.androidschool.domain.BasePagingInteractor
-import com.example.androidschool.util.NetworkResponse
+import com.example.androidschool.util.Status
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,7 +38,7 @@ abstract class BasePagingViewModel<T, R: DiffComparable>: ViewModel() {
             val response = interactor.getItemsPaging(currentOffset, LIMIT)
             when (response) {
                 // check for remote data
-                is NetworkResponse.Success -> {
+                is Status.Success -> {
                     val data = response.data.map(mapToListItemUI)
                     // check for end of data
                     if (data.size < LIMIT) _uiState.value = UIStatePaging.AllData(
@@ -48,7 +48,7 @@ abstract class BasePagingViewModel<T, R: DiffComparable>: ViewModel() {
                     else _uiState.value = UIStatePaging.PartialData(data, currentOffset)
                 }
                 // check for local data
-                is NetworkResponse.Error -> {
+                is Status.Error -> {
                     val data = response.data.map(mapToListItemUI)
                     if (data.isEmpty()) _uiState.value = UIStatePaging.EmptyError(currentData, currentOffset, response.exception)
                     else _uiState.value = UIStatePaging.LoadingPartialDataError(
@@ -73,7 +73,7 @@ abstract class BasePagingViewModel<T, R: DiffComparable>: ViewModel() {
                 val response = interactor.getItemsPaging(currentOffset + LIMIT, LIMIT)
                 when (response) {
                     // check for remote data
-                    is NetworkResponse.Success -> {
+                    is Status.Success -> {
                         val data = response.data.map(mapToListItemUI)
                         // check for end of data
                         if (data.size < LIMIT) _uiState.value = UIStatePaging.AllData(
@@ -85,7 +85,7 @@ abstract class BasePagingViewModel<T, R: DiffComparable>: ViewModel() {
                             currentOffset + LIMIT)
                     }
                     // check for local data
-                    is NetworkResponse.Error -> {
+                    is Status.Error -> {
                         val error = response.exception
                         _uiState.value = UIStatePaging.LoadingPartialDataError(
                             data = currentData.filter { isItem(it) } + DefaultRecyclerError(error = error),

@@ -10,7 +10,7 @@ import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeDe
 import com.example.androidschool.andersencoursework.util.UIState
 import com.example.androidschool.domain.characters.interactor.CharactersListInteractor
 import com.example.androidschool.domain.episode.interactor.EpisodeDetailsInteractor
-import com.example.androidschool.util.NetworkResponse
+import com.example.androidschool.util.Status
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -45,7 +45,7 @@ class EpisodeDetailsViewModel @Inject constructor(
 
         viewModelScope.launch(defaultDispatcher) {
             when (val episodeDetails = loadEpisodeDetails(episodeId)) {
-                is NetworkResponse.Success -> {
+                is Status.Success -> {
                     val appearanceList = loadCharacters(episodeDetails.data!!.characters)
                     _uiState.value = UIState.Success(
                         data = EpisodeDetailsState(
@@ -54,7 +54,7 @@ class EpisodeDetailsViewModel @Inject constructor(
                         )
                     )
                 }
-                is NetworkResponse.Error -> {
+                is Status.Error -> {
                     episodeDetails.data?.let { episode ->
                         val appearanceList = loadCharacters(episode.characters)
                         _uiState.value = UIState.Error(
@@ -74,22 +74,27 @@ class EpisodeDetailsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadEpisodeDetails(characterId: Int): NetworkResponse<EpisodeDetailsUI?> {
+    private suspend fun loadEpisodeDetails(characterId: Int): Status<EpisodeDetailsUI?> {
         val response = episodeDetailsInteractor.getEpisodeDetails(characterId)
         return when (response) {
-            is NetworkResponse.Success -> NetworkResponse.Success(
+            is Status.Success -> Status.Success(
                 data = mapper.mapEpisodeDetails(response.data)
             )
-            is NetworkResponse.Error -> NetworkResponse.Error(
+            is Status.Error -> Status.Error(
                 data = mapper.mapEpisodeDetails(response.data),
                 exception = response.exception
             )
+            is Status.Empty -> Status.Empty
         }
     }
 
     private suspend fun loadCharacters(charactersIdList: List<String>): List<CharacterListItemUI> {
         val response = charactersListInteractor.getCharactersInEpisode(charactersIdList)
-        return mapper.mapListCharacterInEpisode(response.data)
+        return when (response) {
+            is Status.Success -> mapper.mapListCharacterInEpisode(response.data)
+            is Status.Error -> mapper.mapListCharacterInEpisode(response.data)
+            is Status.Empty -> emptyList()
+        }
     }
 
     class Factory @Inject constructor(

@@ -1,6 +1,7 @@
 package com.example.androidschool.andersencoursework.ui.characters.details
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -12,12 +13,15 @@ import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentCharacterDetailsBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
+import com.example.androidschool.andersencoursework.ui.characters.models.CharacterDetailsUI
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.recycler.CompositeAdapter
+import com.example.androidschool.andersencoursework.ui.seasons.model.SeasonListItemUI
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
-import com.example.androidschool.andersencoursework.util.UIState
+import com.example.androidschool.util.Status
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
+import java.lang.Error
 import javax.inject.Inject
 
 class CharacterDetailsFragment :
@@ -25,8 +29,10 @@ class CharacterDetailsFragment :
 
     @Inject
     lateinit var resourceProvider: ResourceProvider
+
     @Inject
     lateinit var mContext: Context
+
     @Inject
     lateinit var glide: RequestManager
 
@@ -64,9 +70,13 @@ class CharacterDetailsFragment :
     }
 
     private fun initPage() {
+
         lifecycleScope.launchWhenStarted {
-            viewModel.uiState.collectLatest { state -> handleState(state) }
+            viewModel.uiState.collectLatest { state ->
+                handleState(state)
+            }
         }
+
         with(viewBinding.characterSeriesAppearanceList) {
             adapter = mAdapter
             layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
@@ -80,60 +90,69 @@ class CharacterDetailsFragment :
                 )
             )
         }
-    }
 
-    private fun handleState(state: UIState<CharacterDetailsState>) {
-        when (state) {
-            is UIState.Success -> handleSuccess(state)
-            is UIState.Error -> handleError(state)
-            is UIState.EmptyError -> handleEmptyError()
-            is UIState.InitialLoading -> handleInitialLoading()
-            is UIState.Refresh -> handleRefresh()
+        viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
+            viewModel.retry()
         }
     }
 
-    private fun handleEmptyError() {
-        hideAll()
-        showError()
+    private fun handleState(state: CharacterDetailsState) {
+        Log.e("STATE", "$state")
+        handleCharacter(state.character)
+        handleAppearance(state.appearance)
     }
 
-    private fun handleInitialLoading() {
-        hideAll()
-        showLoading()
-        viewModel.load(characterId)
-    }
-
-    private fun handleRefresh() {
-        showLoading()
-        viewModel.load(characterId)
-    }
-
-    private fun handleSuccess(state: UIState.Success<CharacterDetailsState>) {
-        hideLoading()
-        showContent(state.data)
-        viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
-            viewModel.refresh(characterId)
+    private fun handleAppearance(appearance: Status<List<SeasonListItemUI>>) {
+        when (appearance) {
+            is Status.Empty -> {
+                showNoAppearance()
+            }
+            is Status.Success -> {
+                showAppearance(appearance.extractData)
+            }
+            is Status.Error -> {
+                showAppearance(appearance.extractData)
+                showErrorMessage()
+            }
         }
     }
 
-    private fun handleError(state: UIState.Error<CharacterDetailsState>) {
-        hideLoading()
-        hideAll()
-        showContent(state.data)
-        showErrorMessage()
-        viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
-            viewModel.refresh(characterId)
+    private fun showAppearance(data: List<SeasonListItemUI>) {
+        if (data.isEmpty()) {
+            showNoAppearance()
+        } else {
+            viewBinding.characterSeriesAppearanceListNoData.visibility = View.GONE
+            mAdapter.submitList(data)
+        }
+    }
+
+    private fun showNoAppearance() {
+        viewBinding.characterSeriesAppearanceListNoData.visibility = View.VISIBLE
+    }
+
+    private fun handleCharacter(character: Status<CharacterDetailsUI>) {
+        when (character) {
+            is Status.Empty -> {
+                hideAll()
+                showLoading()
+                viewModel.load(characterId)
+            }
+            is Status.Success -> {
+                hideLoading()
+                showContent(character.extractData)
+            }
+            is Status.Error -> {
+                hideLoading()
+                showContent(character.extractData)
+                showErrorMessage()
+            }
         }
     }
 
     private fun showErrorMessage() {
-        Snackbar.make(
-            viewBinding.root,
-            resourceProvider.resources.getString(R.string.default_error_message),
-            Snackbar.LENGTH_LONG
-        ).setAction(
-            R.string.refresh_btn_title
-        ) { viewModel.refresh(characterId) }.show()
+        Snackbar.make(viewBinding.root, R.string.default_error_message, Snackbar.LENGTH_INDEFINITE)
+            .setAction(R.string.retry_btn_title) { viewModel.load(characterId) }
+            .show()
     }
 
     private fun hideAll() {
@@ -154,13 +173,13 @@ class CharacterDetailsFragment :
         viewBinding.characterDetailsRefreshContainer.isRefreshing = false
     }
 
-    private fun showContent(data: CharacterDetailsState) {
+    private fun showContent(data: CharacterDetailsUI) {
         hideErrorBlock()
         viewBinding.characterDetailsMainContent.visibility = View.VISIBLE
         with(viewBinding) {
             with(data) {
                 glide
-                    .load(character.img)
+                    .load(img)
                     .placeholder(R.drawable.splashscreen)
                     .error(R.drawable.ic_person)
                     .centerCrop()
@@ -169,34 +188,11 @@ class CharacterDetailsFragment :
                 characterNickname.text =
                     resourceProvider.resources.getString(
                         R.string.characters_details_nickname,
-                        character.nickname
+                        nickname
                     )
 
-                characterName.text = character.name
-
-                if (appearance.isEmpty()) {
-                    characterSeriesAppearanceListNoData.visibility = View.VISIBLE
-                } else {
-                    characterSeriesAppearanceListNoData.visibility = View.GONE
-                    mAdapter.submitList(appearance)
-                }
+                characterName.text = name
             }
-        }
-    }
-
-    private fun showError() {
-        hideAll()
-        showErrorBlock()
-    }
-
-    private fun showErrorBlock() {
-        hideLoading()
-        viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE
-        viewBinding.characterDetailsRefreshContainer.setOnRefreshListener {
-            viewModel.retry(characterId)
-        }
-        viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener {
-            viewModel.retry(characterId)
         }
     }
 

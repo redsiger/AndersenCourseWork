@@ -48,9 +48,8 @@ class UIMapper {
     fun mapListEpisodeListItem(list: List<EpisodeListItem>): List<EpisodeListItemUI> =
         list.map(::mapEpisodeListItem)
 
-    fun mapCharacterDetails(entity: CharacterDetails?): CharacterDetailsUI? {
-        return if (entity != null) {
-            CharacterDetailsUI(
+    fun mapCharacterDetails(entity: CharacterDetails): CharacterDetailsUI {
+        return CharacterDetailsUI(
                 appearance = entity.appearance,
                 betterCallSaulAppearance = entity.betterCallSaulAppearance,
                 birthday = entity.birthday,
@@ -63,7 +62,6 @@ class UIMapper {
                 portrayed = entity.portrayed,
                 status = entity.status
             )
-        } else null
     }
 
     fun mapCharacterListItem(entity: CharacterListItem): CharacterListItemUI {

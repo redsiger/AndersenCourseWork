@@ -25,13 +25,12 @@ class SearchFragment: BaseFragment<FragmentSearchBinding>(R.layout.fragment_sear
     @Inject lateinit var viewModelFactory: SearchViewModel.Factory
     private val viewModel: SearchViewModel by viewModels { viewModelFactory }
 
-    private val mNavController: NavController by lazy { findNavController() }
-
     private val mAdapter: SearchAdapter by lazy { SearchAdapter() }
 
     override fun initBinding(view: View): FragmentSearchBinding = FragmentSearchBinding.bind(view)
+
     override fun initFragment() {
-        viewBinding.fragmentSearchBackBtn.setOnClickListener { mNavController.navigateUp() }
+        setupToolbar(viewBinding.fragmentSearchToolbar)
         initSearchResultList()
 
         with(viewBinding) {
@@ -62,7 +61,7 @@ class SearchFragment: BaseFragment<FragmentSearchBinding>(R.layout.fragment_sear
                 list.forEach {
                     Log.e("SEARCH", it.toString())
                 }
-                mAdapter.setList(list)
+//                mAdapter.setList(list)
             }
         }
     }

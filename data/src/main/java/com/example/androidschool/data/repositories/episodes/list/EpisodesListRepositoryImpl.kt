@@ -4,7 +4,7 @@ import com.example.androidschool.data.network.episodes.EpisodesService
 import com.example.androidschool.data.network.episodes.model.EpisodeListItemNetwork
 import com.example.androidschool.domain.episode.repository.EpisodesListRepository
 import com.example.androidschool.domain.episode.model.EpisodeListItem
-import com.example.androidschool.util.NetworkResponse
+import com.example.androidschool.util.Status
 import retrofit2.HttpException
 import java.lang.Exception
 
@@ -16,7 +16,7 @@ class EpisodesListRepositoryImpl(
     override suspend fun getEpisodesPaging(
         offset: Int,
         limit: Int
-    ): NetworkResponse<List<EpisodeListItem>> {
+    ): Status<List<EpisodeListItem>> {
         return try {
             // imitation of paging because API service don't support paging
             val response = service.getEpisodes()
@@ -30,20 +30,20 @@ class EpisodesListRepositoryImpl(
                 ).map(EpisodeListItemNetwork::toDomainModel)
 
                 val data = localStorage.insertAndReturnEpisodesPaging(partialData, offset, limit)
-                NetworkResponse.Success(data)
+                Status.Success(data)
             }
             else {
                 val localData = localStorage.getEpisodesPaging(offset, limit)
                 val exception = response.errorBody() as HttpException
-                NetworkResponse.Error(localData, exception)
+                Status.Error(localData, exception)
             }
         } catch (e: Exception) {
             val localData = localStorage.getEpisodesPaging(offset, limit)
-            NetworkResponse.Error(localData, e)
+            Status.Error(localData, e)
         }
     }
 
-    override suspend fun getCharacterAppearance(appearanceInList: List<Int>): NetworkResponse<List<EpisodeListItem>> {
+    override suspend fun getCharacterAppearance(appearanceInList: List<Int>): Status<List<EpisodeListItem>> {
         return try {
             val response = service.getEpisodes()
             if (response.isSuccessful) {
@@ -54,20 +54,20 @@ class EpisodesListRepositoryImpl(
                 }.map(EpisodeListItemNetwork::toDomainModel)
 
                 val data = localStorage.insertAndReturnAppearance(appearanceList, appearanceInList)
-                NetworkResponse.Success(data)
+                Status.Success(data)
             }
             else {
                 val localData = localStorage.getAppearanceList(appearanceInList)
                 val exception = response.errorBody() as HttpException
-                NetworkResponse.Error(localData, exception)
+                Status.Error(localData, exception)
             }
         } catch (e: Exception) {
             val localData = localStorage.getAppearanceList(appearanceInList)
-            NetworkResponse.Error(localData, e)
+            Status.Error(localData, e)
         }
     }
 
-    override suspend fun getEpisodesBySeason(season: String): NetworkResponse<List<EpisodeListItem>> {
+    override suspend fun getEpisodesBySeason(season: String): Status<List<EpisodeListItem>> {
         return try {
             val response = service.getEpisodes()
             if (response.isSuccessful) {
@@ -78,16 +78,16 @@ class EpisodesListRepositoryImpl(
                 }.map(EpisodeListItemNetwork::toDomainModel)
 
                 val data = localStorage.insertAndReturnEpisodesBySeason(appearanceList, season)
-                NetworkResponse.Success(data)
+                Status.Success(data)
             }
             else {
                 val localData = localStorage.getEpisodesBySeason(season)
                 val exception = response.errorBody() as HttpException
-                NetworkResponse.Error(localData, exception)
+                Status.Error(localData, exception)
             }
         } catch (e: Exception) {
             val localData = localStorage.getEpisodesBySeason(season)
-            NetworkResponse.Error(localData, e)
+            Status.Error(localData, e)
         }
     }
 

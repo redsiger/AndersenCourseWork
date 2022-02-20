@@ -8,89 +8,69 @@ import com.example.androidschool.andersencoursework.ui.seasons.model.SeasonListI
 import com.example.androidschool.andersencoursework.util.UIState
 import com.example.androidschool.domain.characters.interactor.CharacterDetailsInteractor
 import com.example.androidschool.domain.seasons.interactor.SeasonsInteractor
-import com.example.androidschool.util.NetworkResponse
+import com.example.androidschool.util.Status
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 class CharacterDetailsViewModel constructor(
     private val defaultDispatcher: CoroutineDispatcher,
     private val characterInteractor: CharacterDetailsInteractor,
     private val seasonsInteractor: SeasonsInteractor,
     private val mapper: UIMapper
-): ViewModel() {
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<UIState<CharacterDetailsState>>(UIState.InitialLoading)
-    val uiState: StateFlow<UIState<CharacterDetailsState>> get() = _uiState.asStateFlow()
-
-    fun load(characterId: Int) {
-        _uiState.value = UIState.InitialLoading
-        this.loadUIState(characterId)
-    }
-
-    fun refresh(characterId: Int) {
-        _uiState.value = UIState.Refresh
-        this.loadUIState(characterId)
-    }
-
-    fun retry(characterId: Int) {
-        _uiState.value = UIState.InitialLoading
-        this.loadUIState(characterId)
-    }
-
-    private fun loadUIState(characterId: Int) {
-        viewModelScope.launch(defaultDispatcher) {
-
-            when (val characterDetails = loadCharacterDetails(characterId)) {
-                is NetworkResponse.Success -> {
-                    val appearanceList =
-                        loadAppearance(characterDetails.data!!.appearance.map { it.toString() })
-                    _uiState.value = UIState.Success(
-                        data = CharacterDetailsState(
-                            character = characterDetails.data!!,
-                            appearance = appearanceList
-                        )
-                    )
-                }
-                is NetworkResponse.Error -> {
-                    characterDetails.data?.let { character ->
-                        val appearanceList =
-                            loadAppearance(character.appearance.map { it.toString() })
-                        _uiState.value = UIState.Error(
-                            data = CharacterDetailsState(
-                                character = character,
-                                appearance = appearanceList
-                            ),
-                            error = characterDetails.exception
-                        )
-                    } ?: run {
-                        _uiState.value = UIState.EmptyError(
-                            error = characterDetails.exception
-                        )
+    private val _character = MutableStateFlow<Status<CharacterDetailsUI>>(Status.Empty)
+    private val _appearance: Flow<Status<List<SeasonListItemUI>>> =
+        _character.flatMapLatest { character ->
+            flowOf(
+                when (character) {
+                    is Status.Empty -> Status.Empty
+                    else -> {
+                        seasonsInteractor
+                            .getSeasonsByAppearance(character.extractData.appearance.map { it.toString() })
+                            .map(mapper::mapListSeasonListItem)
                     }
                 }
-            }
+            ).stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(0),
+                initialValue = Status.Empty
+            )
+        }
+
+    val uiState: Flow<CharacterDetailsState> =
+        combine(_character, _appearance, ::makeState)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(0),
+                initialValue = CharacterDetailsState(
+                    character = Status.Empty,
+                    appearance = Status.Empty
+                )
+            )
+
+    fun load(characterId: Int) {
+        loadCharacter(characterId)
+    }
+
+    fun retry() {
+        _character.value = Status.Empty
+    }
+
+    private fun loadCharacter(characterId: Int) {
+        viewModelScope.launch(defaultDispatcher) {
+            _character.value = characterInteractor.getCharacterDetails(characterId)
+                .map(mapper::mapCharacterDetails)
         }
     }
 
-    private suspend fun loadCharacterDetails(characterId: Int): NetworkResponse<CharacterDetailsUI?> {
-        val response = characterInteractor.getCharacterDetails(characterId)
-        return when (response) {
-            is NetworkResponse.Success -> NetworkResponse.Success(
-                data = mapper.mapCharacterDetails(response.data)
-            )
-            is NetworkResponse.Error -> NetworkResponse.Error(
-                data = mapper.mapCharacterDetails(response.data),
-                exception = response.exception
-            )
-        }
-    }
-
-    private suspend fun loadAppearance(appearanceList: List<String>): List<SeasonListItemUI> {
-        val response = seasonsInteractor.getSeasonsByAppearance(appearanceList)
-        return mapper.mapListSeasonListItem(response.data)
-    }
+    private fun makeState(
+        character: Status<CharacterDetailsUI>,
+        appearance: Status<List<SeasonListItemUI>>
+    ): CharacterDetailsState = CharacterDetailsState(character, appearance)
 
     class Factory @Inject constructor(
         @DispatcherIO
@@ -98,7 +78,7 @@ class CharacterDetailsViewModel constructor(
         private val characterInteractor: CharacterDetailsInteractor,
         private val seasonsInteractor: SeasonsInteractor,
         private val mapper: UIMapper
-    ): ViewModelProvider.Factory {
+    ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -114,6 +94,6 @@ class CharacterDetailsViewModel constructor(
 }
 
 data class CharacterDetailsState(
-    val character: CharacterDetailsUI,
-    val appearance: List<SeasonListItemUI>
+    val character: Status<CharacterDetailsUI>,
+    val appearance: Status<List<SeasonListItemUI>>
 )
