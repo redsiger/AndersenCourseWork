@@ -1,23 +1,23 @@
 package com.example.androidschool.andersencoursework.ui.edpisode.details
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.RequestManager
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentEpisodeDetailsBinding
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
-import com.example.androidschool.andersencoursework.ui.characters.details.CharacterDetailsState
 import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListDelegateAdapter
+import com.example.androidschool.andersencoursework.ui.characters.models.CharacterListItemUI
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.recycler.CompositeAdapter
+import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeDetailsUI
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
 import com.example.androidschool.andersencoursework.util.UIState
+import com.example.androidschool.util.Status
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
@@ -59,9 +59,11 @@ class EpisodeDetailsFragment: BaseFragment<FragmentEpisodeDetailsBinding>(R.layo
     }
 
     private fun initPage() {
+
         lifecycleScope.launchWhenStarted {
             viewModel.uiState.collectLatest { state -> handleState(state) }
         }
+
         with(viewBinding.episodeDetailsCharactersList) {
             adapter = mAdapter
             layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
@@ -75,80 +77,93 @@ class EpisodeDetailsFragment: BaseFragment<FragmentEpisodeDetailsBinding>(R.layo
                 )
             )
         }
+
+        viewBinding.episodeDetailsRefreshContainer.setOnRefreshListener { viewModel.retry() }
     }
 
     private fun initBackBtn() {
         viewBinding.fragmentEpisodeDetailsBackBtn.setOnClickListener { navController.navigateUp() }
     }
 
-    private fun handleState(state: UIState<EpisodeDetailsState>) {
-        when (state) {
-            is UIState.Success -> handleSuccess(state)
-            is UIState.Error -> handleError(state)
-            is UIState.EmptyError -> handleEmptyError(state)
-            is UIState.InitialLoading -> handleInitialLoading(state)
-            is UIState.Refresh -> handleRefresh(state)
-        }
+    private fun handleState(state: EpisodeDetailsState) {
+        handleEpisode(state.episode)
+        handleCharacters(state.characters)
     }
 
-    private fun handleEmptyError(state: UIState.EmptyError) {
-        hideAll()
-        showError(state.error)
-    }
-
-    private fun handleInitialLoading(state: UIState.InitialLoading) {
-        hideAll()
-        showLoading()
-        viewModel.load(episodeId)
-    }
-
-    private fun handleRefresh(state: UIState.Refresh) {
-        showLoading()
-        viewModel.load(episodeId)
-    }
-
-    private fun handleSuccess(state: UIState.Success<EpisodeDetailsState>) {
-        hideLoading()
-        showContent(state.data)
-        viewBinding.episodeDetailsRefreshContainer.setOnRefreshListener {
-            viewModel.refresh(episodeId)
-        }
-    }
-
-    private fun handleError(state: UIState.Error<EpisodeDetailsState>) {
-        hideLoading()
-        hideAll()
-        showContent(state.data)
-        showErrorMessage(state)
-        viewBinding.episodeDetailsRefreshContainer.setOnRefreshListener {
-            viewModel.refresh(episodeId)
-        }
-    }
-
-    private fun showErrorMessage(state: UIState.Error<EpisodeDetailsState>) {
-        Snackbar.make(
-            viewBinding.root,
-            resourceProvider.resources. getString(R.string.default_error_message),
-            Snackbar.LENGTH_LONG
-        ).setAction(
-            R.string.refresh_btn_title,
-            object: View.OnClickListener {
-                override fun onClick(p0: View?) {
-                    viewModel.refresh(episodeId)
-                }
+    private fun handleEpisode(episode: Status<EpisodeDetailsUI>) {
+        when (episode) {
+            is Status.Empty -> {
+                hideAll()
+                showLoading()
+                viewModel.load(episodeId)
             }
-        ).show()
+            is Status.EmptyError -> {
+                hideAll()
+                showNoData()
+                hideLoading()
+                showErrorMessage()
+            }
+            is Status.Success -> {
+                hideLoading()
+                showContent(episode.extractData)
+            }
+            is Status.Error -> {
+                hideLoading()
+                showContent(episode.extractData)
+                showErrorMessage()
+            }
+        }
+    }
+
+    private fun handleCharacters(characters: Status<List<CharacterListItemUI>>) {
+        when (characters) {
+            is Status.Success -> {
+                showCharacters(characters.extractData)
+            }
+            is Status.Error -> {
+                showCharacters(characters.extractData)
+                showErrorMessage()
+            }
+            else -> showNoCharacters()
+        }
+    }
+
+    private fun showCharacters(data: List<CharacterListItemUI>) {
+        if (data.isEmpty()) {
+            showNoCharacters()
+        } else {
+            viewBinding.episodeDetailsCharactersListNoData.visibility = View.GONE
+            mAdapter.submitList(data)
+        }
+    }
+
+    private fun showNoCharacters() {
+        viewBinding.episodeDetailsCharactersListNoData.visibility = View.VISIBLE
+    }
+
+    private fun showNoData() {
+        viewBinding.errorBlock.visibility = View.VISIBLE
+    }
+
+    private fun hideNoData() {
+        viewBinding.errorBlock.visibility = View.GONE
+    }
+
+    private fun showErrorMessage() {
+        Snackbar.make(
+            viewBinding.episodeDetailsCoordinator,
+            R.string.default_error_message,
+            Snackbar.LENGTH_INDEFINITE
+        )
+            .setAction(R.string.retry_btn_title) { viewModel.retry() }
+            .show()
     }
 
     private fun hideAll() {
-        hideErrorBlock()
+        hideNoData()
         viewBinding.episodeDetailsMainContent.visibility = View.GONE
     }
 
-    private fun hideErrorBlock() {
-        viewBinding.errorBlock.fragmentEmptyDataMessage.visibility = View.GONE
-        viewBinding.errorBlock.fragmentEmptyError.visibility = View.GONE
-    }
 
     private fun showLoading() {
         viewBinding.episodeDetailsRefreshContainer.isRefreshing = true
@@ -158,33 +173,14 @@ class EpisodeDetailsFragment: BaseFragment<FragmentEpisodeDetailsBinding>(R.layo
         viewBinding.episodeDetailsRefreshContainer.isRefreshing = false
     }
 
-    private fun showContent(data: EpisodeDetailsState) {
-        hideErrorBlock()
+    private fun showContent(episode: EpisodeDetailsUI) {
+        hideNoData()
         viewBinding.episodeDetailsMainContent.visibility = View.VISIBLE
         with(viewBinding) {
 
-            episodeDetailsTitle.text = data.episode.title
-            episodeDetailsSeason.text = data.episode.season
-            episodeDetailsEpisode.text = data.episode.episode
-
-            Log.e("CharactersInEpisode", "${data.characters}")
-            mAdapter.submitList(data.characters)
-        }
-    }
-
-    private fun showError(error: Exception) {
-        hideAll()
-        showErrorBlock(error)
-    }
-
-    private fun showErrorBlock(error: Exception) {
-        hideLoading()
-        viewBinding.errorBlock.fragmentEmptyError.visibility = View.VISIBLE
-        viewBinding.episodeDetailsRefreshContainer.setOnRefreshListener {
-            viewModel.retry(episodeId)
-        }
-        viewBinding.errorBlock.fragmentEmptyErrorRetryBtn.setOnClickListener {
-            viewModel.retry(episodeId)
+            episodeDetailsTitle.text = episode.title
+            episodeDetailsSeason.text = episode.season
+            episodeDetailsEpisode.text = episode.episode
         }
     }
 }

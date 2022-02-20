@@ -6,11 +6,11 @@ import com.example.androidschool.util.Status
 
 interface EpisodeDetailsInteractor {
 
-    suspend fun getEpisodeDetails(id: Int): Status<EpisodeDetails?>
+    suspend fun getEpisodeDetails(id: Int): Status<EpisodeDetails>
 
     class Base(private val repository: EpisodeDetailsRepository): EpisodeDetailsInteractor {
 
-        override suspend fun getEpisodeDetails(id: Int): Status<EpisodeDetails?> =
+        override suspend fun getEpisodeDetails(id: Int): Status<EpisodeDetails> =
             repository.getEpisodeDetails(id)
     }
 }

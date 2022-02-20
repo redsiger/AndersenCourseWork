@@ -9,14 +9,14 @@ import kotlinx.coroutines.flow.Flow
 
 interface CharactersListInteractor: BasePagingInteractor<CharacterListItem> {
 
-    suspend fun getCharactersInEpisode(idList: List<String>): Status<List<CharacterInEpisode>>
+    suspend fun getCharactersInEpisode(charactersList: List<String>): Status<List<CharacterInEpisode>>
 
     fun searchCharactersByNameOrNickName(query: String): Flow<List<CharacterListItem>>
 
     class Base(private val repository: CharactersListRepository): CharactersListInteractor, BasePagingInteractor<CharacterListItem> {
 
-        override suspend fun getCharactersInEpisode(idList: List<String>): Status<List<CharacterInEpisode>> =
-            repository.getCharactersInEpisode(idList)
+        override suspend fun getCharactersInEpisode(charactersList: List<String>): Status<List<CharacterInEpisode>> =
+            repository.getCharactersInEpisode(charactersList)
 
         override fun searchCharactersByNameOrNickName(query: String): Flow<List<CharacterListItem>> =
             repository.searchCharactersByNameOrNickName(query)

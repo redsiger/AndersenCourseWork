@@ -4,14 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.androidschool.andersencoursework.di.dispatchers.DispatcherIO
+import com.example.androidschool.andersencoursework.ui.characters.details.CharacterDetailsState
 import com.example.androidschool.andersencoursework.ui.characters.models.CharacterListItemUI
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeDetailsUI
 import com.example.androidschool.andersencoursework.util.UIState
 import com.example.androidschool.domain.characters.interactor.CharactersListInteractor
+import com.example.androidschool.domain.characters.model.CharacterInEpisode
 import com.example.androidschool.domain.episode.interactor.EpisodeDetailsInteractor
+import com.example.androidschool.domain.episode.model.EpisodeDetails
 import com.example.androidschool.util.Status
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,72 +27,61 @@ class EpisodeDetailsViewModel @Inject constructor(
     private val mapper: UIMapper
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<UIState<EpisodeDetailsState>>(UIState.InitialLoading)
-    val uiState: StateFlow<UIState<EpisodeDetailsState>> get() = _uiState.asStateFlow()
+    private val _episodeDetails = MutableStateFlow<Status<EpisodeDetailsUI>>(Status.Empty)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val _charactersInEpisode: Flow<Status<List<CharacterListItemUI>>> =
+        _episodeDetails.flatMapLatest { episode ->
+            flowOf(
+                when (episode) {
+                    is Status.Empty -> Status.Empty
+                    is Status.EmptyError -> Status.EmptyError
+                    else -> loadCharactersInEpisode(episode.extractData.characters)
+                }
+            )
+                .flowOn(defaultDispatcher)
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(0),
+                    initialValue = Status.Empty
+                )
+        }
+
+    val uiState: Flow<EpisodeDetailsState> =
+        combine(_episodeDetails, _charactersInEpisode, ::makeState)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(0),
+                initialValue = EpisodeDetailsState(
+                    episode = Status.Empty,
+                    characters = Status.Empty
+                )
+            )
+
+    private fun makeState(
+        episode: Status<EpisodeDetailsUI>,
+        characters: Status<List<CharacterListItemUI>>
+    ): EpisodeDetailsState = EpisodeDetailsState(episode, characters)
 
     fun load(episodeId: Int) {
-        _uiState.value = UIState.InitialLoading
-        loadUIState(episodeId)
+        loadEpisode(episodeId)
     }
 
-    fun refresh(episodeId: Int) {
-        _uiState.value = UIState.Refresh
-        loadUIState(episodeId)
+    fun retry() {
+        _episodeDetails.value = Status.Empty
     }
 
-    fun retry(episodeId: Int) {
-        _uiState.value = UIState.InitialLoading
-        loadUIState(episodeId)
-    }
-
-    private fun loadUIState(episodeId: Int) {
-
+    private fun loadEpisode(episodeId: Int) {
         viewModelScope.launch(defaultDispatcher) {
-            when (val episodeDetails = loadEpisodeDetails(episodeId)) {
-                is Status.Success -> {
-                    val appearanceList = loadCharacters(episodeDetails.data!!.characters)
-                    _uiState.value = UIState.Success(
-                        data = EpisodeDetailsState(
-                            episode = episodeDetails.data!!,
-                            characters = appearanceList
-                        )
-                    )
-                }
-                is Status.Error -> {
-                    episodeDetails.data?.let { episode ->
-                        val appearanceList = loadCharacters(episode.characters)
-                        _uiState.value = UIState.Error(
-                            data = EpisodeDetailsState(
-                                episode = episode,
-                                characters = appearanceList
-                            ),
-                            error = episodeDetails.exception
-                        )
-                    } ?: run {
-                        _uiState.value = UIState.EmptyError(
-                            error = episodeDetails.exception
-                        )
-                    }
-                }
-            }
+            _episodeDetails.value = episodeDetailsInteractor.getEpisodeDetails(episodeId)
+                .map(mapper::mapEpisodeDetails)
         }
     }
 
-    private suspend fun loadEpisodeDetails(characterId: Int): Status<EpisodeDetailsUI?> {
-        val response = episodeDetailsInteractor.getEpisodeDetails(characterId)
-        return when (response) {
-            is Status.Success -> Status.Success(
-                data = mapper.mapEpisodeDetails(response.data)
-            )
-            is Status.Error -> Status.Error(
-                data = mapper.mapEpisodeDetails(response.data),
-                exception = response.exception
-            )
-            is Status.Empty -> Status.Empty
-            is Status.EmptyError -> Status.EmptyError
-
-        }
-    }
+    private suspend fun loadCharactersInEpisode(list: List<String>): Status<List<CharacterListItemUI>> =
+        charactersListInteractor
+            .getCharactersInEpisode(list)
+            .map(mapper::mapListCharacterInEpisode)
 
     private suspend fun loadCharacters(charactersIdList: List<String>): List<CharacterListItemUI> {
         val response = charactersListInteractor.getCharactersInEpisode(charactersIdList)
@@ -122,6 +115,6 @@ class EpisodeDetailsViewModel @Inject constructor(
 }
 
 data class EpisodeDetailsState(
-    val episode: EpisodeDetailsUI,
-    val characters: List<CharacterListItemUI>
+    val episode: Status<EpisodeDetailsUI>,
+    val characters: Status<List<CharacterListItemUI>>
 )

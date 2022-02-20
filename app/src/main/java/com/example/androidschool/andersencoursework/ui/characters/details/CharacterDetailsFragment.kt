@@ -96,9 +96,33 @@ class CharacterDetailsFragment :
     }
 
     private fun handleState(state: CharacterDetailsState) {
-        Log.e("STATE", "$state")
         handleCharacter(state.character)
         handleAppearance(state.appearance)
+    }
+
+    private fun handleCharacter(character: Status<CharacterDetailsUI>) {
+        when (character) {
+            is Status.Empty -> {
+                hideAll()
+                showLoading()
+                viewModel.load(characterId)
+            }
+            is Status.EmptyError -> {
+                hideAll()
+                showNoData()
+                hideLoading()
+                showErrorMessage()
+            }
+            is Status.Success -> {
+                hideLoading()
+                showContent(character.extractData)
+            }
+            is Status.Error -> {
+                hideLoading()
+                showContent(character.extractData)
+                showErrorMessage()
+            }
+        }
     }
 
     private fun handleAppearance(appearance: Status<List<SeasonListItemUI>>) {
@@ -125,31 +149,6 @@ class CharacterDetailsFragment :
 
     private fun showNoAppearance() {
         viewBinding.characterSeriesAppearanceListNoData.visibility = View.VISIBLE
-    }
-
-    private fun handleCharacter(character: Status<CharacterDetailsUI>) {
-        when (character) {
-            is Status.Empty -> {
-                hideAll()
-                showLoading()
-                viewModel.load(characterId)
-            }
-            is Status.EmptyError -> {
-                hideAll()
-                showNoData()
-                hideLoading()
-                showErrorMessage()
-            }
-            is Status.Success -> {
-                hideLoading()
-                showContent(character.extractData)
-            }
-            is Status.Error -> {
-                hideLoading()
-                showContent(character.extractData)
-                showErrorMessage()
-            }
-        }
     }
 
     private fun showNoData() {

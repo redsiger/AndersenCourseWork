@@ -19,9 +19,8 @@ class UIMapper {
     fun mapListSeasonListItem(list: List<SeasonListItem>): List<SeasonListItemUI> =
         list.map(::mapSeasonListItem)
 
-    fun mapEpisodeDetails(entity: EpisodeDetails?): EpisodeDetailsUI? {
-        return if (entity != null) {
-            EpisodeDetailsUI(
+    fun mapEpisodeDetails(entity: EpisodeDetails): EpisodeDetailsUI {
+        return EpisodeDetailsUI(
                 airDate = entity.airDate,
                 characters = entity.characters,
                 episode = entity.episode,
@@ -30,7 +29,6 @@ class UIMapper {
                 series = entity.series,
                 title = entity.title
             )
-        } else null
     }
 
     fun mapEpisodeListItem(entity: EpisodeListItem): EpisodeListItemUI {

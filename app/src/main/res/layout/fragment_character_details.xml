@@ -111,19 +111,13 @@
 
             </androidx.core.widget.NestedScrollView>
 
-            <FrameLayout
+            <TextView
                 android:id="@+id/errorBlock"
+                style="@style/AppDefaultSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/default_emptyData_message"
-                    style="@style/AppDefaultSubtitle"/>
-
-            </FrameLayout>
+                android:layout_gravity="center"
+                android:text="@string/default_emptyData_message" />
 
             <FrameLayout
                 android:id="@+id/fragment_character_details_fakeToolbar"

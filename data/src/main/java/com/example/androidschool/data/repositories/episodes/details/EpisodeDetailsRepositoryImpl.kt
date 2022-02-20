@@ -13,7 +13,7 @@ class EpisodeDetailsRepositoryImpl(
     private val localStorage: EpisodeDetailsLocalStorage
 ): EpisodeDetailsRepository {
 
-    override suspend fun getEpisodeDetails(id: Int): Status<EpisodeDetails?> {
+    override suspend fun getEpisodeDetails(id: Int): Status<EpisodeDetails> {
         return try {
             val response = service.getEpisodeDetails(id)
             if (response.isSuccessful) {
@@ -22,11 +22,15 @@ class EpisodeDetailsRepositoryImpl(
                 Status.Success(data)
             } else {
                 val localEpisode = localStorage.getEpisodeDetails(id)
-                Status.Error(localEpisode, response.errorBody() as HttpException)
+                if (localEpisode != null) {
+                    Status.Error(localEpisode, response.errorBody() as HttpException)
+                } else Status.EmptyError
             }
         } catch (e: Exception) {
             val localEpisode = localStorage.getEpisodeDetails(id)
-            Status.Error(localEpisode, e)
+            if (localEpisode != null) {
+                Status.Error(localEpisode, e)
+            } else Status.EmptyError
         }
     }
 }

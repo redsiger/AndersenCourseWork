@@ -1,101 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/episode_details_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/episode_details_refresh_container"
-    android:background="?attr/colorSurface">
+    android:layout_height="wrap_content">
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/episode_details_refresh_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <include
-                android:id="@+id/errorBlock"
-                layout="@layout/include_default_empty_error" />
-
-            <LinearLayout
-                android:id="@+id/episode_details_main_content"
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/episode_details_main_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="?actionBarSize"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/episode_details_title"
+                            style="@style/AppDefaultTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/app_offset_large"
+                            android:layout_marginEnd="@dimen/app_offset_large"
+                            android:layout_marginBottom="@dimen/app_offset_large"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            tools:text="Episode Title Title Title" />
+
+                        <TextView
+                            style="@style/SecondaryText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/app_offset_large"
+                            android:layout_marginEnd="@dimen/app_offset_large"
+                            android:text="@string/episode_details_season_title" />
+
+                        <TextView
+                            android:id="@+id/episode_details_season"
+                            style="@style/PrimaryText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/app_offset_large"
+                            android:layout_marginEnd="@dimen/app_offset_large"
+                            android:layout_marginBottom="@dimen/app_offset_small"
+                            tools:text="1" />
+
+                        <TextView
+                            style="@style/SecondaryText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/app_offset_large"
+                            android:layout_marginEnd="@dimen/app_offset_large"
+                            android:text="@string/episode_details_episode_details" />
+
+                        <TextView
+                            android:id="@+id/episode_details_episode"
+                            style="@style/PrimaryText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/app_offset_large"
+                            android:layout_marginEnd="@dimen/app_offset_large"
+                            android:layout_marginBottom="@dimen/app_offset_large"
+                            tools:text="1" />
+
+                        <TextView
+                            android:id="@+id/episode_details_characters"
+                            style="@style/AppDefaultSubtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/app_offset_large"
+                            android:layout_marginEnd="@dimen/app_offset_large"
+                            android:layout_marginBottom="@dimen/app_offset_small"
+                            android:text="@string/episode_details_characters_list_title" />
+
+                        <TextView
+                            android:id="@+id/episode_details_characters_list_no_data"
+                            style="@style/SecondaryText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/default_no_data_message"
+                            android:visibility="gone" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/episode_details_characters_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clipToPadding="false"
+                            android:paddingStart="@dimen/app_offset_large"
+                            android:paddingEnd="@dimen/app_offset_large"
+                            tools:itemCount="1"
+                            tools:listitem="@layout/list_item_character" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+            <TextView
+                android:id="@+id/errorBlock"
+                style="@style/AppDefaultSubtitle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="?actionBarSize">
-
-                <TextView
-                    android:id="@+id/episode_details_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/app_offset_large"
-                    android:layout_marginEnd="@dimen/app_offset_large"
-                    android:layout_marginBottom="@dimen/app_offset_large"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    style="@style/AppDefaultTitle"
-                    tools:text="Episode Title Title Title" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/app_offset_large"
-                    android:layout_marginEnd="@dimen/app_offset_large"
-                    android:text="@string/episode_details_season_title"
-                    style="@style/SecondaryText" />
-
-                <TextView
-                    android:id="@+id/episode_details_season"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/app_offset_large"
-                    android:layout_marginEnd="@dimen/app_offset_large"
-                    android:layout_marginBottom="@dimen/app_offset_small"
-                    tools:text="1"
-                    style="@style/PrimaryText"
-                    />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/app_offset_large"
-                    android:layout_marginEnd="@dimen/app_offset_large"
-                    android:text="@string/episode_details_episode_details"
-                    style="@style/SecondaryText" />
-
-                <TextView
-                    android:id="@+id/episode_details_episode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/app_offset_large"
-                    android:layout_marginEnd="@dimen/app_offset_large"
-                    android:layout_marginBottom="@dimen/app_offset_large"
-                    tools:text="1"
-                    style="@style/PrimaryText" />
-
-                <TextView
-                    android:id="@+id/episode_details_characters"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/app_offset_large"
-                    android:layout_marginEnd="@dimen/app_offset_large"
-                    android:layout_marginBottom="@dimen/app_offset_small"
-                    android:text="@string/episode_details_characters_list_title"
-                    style="@style/AppDefaultSubtitle" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/episode_details_characters_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/app_offset_large"
-                    android:paddingEnd="@dimen/app_offset_large"
-                    android:clipToPadding="false"
-                    tools:listitem="@layout/list_item_character"
-                    tools:itemCount="1" />
-
-            </LinearLayout>
+                android:layout_gravity="center"
+                android:text="@string/default_emptyData_message" />
 
             <FrameLayout
                 android:id="@+id/fragment_episode_details_fakeToolbar"
@@ -114,15 +139,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="?actionBarSize"
                     android:layout_gravity="start"
+                    android:clickable="true"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:padding="@dimen/app_offset_medium"
-                    android:src="@drawable/ic_arrow_back"
-                    android:clickable="true" />
+                    android:src="@drawable/ic_arrow_back" />
 
             </FrameLayout>
 
         </FrameLayout>
 
-    </androidx.core.widget.NestedScrollView>
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

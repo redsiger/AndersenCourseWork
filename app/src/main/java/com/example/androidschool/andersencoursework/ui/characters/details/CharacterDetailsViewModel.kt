@@ -30,13 +30,11 @@ class CharacterDetailsViewModel constructor(
                 when (character) {
                     is Status.Empty -> Status.Empty
                     is Status.EmptyError -> Status.EmptyError
-                    else -> {
-                        seasonsInteractor
-                            .getSeasonsByAppearance(character.extractData.appearance.map { it.toString() })
-                            .map(mapper::mapListSeasonListItem)
-                    }
+                    else -> loadAppearance(character.extractData.appearance.map { it.toString() })
                 }
-            ).stateIn(
+            )
+                .flowOn(defaultDispatcher)
+                .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(0),
                 initialValue = Status.Empty
@@ -68,6 +66,11 @@ class CharacterDetailsViewModel constructor(
                 .map(mapper::mapCharacterDetails)
         }
     }
+
+    private suspend fun loadAppearance(list: List<String>): Status<List<SeasonListItemUI>> =
+        seasonsInteractor
+            .getSeasonsByAppearance(list)
+            .map(mapper::mapListSeasonListItem)
 
     private fun makeState(
         character: Status<CharacterDetailsUI>,

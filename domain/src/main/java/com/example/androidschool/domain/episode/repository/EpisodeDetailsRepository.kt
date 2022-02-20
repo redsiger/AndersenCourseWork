@@ -5,5 +5,5 @@ import com.example.androidschool.util.Status
 
 interface EpisodeDetailsRepository {
 
-    suspend fun getEpisodeDetails(id: Int): Status<EpisodeDetails?>
+    suspend fun getEpisodeDetails(id: Int): Status<EpisodeDetails>
 }
