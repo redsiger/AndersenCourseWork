@@ -1,4 +1,4 @@
-package com.example.androidschool.domain.search.model
+package com.example.androidschool.domain
 
 
 sealed interface ListItem {

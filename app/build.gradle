@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs'
 }
 
@@ -90,6 +91,10 @@ dependencies {
     // SwipeRefreshLayout
     def swipeRefresh_dev = "1.1.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefresh_dev"
+
+    // Fragment
+    def fragments_ver = "1.4.1"
+    implementation "androidx.fragment:fragment-ktx:$fragments_ver"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'

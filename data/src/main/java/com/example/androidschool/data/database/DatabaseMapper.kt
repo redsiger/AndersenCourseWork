@@ -9,7 +9,7 @@ import com.example.androidschool.data.network.characters.model.CharacterNetworkE
 import com.example.androidschool.domain.characters.model.CharacterDetails
 import com.example.androidschool.domain.characters.model.CharacterInEpisode
 import com.example.androidschool.domain.episode.model.EpisodeDetails
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 
 class DatabaseMapper {
 

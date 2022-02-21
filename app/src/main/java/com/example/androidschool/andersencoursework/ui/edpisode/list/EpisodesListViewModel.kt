@@ -8,7 +8,7 @@ import com.example.androidschool.andersencoursework.ui.core.BasePagingViewModel
 import com.example.androidschool.andersencoursework.ui.core.recycler.ListItemUI
 import com.example.androidschool.domain.BasePagingInteractor
 import com.example.androidschool.domain.episode.interactor.EpisodesListInteractor
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 

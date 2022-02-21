@@ -3,7 +3,7 @@ package com.example.androidschool.data.repositories.episodes.list
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.episodes.EpisodesListDao
 import com.example.androidschool.data.database.episodes.model.EpisodeListItemRoom
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 
 interface EpisodesListLocalStorage {
 

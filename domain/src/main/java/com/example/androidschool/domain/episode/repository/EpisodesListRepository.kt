@@ -1,6 +1,6 @@
 package com.example.androidschool.domain.episode.repository
 
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 import com.example.androidschool.util.Status
 
 interface EpisodesListRepository {

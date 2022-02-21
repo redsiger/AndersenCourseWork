@@ -10,7 +10,11 @@
         android:label="SearchFragment" >
         <action
             android:id="@+id/toFilter"
-            app:destination="@id/searchFilterFragment" />
+            app:destination="@id/searchFilterFragment">
+            <argument
+                android:name="filter"
+                app:argType="com.example.androidschool.andersencoursework.ui.search.filter.SearchFilter" />
+        </action>
         <action
             android:id="@+id/toCharacterDetails"
             app:destination="@id/character_details_graph" >
@@ -31,8 +35,12 @@
 
     <dialog
         android:id="@+id/searchFilterFragment"
-        android:name="com.example.androidschool.andersencoursework.ui.search.SearchFilterFragment"
-        android:label="SearchFilterFragment" />
+        android:name="com.example.androidschool.andersencoursework.ui.search.filter.SearchFilterFragment"
+        android:label="SearchFilterFragment" >
+        <argument
+            android:name="filter"
+            app:argType="com.example.androidschool.andersencoursework.ui.search.filter.SearchFilter" />
+    </dialog>
 
     <include app:graph="@navigation/character_details_graph" />
     <include app:graph="@navigation/episode_details_nav_graph" />

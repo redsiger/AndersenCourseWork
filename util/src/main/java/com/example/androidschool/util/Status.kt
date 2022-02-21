@@ -34,30 +34,50 @@ sealed class Status<out T> {
     }
 }
 
+fun <T> Status<List<T>>.filter(
+    filter: (T) -> Boolean
+): Status<List<T>> {
+    return when (this) {
+        is Status.Success -> Status.Success(this.data.filter(filter))
+        is Status.Error -> Status.Error(this.data.filter(filter), this.exception)
+        is Status.EmptyError -> Status.EmptyError
+        is Status.Initial -> Status.Initial
+    }
+}
+
+// something terrible
+fun <T> Status<List<List<T>>>.flatten(): Status<List<T>> {
+    return when (this) {
+        is Status.Initial -> Status.Initial
+        is Status.EmptyError -> Status.EmptyError
+        is Status.Success -> Status.Success(this.data.flatten())
+        is Status.Error -> Status.Error(this.data.flatten(), this.exception)
+    }
+}
+
 // something terrible
 fun <T> Status<List<T>>.merge(
     other: Status<List<T>>,
-    mergeFunction: (List<T>, List<T>) -> List<T>
-): Status<List<T>> {
+): Status<List<List<T>>> {
     return when (this.areSameAndNotEmpty(other)) {
         true -> {
             val firstList = this.extractData
             val secondList = other.extractData
             when (this) {
-                is Status.Success -> Status.Success(mergeFunction(firstList, secondList))
+                is Status.Success -> Status.Success(listOf(firstList, secondList))
                 is Status.Error -> Status.Error(
-                    mergeFunction(firstList, secondList),
+                    listOf(firstList, secondList),
                     this.exception
                 )
                 else -> throw IllegalStateException("Status is incorrect")
             }
         }
         false -> when (this) {
-            is Status.Success -> Status.Success(this.extractData)
-            is Status.Error -> Status.Error(this.extractData, this.exception)
+            is Status.Success -> Status.Success(listOf(this.extractData))
+            is Status.Error -> Status.Error(listOf(this.extractData), this.exception)
             else -> when (other) {
-                is Status.Success -> Status.Success(other.extractData)
-                is Status.Error -> Status.Error(other.extractData, other.exception)
+                is Status.Success -> Status.Success(listOf(other.extractData))
+                is Status.Error -> Status.Error(listOf(other.extractData), other.exception)
                 else -> throw IllegalStateException("Status: neither one nor the other")
             }
         }

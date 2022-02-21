@@ -1,7 +1,7 @@
 package com.example.androidschool.data.network.episodes.model
 
 import com.example.androidschool.domain.episode.model.EpisodeDetails
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

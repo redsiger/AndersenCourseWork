@@ -2,7 +2,7 @@ package com.example.androidschool.domain.episode.interactor
 
 import com.example.androidschool.domain.BasePagingInteractor
 import com.example.androidschool.domain.episode.repository.EpisodesListRepository
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 import com.example.androidschool.util.Status
 
 interface EpisodesListInteractor : BasePagingInteractor<ListItem.EpisodeListItem> {

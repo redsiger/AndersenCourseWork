@@ -6,8 +6,9 @@ import com.example.androidschool.andersencoursework.ui.seasons.model.SeasonListI
 import com.example.androidschool.domain.characters.model.CharacterDetails
 import com.example.androidschool.domain.characters.model.CharacterInEpisode
 import com.example.androidschool.domain.episode.model.EpisodeDetails
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 import com.example.androidschool.domain.seasons.model.SeasonListItem
+import kotlin.reflect.KClass
 
 class UIMapper {
 
@@ -17,7 +18,6 @@ class UIMapper {
             is ListItem.CharacterListItem -> mapListItemCharacter(item)
         }
     }
-
 
     private fun mapListItemCharacter(item: ListItem.CharacterListItem): ListItemUI.CharacterListItemUI =
         ListItemUI.CharacterListItemUI(

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,7 @@ import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.recycler.CompositeAdapter
 import com.example.androidschool.andersencoursework.ui.core.recycler.DiffComparable
 import com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListDelegateAdapter
+import com.example.androidschool.andersencoursework.ui.search.filter.SearchFilter
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.delay
@@ -60,8 +62,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         navController.navigate(action)
     }
 
-    private fun toFilter() {
-        val action = SearchFragmentDirections.toFilter()
+    private fun toFilter(filter: SearchFilter) {
+        val action = SearchFragmentDirections.toFilter(filter)
         navController.navigate(action)
     }
 
@@ -73,6 +75,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     override fun initBinding(view: View): FragmentSearchBinding = FragmentSearchBinding.bind(view)
 
     override fun initFragment() {
+
+        registerResultListener()
 
         setupToolbar(viewBinding.fragmentSearchToolbar)
 
@@ -87,8 +91,18 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         }
 
         collectStates()
-        viewBinding.fragmentSearchFilterBtn.setOnClickListener { toFilter() }
+        viewBinding.fragmentSearchFilterBtn.setOnClickListener { toFilter(SearchFilter(viewModel.currentFilter)) }
         viewBinding.searchFragmentRefreshContainer.setOnRefreshListener { viewModel.retry() }
+    }
+
+    private fun registerResultListener() {
+        setFragmentResultListener("FILTER") { key, bundle ->
+            val filter = bundle.getParcelable<SearchFilter>("FILTER")
+            filter?.let {
+                viewModel.filter(filter.filter)
+                Log.e("FILTER", "$filter")
+            }
+        }
     }
 
     private fun initSearchResultList() {

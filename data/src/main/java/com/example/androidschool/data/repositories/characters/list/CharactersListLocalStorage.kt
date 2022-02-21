@@ -5,7 +5,7 @@ import com.example.androidschool.data.database.characters.CharactersListDao
 import com.example.androidschool.data.database.characters.model.CharacterInEpisodeRoom
 import com.example.androidschool.data.database.characters.model.CharacterListItemRoom
 import com.example.androidschool.domain.characters.model.CharacterInEpisode
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 
 interface CharactersListLocalStorage {
 

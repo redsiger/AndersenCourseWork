@@ -4,7 +4,7 @@ import com.example.androidschool.data.network.characters.CharactersService
 import com.example.androidschool.data.network.characters.model.CharacterNetworkEntity
 import com.example.androidschool.domain.characters.model.CharacterInEpisode
 import com.example.androidschool.domain.characters.repository.CharactersListRepository
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 import com.example.androidschool.util.Status
 import kotlin.Exception
 

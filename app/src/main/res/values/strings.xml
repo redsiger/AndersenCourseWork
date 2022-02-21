@@ -4,6 +4,8 @@
     <string name="app_name">Breaking Bad Api</string>
     <string name="refresh_btn_title">Refresh</string>
     <string name="retry_btn_title">Retry</string>
+    <string name="apply_btn_title">Apply</string>
+    <string name="cancel_btn_title">@android:string/cancel</string>
 
     <!--  MenuItems  -->
     <string name="menu_item_search_title">Search</string>
@@ -13,6 +15,7 @@
     <string name="characters_fragment_title">Characters</string>
     <string name="characters_details_nickname">\"%1$s\"</string>
     <string name="character_appeared_in">Character appeared in</string>
+    <string name="img_desc_character">Character img</string>
 
     <!--  Appearance List Item  -->
     <string name="appearance_list_item_season">Season %1$s</string>
@@ -34,7 +37,8 @@
     <string name="default_error_message">Something went wrong</string>
     <string name="default_emptyData_message">Nothing to show here</string>
     <string name="fragment_filter_title">Filter</string>
-
+    <string name="filter_category_title">Category</string>
+    <string name="start_typing_something">Start typing something…</string>
 
     <!--  Seasons  -->
     <string name="seasons_fragment_title">Seasons</string>
@@ -42,6 +46,7 @@
     <string name="season_list_item_title">Season %1$s</string>
     <string name="fragment_seasons_list_all_episodes">All episodes</string>
     <string name="default_no_data_message">There\'s no data to show</string>
-
+    <string name="img_desc_clear_btn">Clear button</string>
+    <string name="img_desc_filter_btn">Filter button</string>
 
 </resources>

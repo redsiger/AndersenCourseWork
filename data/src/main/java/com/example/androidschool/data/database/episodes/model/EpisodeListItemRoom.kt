@@ -4,7 +4,7 @@ package com.example.androidschool.data.database.episodes.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 
 @Entity(tableName = "episodes_list_items")
 data class EpisodeListItemRoom(

@@ -1,7 +1,7 @@
 package com.example.androidschool.domain.characters.repository
 
 import com.example.androidschool.domain.characters.model.CharacterInEpisode
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 import com.example.androidschool.util.Status
 
 interface CharactersListRepository {

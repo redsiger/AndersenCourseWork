@@ -1,7 +1,7 @@
 package com.example.androidschool.data.database.characters.model
 
 import androidx.room.*
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 
 @Entity(tableName = "characters")
 data class CharacterListItemRoom(

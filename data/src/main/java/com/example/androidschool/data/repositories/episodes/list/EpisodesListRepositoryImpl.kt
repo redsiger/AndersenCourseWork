@@ -3,7 +3,7 @@ package com.example.androidschool.data.repositories.episodes.list
 import com.example.androidschool.data.network.episodes.EpisodesService
 import com.example.androidschool.data.network.episodes.model.EpisodeListItemNetwork
 import com.example.androidschool.domain.episode.repository.EpisodesListRepository
-import com.example.androidschool.domain.search.model.ListItem
+import com.example.androidschool.domain.ListItem
 import com.example.androidschool.util.Status
 import kotlin.Exception
 

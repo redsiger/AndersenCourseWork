@@ -10,10 +10,28 @@
     <style name="MainTheme" parent="Theme.AppTheme">
         <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
         <item name="bottomNavigationStyle">@style/bottom</item>
+        <item name="materialButtonStyle">@style/Widget.App.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.App.Button.OutlinedButton</item>
         <item name="android:fontFamily">@font/montserrat</item>
-<!--        <item name="android:textColorHint">@color/white</item>-->
-        <!--   toolbar back arrow     -->
         <item name="drawerArrowStyle">@style/MyDrawerArrowToggle</item>
+    </style>
+
+    <!--  Buttons  -->
+    <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Button</item>
+    </style>
+
+    <style name="Widget.App.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Button.TextButton</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Button" parent="">
+        <item name="colorPrimary">@color/colorSecondary</item>
+        <item name="colorOnPrimary">?colorOnSurface</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Button.TextButton" parent="">
+        <item name="colorPrimary">@color/colorSecondary</item>
     </style>
 
     <!--  Toolbar  -->

@@ -98,7 +98,6 @@ abstract class BaseFragment<B: ViewBinding>(resId: Int): Fragment(resId) {
         toolbar.setOnMenuItemClickListener(onClickListener)
     }
 
-//    abstract fun shoErrorMessage()
 
 //     Fragment State Management ------------------------------------------------
 

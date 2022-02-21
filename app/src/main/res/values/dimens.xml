@@ -9,6 +9,7 @@
     <dimen name="app_text_small">10sp</dimen>
 
     <!--  App margins/paddings  -->
+    <dimen name="app_offset_extra_extra_large">48dp</dimen>
     <dimen name="app_offset_extra_large">32dp</dimen>
     <dimen name="app_offset_large">20dp</dimen>
     <dimen name="app_offset_medium">16dp</dimen>
