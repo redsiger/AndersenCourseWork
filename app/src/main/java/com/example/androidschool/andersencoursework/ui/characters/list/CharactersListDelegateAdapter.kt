@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding
-import com.example.androidschool.andersencoursework.ui.characters.models.CharacterListItemUI
 import com.example.androidschool.andersencoursework.ui.core.recycler.DelegateAdapter
+import com.example.androidschool.andersencoursework.ui.core.recycler.ListItemUI
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -17,7 +17,8 @@ class CharactersListDelegateAdapter @AssistedInject constructor (
     private val glide: RequestManager,
     @Assisted("onItemClick") private val onItemClick: (id: Int) -> Unit
 ):
-    DelegateAdapter<CharacterListItemUI, CharactersListDelegateAdapter.ViewHolder>(CharacterListItemUI::class.java) {
+    DelegateAdapter<ListItemUI.CharacterListItemUI, CharactersListDelegateAdapter.ViewHolder>(
+        ListItemUI.CharacterListItemUI::class.java) {
 
     override fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -25,15 +26,15 @@ class CharactersListDelegateAdapter @AssistedInject constructor (
         return ViewHolder(itemView)
     }
 
-    override fun bindViewHolder(model: CharacterListItemUI, viewHolder: ViewHolder) {
-        viewHolder.bind(model)
+    override fun bindViewHolder(item: ListItemUI.CharacterListItemUI, viewHolder: ViewHolder) {
+        viewHolder.bind(item)
     }
 
-    inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         val viewBinding = ListItemCharacterBinding.bind(itemView)
 
-        fun bind(item: CharacterListItemUI) {
+        fun bind(item: ListItemUI.CharacterListItemUI) {
             viewBinding.listItemCharacterName.text = item.name
             glide
                 .load(item.img)

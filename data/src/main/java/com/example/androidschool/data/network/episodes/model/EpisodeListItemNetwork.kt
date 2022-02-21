@@ -1,7 +1,7 @@
 package com.example.androidschool.data.network.episodes.model
 
 import com.example.androidschool.domain.episode.model.EpisodeDetails
-import com.example.androidschool.domain.episode.model.EpisodeListItem
+import com.example.androidschool.domain.search.model.ListItem
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -22,8 +22,8 @@ data class EpisodeListItemNetwork(
     @Json(name = "title")
     val title: String
 ) {
-    fun toDomainModel(): EpisodeListItem {
-        return EpisodeListItem(
+    fun toDomainModel(): ListItem.EpisodeListItem {
+        return ListItem.EpisodeListItem(
             airDate = airDate,
             characters = characters,
             episode = episode,

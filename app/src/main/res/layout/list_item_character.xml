@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="16dp">
+    app:cardCornerRadius="@dimen/app_card_radius_small">
 
     <FrameLayout
         android:layout_width="@dimen/list_item_character_img_width"
@@ -16,7 +16,8 @@
             android:id="@+id/list_item_character_img"
             android:layout_width="@dimen/list_item_character_img_width"
             android:layout_height="@dimen/list_item_character_img_height"
-            android:src="@drawable/ic_person" />
+            android:src="@drawable/ic_person"
+            android:contentDescription="@string/img_desc_character" />
 
         <View
             android:layout_width="@dimen/list_item_character_img_width"

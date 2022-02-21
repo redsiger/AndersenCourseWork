@@ -2,29 +2,24 @@ package com.example.androidschool.data.repositories.characters.list
 
 import com.example.androidschool.data.database.DatabaseMapper
 import com.example.androidschool.data.database.characters.CharactersListDao
-import com.example.androidschool.data.database.characters.model.CharacterDetailsRoom
 import com.example.androidschool.data.database.characters.model.CharacterInEpisodeRoom
 import com.example.androidschool.data.database.characters.model.CharacterListItemRoom
-import com.example.androidschool.data.database.characters.model.toDomainList
-import com.example.androidschool.domain.characters.model.CharacterDetails
 import com.example.androidschool.domain.characters.model.CharacterInEpisode
-import com.example.androidschool.domain.characters.model.CharacterListItem
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import com.example.androidschool.domain.search.model.ListItem
 
 interface CharactersListLocalStorage {
 
-    fun searchCharacters(query: String): List<CharacterListItem>
+    suspend fun searchCharacters(query: String): List<ListItem.CharacterListItem>
 
-    suspend fun insertCharacters(characters: List<CharacterListItem>, offset: Int)
+    suspend fun insertCharacters(characters: List<ListItem.CharacterListItem>, offset: Int)
 
-    suspend fun getCharactersPaging(offset: Int, limit: Int): List<CharacterListItem>
+    suspend fun getCharactersPaging(offset: Int, limit: Int): List<ListItem.CharacterListItem>
 
     suspend fun insertAndReturnPage(
-        characters: List<CharacterListItem>,
+        characters: List<ListItem.CharacterListItem>,
         offset: Int,
         limit: Int
-    ): List<CharacterListItem>
+    ): List<ListItem.CharacterListItem>
 
     suspend fun getCharactersInEpisode(): List<CharacterInEpisode>
 
@@ -37,17 +32,17 @@ interface CharactersListLocalStorage {
         private val mapper: DatabaseMapper
     ) : CharactersListLocalStorage {
 
-        override fun searchCharacters(query: String): List<CharacterListItem> =
+        override suspend fun searchCharacters(query: String): List<ListItem.CharacterListItem> =
             dao.searchCharacters(query).map(CharacterListItemRoom::toDomainModel)
 
-        override suspend fun getCharactersPaging(offset: Int, limit: Int): List<CharacterListItem> =
+        override suspend fun getCharactersPaging(offset: Int, limit: Int): List<ListItem.CharacterListItem> =
             dao.getCharactersPaging(offset).map(CharacterListItemRoom::toDomainModel)
 
         override suspend fun insertAndReturnPage(
-            characters: List<CharacterListItem>,
+            characters: List<ListItem.CharacterListItem>,
             offset: Int,
             limit: Int
-        ): List<CharacterListItem> {
+        ): List<ListItem.CharacterListItem> {
             return dao
                 .insertAndReturnPage(
                     characters.map { mapper.toRoomEntity(it, offset) }, offset, limit
@@ -64,7 +59,7 @@ interface CharactersListLocalStorage {
             dao.insertAndReturnCharactersInEpisode(characters.map(mapper::toRoomEntity))
                 .map(CharacterInEpisodeRoom::toDomainModel)
 
-        override suspend fun insertCharacters(characters: List<CharacterListItem>, offset: Int) =
+        override suspend fun insertCharacters(characters: List<ListItem.CharacterListItem>, offset: Int) =
             dao.insertCharacters(characters.map { mapper.toRoomEntity(it, offset) })
 
     }

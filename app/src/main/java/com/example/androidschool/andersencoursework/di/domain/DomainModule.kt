@@ -8,7 +8,8 @@ import dagger.Module
     includes = [
         CharactersModule::class,
         EpisodesModule::class,
-        SeasonsModule::class
+        SeasonsModule::class,
+        SearchModule::class
     ]
 )
 class DomainModule

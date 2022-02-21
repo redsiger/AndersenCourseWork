@@ -3,8 +3,7 @@ package com.example.androidschool.data.repositories.episodes.list
 import com.example.androidschool.data.network.episodes.EpisodesService
 import com.example.androidschool.data.network.episodes.model.EpisodeListItemNetwork
 import com.example.androidschool.domain.episode.repository.EpisodesListRepository
-import com.example.androidschool.domain.episode.model.EpisodeListItem
-import com.example.androidschool.domain.search.model.SearchItem
+import com.example.androidschool.domain.search.model.ListItem
 import com.example.androidschool.util.Status
 import kotlin.Exception
 
@@ -16,7 +15,7 @@ class EpisodesListRepositoryImpl(
     override suspend fun getEpisodesPaging(
         offset: Int,
         limit: Int
-    ): Status<List<EpisodeListItem>> {
+    ): Status<List<ListItem.EpisodeListItem>> {
         return try {
             // imitation of paging because API service don't support paging
             val response = service.getEpisodes()
@@ -42,7 +41,7 @@ class EpisodesListRepositoryImpl(
         }
     }
 
-    override suspend fun getCharacterAppearance(appearanceInList: List<Int>): Status<List<EpisodeListItem>> {
+    override suspend fun getCharacterAppearance(appearanceInList: List<Int>): Status<List<ListItem.EpisodeListItem>> {
         return try {
             val response = service.getEpisodes()
             if (response.isSuccessful) {
@@ -65,7 +64,7 @@ class EpisodesListRepositoryImpl(
         }
     }
 
-    override suspend fun getEpisodesBySeason(season: String): Status<List<EpisodeListItem>> {
+    override suspend fun getEpisodesBySeason(season: String): Status<List<ListItem.EpisodeListItem>> {
         return try {
             val response = service.getEpisodes()
             if (response.isSuccessful) {
@@ -88,7 +87,7 @@ class EpisodesListRepositoryImpl(
         }
     }
 
-    override suspend fun searchEpisodesByNameOrAppearance(query: String): Status<List<SearchItem>> {
+    override suspend fun searchEpisodesByNameOrAppearance(query: String): Status<List<ListItem>> {
         return try {
             val response = service.getEpisodes()
             if (response.isSuccessful) {

@@ -13,11 +13,7 @@ import com.example.androidschool.andersencoursework.databinding.MergeToolbarBind
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
-import com.example.androidschool.andersencoursework.ui.core.recycler.CompositeAdapter
-import com.example.androidschool.andersencoursework.ui.core.recycler.DefaultErrorDelegateAdapter
-import com.example.androidschool.andersencoursework.ui.core.recycler.DefaultLoadingDelegateAdapter
-import com.example.androidschool.andersencoursework.ui.core.recycler.DiffComparable
-import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
+import com.example.androidschool.andersencoursework.ui.core.recycler.*
 import com.example.androidschool.andersencoursework.util.InfiniteScrollListener
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
 import com.example.androidschool.andersencoursework.util.UIStatePaging
@@ -175,23 +171,23 @@ class EpisodesListFragment :
 
     private fun handlePartialData(state: UIStatePaging.PartialData<DiffComparable>) {
         hideLoading()
-        showPartialData(state.data as List<EpisodeListItemUI>)
+        showPartialData(state.data as List<ListItemUI.EpisodeListItemUI>)
     }
 
     private fun handleLoadingPartialData(state: UIStatePaging.LoadingPartialData<DiffComparable>) {
         hideLoading()
-        showPartialDataLoading(state.data as List<EpisodeListItemUI>)
+        showPartialDataLoading(state.data as List<ListItemUI.EpisodeListItemUI>)
         resetScrollListener()
     }
 
     private fun handleLoadingPartialDataError(state: UIStatePaging.LoadingPartialDataError<DiffComparable>) {
         hideLoading()
-        showPartialDataError(state.data as List<EpisodeListItemUI>)
+        showPartialDataError(state.data as List<ListItemUI.EpisodeListItemUI>)
     }
 
     private fun handleAllData(state: UIStatePaging.AllData<DiffComparable>) {
         hideLoading()
-        showAllData(state.data as List<EpisodeListItemUI>)
+        showAllData(state.data as List<ListItemUI.EpisodeListItemUI>)
     }
 
     private fun handleRefresh(state: UIStatePaging.Refresh<DiffComparable>) {
@@ -232,22 +228,22 @@ class EpisodesListFragment :
             getString(R.string.default_error_message)
     }
 
-    private fun showPartialData(data: List<EpisodeListItemUI>) {
+    private fun showPartialData(data: List<ListItemUI.EpisodeListItemUI>) {
         viewBinding.fragmentEpisodesListRecycler.visibility = View.VISIBLE
         mPagingAdapter.submitList(data)
     }
 
-    private fun showPartialDataLoading(data: List<EpisodeListItemUI>) {
+    private fun showPartialDataLoading(data: List<ListItemUI.EpisodeListItemUI>) {
         viewBinding.fragmentEpisodesListRecycler.visibility = View.VISIBLE
         mPagingAdapter.submitList(data)
     }
 
-    private fun showPartialDataError(data: List<EpisodeListItemUI>) {
+    private fun showPartialDataError(data: List<ListItemUI.EpisodeListItemUI>) {
         viewBinding.fragmentEpisodesListRecycler.visibility = View.VISIBLE
         mPagingAdapter.submitList(data)
     }
 
-    private fun showAllData(data: List<EpisodeListItemUI>) {
+    private fun showAllData(data: List<ListItemUI.EpisodeListItemUI>) {
         viewBinding.fragmentEpisodesListRecycler.visibility = View.VISIBLE
         mPagingAdapter.submitList(data)
     }

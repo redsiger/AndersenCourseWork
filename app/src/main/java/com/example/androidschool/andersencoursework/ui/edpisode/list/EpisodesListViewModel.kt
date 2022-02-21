@@ -5,28 +5,28 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.androidschool.andersencoursework.di.dispatchers.DispatcherIO
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.core.BasePagingViewModel
-import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
+import com.example.androidschool.andersencoursework.ui.core.recycler.ListItemUI
 import com.example.androidschool.domain.BasePagingInteractor
 import com.example.androidschool.domain.episode.interactor.EpisodesListInteractor
-import com.example.androidschool.domain.episode.model.EpisodeListItem
+import com.example.androidschool.domain.search.model.ListItem
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
-import javax.inject.Named
 
 class EpisodesListViewModel(
-    override val mapToListItemUI: (EpisodeListItem) -> EpisodeListItemUI,
+    override val mapToListItemUI: (ListItem.EpisodeListItem) -> ListItemUI.EpisodeListItemUI,
     override val defaultDispatcher: CoroutineDispatcher,
-    override val interactor: BasePagingInteractor<EpisodeListItem>
-): BasePagingViewModel<EpisodeListItem, EpisodeListItemUI>() {
+    override val interactor: BasePagingInteractor<ListItem.EpisodeListItem>
+) : BasePagingViewModel<ListItem.EpisodeListItem, ListItemUI.EpisodeListItemUI>() {
 
-    override val itemClass: Class<EpisodeListItemUI> = EpisodeListItemUI::class.java
+    override val itemClass: Class<ListItemUI.EpisodeListItemUI> =
+        ListItemUI.EpisodeListItemUI::class.java
 
-    class Factory @Inject constructor (
+    class Factory @Inject constructor(
         private val interactor: EpisodesListInteractor,
         @DispatcherIO
         private val defaultDispatcher: CoroutineDispatcher,
         private val mapper: UIMapper
-    ): ViewModelProvider.Factory {
+    ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {

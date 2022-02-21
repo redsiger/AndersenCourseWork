@@ -48,19 +48,19 @@ interface CharactersListDao {
     suspend fun getCharactersInEpisode(): List<CharacterInEpisodeRoom>
 
     @Query("SELECT * FROM characters WHERE charId > :offset AND charId <= (:offset + :limit)")
-    fun getCharactersPagingStatus(offset: Int, limit: Int): List<CharacterListItemRoom>
+    suspend fun getCharactersPagingStatus(offset: Int, limit: Int): List<CharacterListItemRoom>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacters(characters: List<CharacterListItemRoom>)
 
     @Query("SELECT * FROM characters WHERE character_offset = :offset")
-    fun getCharactersPaging(offset: Int): List<CharacterListItemRoom>
+    suspend fun getCharactersPaging(offset: Int): List<CharacterListItemRoom>
 
     @Query("SELECT * FROM characters")
     fun getAll(): Flow<List<CharacterListItemRoom>>
 
     @Query("SELECT * FROM characters WHERE name LIKE '%' || :query || '%' OR nickname LIKE '%' || :query || '%'")
-    fun searchCharacters(query: String): List<CharacterListItemRoom>
+    suspend fun searchCharacters(query: String): List<CharacterListItemRoom>
 
     @Query("DELETE FROM characters")
     suspend fun clearAllCharacters()

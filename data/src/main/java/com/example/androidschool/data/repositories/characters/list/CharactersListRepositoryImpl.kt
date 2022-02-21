@@ -4,8 +4,7 @@ import com.example.androidschool.data.network.characters.CharactersService
 import com.example.androidschool.data.network.characters.model.CharacterNetworkEntity
 import com.example.androidschool.domain.characters.model.CharacterInEpisode
 import com.example.androidschool.domain.characters.repository.CharactersListRepository
-import com.example.androidschool.domain.characters.model.CharacterListItem
-import com.example.androidschool.domain.search.model.SearchItem
+import com.example.androidschool.domain.search.model.ListItem
 import com.example.androidschool.util.Status
 import kotlin.Exception
 
@@ -43,7 +42,7 @@ class CharactersListRepositoryImpl(
     override suspend fun getCharactersPagingState(
         offset: Int,
         limit: Int
-    ): Status<List<CharacterListItem>> {
+    ): Status<List<ListItem.CharacterListItem>> {
         return try {
             val response = service.getCharactersPaginated(offset, limit)
             if (response.isSuccessful) {
@@ -65,7 +64,7 @@ class CharactersListRepositoryImpl(
         }
     }
 
-    override suspend fun searchCharactersByNameOrNickName(query: String): Status<List<SearchItem>> {
+    override suspend fun searchCharactersByNameOrNickName(query: String): Status<List<ListItem>> {
         return try {
             val response = service.getAllCharacters()
             if (response.isSuccessful) {

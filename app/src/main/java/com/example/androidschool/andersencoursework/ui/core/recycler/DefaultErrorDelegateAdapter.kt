@@ -18,11 +18,11 @@ class DefaultErrorDelegateAdapter(
         return ViewHolder(itemView)
     }
 
-    override fun bindViewHolder(model: DefaultRecyclerError, viewHolder: ViewHolder) {
-        viewHolder.bind(model)
+    override fun bindViewHolder(item: DefaultRecyclerError, viewHolder: ViewHolder) {
+        viewHolder.bind(item)
     }
 
-    inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         val viewBinding = IncludeDefaultLoadStateBinding.bind(itemView)
 

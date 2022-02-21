@@ -8,9 +8,8 @@ import com.example.androidschool.data.database.episodes.model.EpisodeListItemRoo
 import com.example.androidschool.data.network.characters.model.CharacterNetworkEntity
 import com.example.androidschool.domain.characters.model.CharacterDetails
 import com.example.androidschool.domain.characters.model.CharacterInEpisode
-import com.example.androidschool.domain.characters.model.CharacterListItem
 import com.example.androidschool.domain.episode.model.EpisodeDetails
-import com.example.androidschool.domain.episode.model.EpisodeListItem
+import com.example.androidschool.domain.search.model.ListItem
 
 class DatabaseMapper {
 
@@ -70,7 +69,7 @@ class DatabaseMapper {
         )
     }
 
-    fun toRoomEntity(entity: CharacterListItem, offset: Int): CharacterListItemRoom {
+    fun toRoomEntity(entity: ListItem.CharacterListItem, offset: Int): CharacterListItemRoom {
         return CharacterListItemRoom(
             appearance = entity.appearance,
             betterCallSaulAppearance = entity.betterCallSaulAppearance,
@@ -87,7 +86,7 @@ class DatabaseMapper {
         )
     }
 
-    fun toRoomEntity(entity: EpisodeListItem): EpisodeListItemRoom {
+    fun toRoomEntity(entity: ListItem.EpisodeListItem): EpisodeListItemRoom {
         return EpisodeListItemRoom(
             airDate = entity.airDate,
             characters = entity.characters,

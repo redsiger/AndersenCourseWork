@@ -8,7 +8,6 @@ import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.ListItemSeasonBinding
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
 import com.example.androidschool.andersencoursework.ui.core.recycler.DelegateAdapter
-import com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListDelegateAdapter
 import com.example.androidschool.andersencoursework.ui.seasons.model.SeasonListItemUI
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -27,11 +26,11 @@ class SeasonsListDelegateAdapter @AssistedInject constructor(
         return ViewHolder(itemView)
     }
 
-    override fun bindViewHolder(model: SeasonListItemUI, viewHolder: ViewHolder) {
-        viewHolder.bind(model)
+    override fun bindViewHolder(item: SeasonListItemUI, viewHolder: ViewHolder) {
+        viewHolder.bind(item)
     }
 
-    inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         val viewBinding = ListItemSeasonBinding.bind(itemView)
 

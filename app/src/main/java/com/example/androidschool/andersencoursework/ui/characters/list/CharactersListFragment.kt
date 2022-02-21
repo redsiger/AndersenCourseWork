@@ -11,7 +11,6 @@ import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.FragmentCharactersListBinding
 import com.example.androidschool.andersencoursework.databinding.MergeToolbarBinding
 import com.example.androidschool.andersencoursework.di.appComponent
-import com.example.androidschool.andersencoursework.ui.characters.models.CharacterListItemUI
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.initRecyclerPaging
 import com.example.androidschool.andersencoursework.ui.core.recycler.*
@@ -157,23 +156,23 @@ class CharactersListFragment :
 
     private fun handlePartialData(state: UIStatePaging.PartialData<DiffComparable>) {
         hideLoading()
-        showPartialData(state.data as List<CharacterListItemUI>)
+        showPartialData(state.data as List<ListItemUI.CharacterListItemUI>)
     }
 
     private fun handleLoadingPartialData(state: UIStatePaging.LoadingPartialData<DiffComparable>) {
         hideLoading()
-        showPartialDataLoading(state.data as List<CharacterListItemUI>)
+        showPartialDataLoading(state.data as List<ListItemUI.CharacterListItemUI>)
         resetScrollListener()
     }
 
     private fun handleLoadingPartialDataError(state: UIStatePaging.LoadingPartialDataError<DiffComparable>) {
         hideLoading()
-        showPartialDataError(state.data as List<CharacterListItemUI>)
+        showPartialDataError(state.data as List<ListItemUI.CharacterListItemUI>)
     }
 
     private fun handleAllData(state: UIStatePaging.AllData<DiffComparable>) {
         hideLoading()
-        showAllData(state.data as List<CharacterListItemUI>)
+        showAllData(state.data as List<ListItemUI.CharacterListItemUI>)
     }
 
     private fun handleRefresh(state: UIStatePaging.Refresh<DiffComparable>) {
@@ -214,22 +213,22 @@ class CharactersListFragment :
             getString(R.string.default_error_message)
     }
 
-    private fun showPartialData(data: List<CharacterListItemUI>) {
+    private fun showPartialData(data: List<ListItemUI.CharacterListItemUI>) {
         viewBinding.fragmentCharactersListRecycler.visibility = View.VISIBLE
         mPagingAdapter.submitList(data)
     }
 
-    private fun showPartialDataLoading(data: List<CharacterListItemUI>) {
+    private fun showPartialDataLoading(data: List<ListItemUI.CharacterListItemUI>) {
         viewBinding.fragmentCharactersListRecycler.visibility = View.VISIBLE
         mPagingAdapter.submitList(data)
     }
 
-    private fun showPartialDataError(data: List<CharacterListItemUI>) {
+    private fun showPartialDataError(data: List<ListItemUI.CharacterListItemUI>) {
         viewBinding.fragmentCharactersListRecycler.visibility = View.VISIBLE
         mPagingAdapter.submitList(data)
     }
 
-    private fun showAllData(data: List<CharacterListItemUI>) {
+    private fun showAllData(data: List<ListItemUI.CharacterListItemUI>) {
         viewBinding.fragmentCharactersListRecycler.visibility = View.VISIBLE
         mPagingAdapter.submitList(data)
     }

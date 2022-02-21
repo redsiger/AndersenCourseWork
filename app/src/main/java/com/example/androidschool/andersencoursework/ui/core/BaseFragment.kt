@@ -2,10 +2,8 @@ package com.example.androidschool.andersencoursework.ui.core
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -14,7 +12,6 @@ import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.example.androidschool.andersencoursework.databinding.ListItemCharacterBinding.bind
 import com.example.androidschool.andersencoursework.util.InfiniteScrollListener
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
 
@@ -100,6 +97,8 @@ abstract class BaseFragment<B: ViewBinding>(resId: Int): Fragment(resId) {
         toolbar.inflateMenu(menuId)
         toolbar.setOnMenuItemClickListener(onClickListener)
     }
+
+//    abstract fun shoErrorMessage()
 
 //     Fragment State Management ------------------------------------------------
 

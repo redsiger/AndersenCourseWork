@@ -27,4 +27,8 @@
     <!--  Appearance List Item  -->
     <dimen name="list_item_appearance_width">150dp</dimen>
 
+    <!-- Search List Item  -->
+    <dimen name="search_list_item_image_size">60dp</dimen>
+    <dimen name="search_list_item_image_corner">30dp</dimen>
+
 </resources>

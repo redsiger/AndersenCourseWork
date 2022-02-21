@@ -21,14 +21,14 @@ class CharacterDetailsViewModel constructor(
     private val mapper: UIMapper
 ) : ViewModel() {
 
-    private val _character = MutableStateFlow<Status<CharacterDetailsUI>>(Status.Empty)
+    private val _character = MutableStateFlow<Status<CharacterDetailsUI>>(Status.Initial)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val _appearance: Flow<Status<List<SeasonListItemUI>>> =
         _character.flatMapLatest { character ->
             flowOf(
                 when (character) {
-                    is Status.Empty -> Status.Empty
+                    is Status.Initial -> Status.Initial
                     is Status.EmptyError -> Status.EmptyError
                     else -> loadAppearance(character.extractData.appearance.map { it.toString() })
                 }
@@ -37,7 +37,7 @@ class CharacterDetailsViewModel constructor(
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(0),
-                    initialValue = Status.Empty
+                    initialValue = Status.Initial
                 )
         }
 
@@ -47,8 +47,8 @@ class CharacterDetailsViewModel constructor(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(0),
                 initialValue = CharacterDetailsState(
-                    character = Status.Empty,
-                    appearance = Status.Empty
+                    character = Status.Initial,
+                    appearance = Status.Initial
                 )
             )
 
@@ -57,7 +57,7 @@ class CharacterDetailsViewModel constructor(
     }
 
     fun retry() {
-        _character.value = Status.Empty
+        _character.value = Status.Initial
     }
 
     private fun loadCharacter(characterId: Int) {

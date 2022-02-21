@@ -8,13 +8,10 @@ import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.ListItemAppearanceBinding
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
 import com.example.androidschool.andersencoursework.ui.core.recycler.DelegateAdapter
-import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
-import com.example.androidschool.andersencoursework.ui.seasons.list.SeasonsListDelegateAdapter
 import com.example.androidschool.andersencoursework.ui.seasons.model.SeasonListItemUI
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import javax.inject.Inject
 
 class CharacterAppearanceDelegateAdapter @AssistedInject constructor(
     @Assisted("onItemClick")
@@ -31,13 +28,13 @@ class CharacterAppearanceDelegateAdapter @AssistedInject constructor(
     }
 
     override fun bindViewHolder(
-        model: SeasonListItemUI,
+        item: SeasonListItemUI,
         viewHolder: CharacterAppearanceDelegateAdapter.ViewHolder
     ) {
-        viewHolder.bind(model)
+        viewHolder.bind(item)
     }
 
-    inner class ViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val viewBinding = ListItemAppearanceBinding.bind(itemView)
 

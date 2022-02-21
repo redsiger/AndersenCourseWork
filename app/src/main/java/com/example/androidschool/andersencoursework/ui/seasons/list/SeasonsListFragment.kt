@@ -119,7 +119,7 @@ class SeasonsListFragment :
 
     private fun handleState(state: Status<List<SeasonListItemUI>>) {
         when (state) {
-            is Status.Empty -> {
+            is Status.Initial -> {
                 hideAll()
                 showLoading()
                 viewModel.load()

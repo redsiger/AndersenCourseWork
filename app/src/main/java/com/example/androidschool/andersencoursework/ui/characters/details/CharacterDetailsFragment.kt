@@ -1,7 +1,6 @@
 package com.example.androidschool.andersencoursework.ui.characters.details
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -102,7 +101,7 @@ class CharacterDetailsFragment :
 
     private fun handleCharacter(character: Status<CharacterDetailsUI>) {
         when (character) {
-            is Status.Empty -> {
+            is Status.Initial -> {
                 hideAll()
                 showLoading()
                 viewModel.load(characterId)

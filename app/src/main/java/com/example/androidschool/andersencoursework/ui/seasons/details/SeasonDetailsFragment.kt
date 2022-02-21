@@ -14,8 +14,8 @@ import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.recycler.CompositeAdapter
+import com.example.androidschool.andersencoursework.ui.core.recycler.ListItemUI
 import com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListDelegateAdapter
-import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
 import com.example.androidschool.util.Status
 import com.google.android.material.snackbar.Snackbar
@@ -114,9 +114,9 @@ class SeasonDetailsFragment :
         viewBinding.fragmentSeasonsDetailsRefresh.setOnRefreshListener { viewModel.retry() }
     }
 
-    private fun handleState(state: Status<List<EpisodeListItemUI>>) {
+    private fun handleState(state: Status<List<ListItemUI.EpisodeListItemUI>>) {
         when (state) {
-            is Status.Empty -> {
+            is Status.Initial -> {
                 hideAll()
                 showLoading()
                 viewModel.load(season)
@@ -170,7 +170,7 @@ class SeasonDetailsFragment :
         viewBinding.errorBlock.visibility = View.GONE
     }
 
-    private fun showContent(data: List<EpisodeListItemUI>) {
+    private fun showContent(data: List<ListItemUI.EpisodeListItemUI>) {
         hideNoData()
         if (data.isNotEmpty()) {
             viewBinding.fragmentSeasonsDetailsMainContent.visibility = View.VISIBLE

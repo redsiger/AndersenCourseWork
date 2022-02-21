@@ -1,101 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_fragment_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/fragment_search_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
-        
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+    android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/fragment_search_input"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:hint="@string/fragment_search_hint"
-                android:inputType="text" />
-
-            <ImageView
-                android:id="@+id/fragment_search_clear_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="@dimen/app_offset_medium_small"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:src="@drawable/ic_delete_text"
-                android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/fragment_search_filter_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_filter"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:padding="@dimen/app_offset_medium_small"
-                />
-
-        </LinearLayout>
-
-    </com.google.android.material.appbar.MaterialToolbar>
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?actionBarSize"-->
-<!--        android:background="@color/colorSurface"-->
-<!--        android:orientation="horizontal">-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/fragment_search_back_btn"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:paddingStart="16dp"-->
-<!--            android:paddingEnd="16dp"-->
-<!--            android:src="@drawable/ic_arrow_back" />-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/fragment_search_input"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_weight="1"-->
-<!--            android:backgroundTint="?attr/colorOnPrimary"-->
-<!--            android:hint="@string/fragment_search_hint"-->
-<!--            android:inputType="text" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/fragment_search_clear_btn"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_margin="@dimen/app_offset_medium_small"-->
-<!--            android:background="?attr/selectableItemBackgroundBorderless"-->
-<!--            android:clickable="true"-->
-<!--            android:src="@drawable/ic_delete_text"-->
-<!--            android:visibility="gone" />-->
-
-<!--    </LinearLayout>-->
-
-    <include layout="@layout/merge_decor_line" />
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurface">
+        android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_search_results_list"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/fragment_search_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="?attr/actionBarSize">
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
+                <EditText
+                    android:id="@+id/fragment_search_input"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:hint="@string/fragment_search_hint"
+                    android:inputType="text" />
 
-</LinearLayout>
+                <ImageView
+                    android:id="@+id/fragment_search_clear_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/app_offset_medium_small"
+                    android:src="@drawable/ic_delete_text"
+                    android:visibility="gone"
+                    android:contentDescription="@string/img_desc_clear_btn" />
+
+                <ImageView
+                    android:id="@+id/fragment_search_filter_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/app_offset_medium_small"
+                    android:src="@drawable/ic_filter"
+                    android:contentDescription="@string/img_desc_filter_btn" />
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <include layout="@layout/merge_decor_line" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/search_fragment_refresh_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSurface">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/errorBlock"
+                    style="@style/AppDefaultSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/default_emptyData_message" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fragment_search_results_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </FrameLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <include layout="@layout/merge_decor_line" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

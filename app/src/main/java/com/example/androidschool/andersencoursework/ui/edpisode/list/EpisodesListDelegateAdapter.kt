@@ -4,23 +4,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.RequestManager
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.ListItemEpisodeBinding
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
 import com.example.androidschool.andersencoursework.ui.core.recycler.DelegateAdapter
-import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeListItemUI
+import com.example.androidschool.andersencoursework.ui.core.recycler.ListItemUI
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import javax.inject.Inject
 
 class EpisodesListDelegateAdapter @AssistedInject constructor(
     @Assisted("onItemClick")
     private val onItemClick: (id: Int) -> Unit,
     private val resourceProvider: ResourceProvider
 ) :
-    DelegateAdapter<EpisodeListItemUI, EpisodesListDelegateAdapter.ViewHolder>(EpisodeListItemUI::class.java) {
+    DelegateAdapter<ListItemUI.EpisodeListItemUI, EpisodesListDelegateAdapter.ViewHolder>(ListItemUI.EpisodeListItemUI::class.java) {
 
     override fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -28,15 +26,15 @@ class EpisodesListDelegateAdapter @AssistedInject constructor(
         return ViewHolder(itemView)
     }
 
-    override fun bindViewHolder(model: EpisodeListItemUI, viewHolder: ViewHolder) {
-        viewHolder.bind(model)
+    override fun bindViewHolder(item: ListItemUI.EpisodeListItemUI, viewHolder: ViewHolder) {
+        viewHolder.bind(item)
     }
 
-    inner class ViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val viewBinding = ListItemEpisodeBinding.bind(itemView)
 
-        fun bind(item: EpisodeListItemUI) {
+        fun bind(item: ListItemUI.EpisodeListItemUI) {
             with(viewBinding) {
                 listItemEpisodeTitle.text =
                     resourceProvider.resources.getString(

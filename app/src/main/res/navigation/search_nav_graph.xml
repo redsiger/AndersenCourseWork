@@ -11,11 +11,30 @@
         <action
             android:id="@+id/toFilter"
             app:destination="@id/searchFilterFragment" />
+        <action
+            android:id="@+id/toCharacterDetails"
+            app:destination="@id/character_details_graph" >
+            <argument
+                android:name="characterId"
+                app:argType="integer"
+                app:nullable="false" />
+        </action>
+        <action
+            android:id="@+id/toEpisodeDetails"
+            app:destination="@id/episode_details_nav_graph" >
+            <argument
+                android:name="episodeId"
+                app:argType="integer"
+                app:nullable="false" />
+        </action>
     </fragment>
 
     <dialog
         android:id="@+id/searchFilterFragment"
         android:name="com.example.androidschool.andersencoursework.ui.search.SearchFilterFragment"
         android:label="SearchFilterFragment" />
+
+    <include app:graph="@navigation/character_details_graph" />
+    <include app:graph="@navigation/episode_details_nav_graph" />
 
 </navigation>

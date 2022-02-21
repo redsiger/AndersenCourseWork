@@ -14,15 +14,16 @@
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_episode_details.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_episodes_list.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_favorites.xml" value="0.67" />
-        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_search.xml" value="0.5" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_search.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_search_filter.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_season_details.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_seasons_list.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/include_default_empty_error.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/include_default_load_state.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/list_item_appearance.xml" value="0.75" />
-        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/list_item_character.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/list_item_character.xml" value="0.5" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/list_item_episode.xml" value="0.5" />
+        <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/list_item_search_character.xml" value="0.4986098239110287" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/list_item_season.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/merge_toolbar.xml" value="0.67" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/menu/activity_main_bottom_nav_menu.xml" value="0.36666666666666664" />

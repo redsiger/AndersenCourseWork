@@ -4,7 +4,7 @@ package com.example.androidschool.data.database.episodes.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.androidschool.domain.episode.model.EpisodeListItem
+import com.example.androidschool.domain.search.model.ListItem
 
 @Entity(tableName = "episodes_list_items")
 data class EpisodeListItemRoom(
@@ -24,8 +24,8 @@ data class EpisodeListItemRoom(
     @ColumnInfo(name = "title")
     val title: String
 ) {
-    fun toDomainModel(): EpisodeListItem {
-        return EpisodeListItem(
+    fun toDomainModel(): ListItem.EpisodeListItem {
+        return ListItem.EpisodeListItem(
             airDate = this.airDate,
             characters = this.characters,
             episode = this.episode,

@@ -22,7 +22,7 @@ class SeasonsListViewModel(
     private val interactor: SeasonsInteractor
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow<Status<List<SeasonListItemUI>>>(Status.Empty)
+    private val _uiState = MutableStateFlow<Status<List<SeasonListItemUI>>>(Status.Initial)
     val uiState: StateFlow<Status<List<SeasonListItemUI>>> get() = _uiState.asStateFlow()
 
     fun load() {
@@ -30,7 +30,7 @@ class SeasonsListViewModel(
     }
 
     fun retry() {
-        _uiState.value = Status.Empty
+        _uiState.value = Status.Initial
     }
 
     private fun loadUIState() {

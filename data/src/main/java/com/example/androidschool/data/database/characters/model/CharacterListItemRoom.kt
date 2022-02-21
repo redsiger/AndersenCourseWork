@@ -1,7 +1,7 @@
 package com.example.androidschool.data.database.characters.model
 
 import androidx.room.*
-import com.example.androidschool.domain.characters.model.CharacterListItem
+import com.example.androidschool.domain.search.model.ListItem
 
 @Entity(tableName = "characters")
 data class CharacterListItemRoom(
@@ -31,8 +31,8 @@ data class CharacterListItemRoom(
     @ColumnInfo(name = "character_offset")
     val offset: Int
 ) {
-    fun toDomainModel(): CharacterListItem {
-        return CharacterListItem(
+    fun toDomainModel(): ListItem.CharacterListItem {
+        return ListItem.CharacterListItem(
             appearance = appearance,
             betterCallSaulAppearance = betterCallSaulAppearance,
             birthday = birthday,
@@ -48,6 +48,6 @@ data class CharacterListItemRoom(
     }
 }
 
-fun List<CharacterListItemRoom>.toDomainList(): List<CharacterListItem> {
+fun List<CharacterListItemRoom>.toDomainList(): List<ListItem.CharacterListItem> {
     return this.map { it.toDomainModel() }
 }

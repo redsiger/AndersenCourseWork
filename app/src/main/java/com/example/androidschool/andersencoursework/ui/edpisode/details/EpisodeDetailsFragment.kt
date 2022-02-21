@@ -11,12 +11,11 @@ import com.example.androidschool.andersencoursework.databinding.FragmentEpisodeD
 import com.example.androidschool.andersencoursework.di.appComponent
 import com.example.androidschool.andersencoursework.di.util.ResourceProvider
 import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListDelegateAdapter
-import com.example.androidschool.andersencoursework.ui.characters.models.CharacterListItemUI
 import com.example.androidschool.andersencoursework.ui.core.BaseFragment
 import com.example.androidschool.andersencoursework.ui.core.recycler.CompositeAdapter
+import com.example.androidschool.andersencoursework.ui.core.recycler.ListItemUI
 import com.example.androidschool.andersencoursework.ui.edpisode.models.EpisodeDetailsUI
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
-import com.example.androidschool.andersencoursework.util.UIState
 import com.example.androidschool.util.Status
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
@@ -27,6 +26,7 @@ class EpisodeDetailsFragment :
 
     @Inject
     lateinit var resourceProvider: ResourceProvider
+
     @Inject
     lateinit var mContext: Context
 
@@ -97,7 +97,7 @@ class EpisodeDetailsFragment :
 
     private fun handleEpisode(episode: Status<EpisodeDetailsUI>) {
         when (episode) {
-            is Status.Empty -> {
+            is Status.Initial -> {
                 hideAll()
                 showLoading()
                 viewModel.load(episodeId)
@@ -120,7 +120,7 @@ class EpisodeDetailsFragment :
         }
     }
 
-    private fun handleCharacters(characters: Status<List<CharacterListItemUI>>) {
+    private fun handleCharacters(characters: Status<List<ListItemUI.CharacterListItemUI>>) {
         when (characters) {
             is Status.Success -> {
                 showCharacters(characters.extractData)
@@ -133,7 +133,7 @@ class EpisodeDetailsFragment :
         }
     }
 
-    private fun showCharacters(data: List<CharacterListItemUI>) {
+    private fun showCharacters(data: List<ListItemUI.CharacterListItemUI>) {
         if (data.isEmpty()) {
             showNoCharacters()
         } else {
@@ -181,8 +181,8 @@ class EpisodeDetailsFragment :
     private fun showContent(episode: EpisodeDetailsUI) {
         hideNoData()
         viewBinding.episodeDetailsMainContent.visibility = View.VISIBLE
-        with(viewBinding) {
 
+        with(viewBinding) {
             episodeDetailsTitle.text = episode.title
             episodeDetailsSeason.text = episode.season
             episodeDetailsEpisode.text = episode.episode

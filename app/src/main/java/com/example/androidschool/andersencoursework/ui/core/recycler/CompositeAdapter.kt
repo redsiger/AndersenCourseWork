@@ -13,7 +13,7 @@ class CompositeAdapter(
 
     override fun getItemViewType(position: Int): Int {
         for (i in 0 until delegates.size()) {
-            if (delegates[i].modelClass == getItem(position).javaClass)
+            if (delegates[i].itemClass == getItem(position).javaClass)
                 return delegates.keyAt(i)
         }
         throw IllegalArgumentException("Illegal item viewType: ${getItem(position)}, delegates: $delegates")

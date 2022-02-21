@@ -3,7 +3,7 @@ package com.example.androidschool.data.network.characters.model
 
 import com.example.androidschool.domain.characters.model.CharacterDetails
 import com.example.androidschool.domain.characters.model.CharacterInEpisode
-import com.example.androidschool.domain.characters.model.CharacterListItem
+import com.example.androidschool.domain.search.model.ListItem
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -32,8 +32,8 @@ data class CharacterNetworkEntity(
     @Json(name = "status")
     val status: String
 ) {
-    fun toDomainModel(): CharacterListItem {
-        return CharacterListItem(
+    fun toDomainModel(): ListItem.CharacterListItem {
+        return ListItem.CharacterListItem(
             appearance = appearance,
             betterCallSaulAppearance = betterCallSaulAppearance,
             birthday = birthday,
