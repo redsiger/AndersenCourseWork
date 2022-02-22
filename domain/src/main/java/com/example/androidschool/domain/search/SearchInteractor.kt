@@ -4,6 +4,7 @@ import com.example.androidschool.domain.characters.repository.CharactersListRepo
 import com.example.androidschool.domain.episode.repository.EpisodesListRepository
 import com.example.androidschool.domain.ListItem
 import com.example.androidschool.util.Status
+import com.example.androidschool.util.filter
 import com.example.androidschool.util.flatten
 import com.example.androidschool.util.merge
 
@@ -18,10 +19,19 @@ interface SearchInteractor {
 
         override suspend fun getSearch(searchParameters: SearchParameters): Status<List<ListItem>> {
 
-            val characters = charactersRepository.searchCharactersByNameOrNickName(searchParameters.query)
-            val episodes = episodesRepository.searchEpisodesByNameOrAppearance(searchParameters.query)
+            val characters =
+                charactersRepository.searchCharactersByNameOrNickName(searchParameters.query)
+            val episodes =
+                episodesRepository.searchEpisodesByNameOrAppearance(searchParameters.query)
 
-            return characters.merge(episodes).flatten()
+            return characters.merge(episodes)
+                .flatten()
+                .filter { item ->
+                    if (searchParameters.filter.isNotEmpty()) {
+                        searchParameters.filter.contains(item.listItemType)
+                    } else true
+                }
         }
     }
+
 }

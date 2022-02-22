@@ -1,7 +1,11 @@
 package com.example.androidschool.domain
 
+import com.example.androidschool.domain.search.ListItemType
+
 
 sealed interface ListItem {
+
+    val listItemType: ListItemType
 
     data class CharacterListItem(
         val appearance: List<Int> = emptyList(),
@@ -14,8 +18,11 @@ sealed interface ListItem {
         val nickname: String = "",
         val occupation: List<String> = emptyList(),
         val portrayed: String = "",
-        val status: String = ""
-    ) : ListItem
+        val status: String = "",
+    ) : ListItem {
+        override val listItemType: ListItemType
+            get() = ListItemType.CHARACTER
+    }
 
     data class EpisodeListItem(
         val airDate: String,
@@ -25,5 +32,8 @@ sealed interface ListItem {
         val season: String,
         val series: String,
         val title: String
-    ) : ListItem
+    ) : ListItem {
+        override val listItemType: ListItemType
+            get() = ListItemType.EPISODE
+    }
 }
