@@ -10,7 +10,9 @@
         android:label="@string/episodes_fragment_title">
         <action
             android:id="@+id/fromListToDetails"
-            app:destination="@id/episode_details_nav_graph">
+            app:destination="@id/episode_details_nav_graph"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out">
             <argument
                 android:name="episodeId"
                 app:argType="integer"

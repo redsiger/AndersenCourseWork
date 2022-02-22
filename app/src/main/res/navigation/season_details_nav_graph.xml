@@ -14,7 +14,11 @@
             app:nullable="false" />
         <action
             android:id="@+id/toEpisode"
-            app:destination="@id/episode_details_nav_graph">
+            app:destination="@id/episode_details_nav_graph"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out">
             <argument
                 android:name="episodeId"
                 app:argType="integer"

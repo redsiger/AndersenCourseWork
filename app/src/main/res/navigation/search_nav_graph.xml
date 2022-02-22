@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.androidschool.andersencoursework.ui.search.SearchFragment"
-        android:label="SearchFragment" >
+        android:label="SearchFragment">
         <action
             android:id="@+id/toFilter"
             app:destination="@id/searchFilterFragment">
@@ -17,7 +17,11 @@
         </action>
         <action
             android:id="@+id/toCharacterDetails"
-            app:destination="@id/character_details_graph" >
+            app:destination="@id/character_details_graph"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out">
             <argument
                 android:name="characterId"
                 app:argType="integer"
@@ -25,7 +29,11 @@
         </action>
         <action
             android:id="@+id/toEpisodeDetails"
-            app:destination="@id/episode_details_nav_graph" >
+            app:destination="@id/episode_details_nav_graph"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out">
             <argument
                 android:name="episodeId"
                 app:argType="integer"
@@ -36,7 +44,7 @@
     <dialog
         android:id="@+id/searchFilterFragment"
         android:name="com.example.androidschool.andersencoursework.ui.search.filter.SearchFilterFragment"
-        android:label="SearchFilterFragment" >
+        android:label="SearchFilterFragment">
         <argument
             android:name="filter"
             app:argType="com.example.androidschool.andersencoursework.ui.search.filter.SearchFilter" />

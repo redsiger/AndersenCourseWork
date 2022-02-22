@@ -12,7 +12,11 @@
         android:label="@string/characters_fragment_title">
         <action
             android:id="@+id/fromListToDetails"
-            app:destination="@id/character_details_graph">
+            app:destination="@id/character_details_graph"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out">
             <argument
                 android:name="characterId"
                 app:argType="integer"

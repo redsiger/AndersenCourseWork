@@ -10,11 +10,19 @@
     <include app:graph="@navigation/search_nav_graph" />
     <action
         android:id="@+id/action_global_to_search"
-        app:destination="@id/search_nav_graph" />
+        app:destination="@id/search_nav_graph"
+        app:enterAnim="@anim/fade_in"
+        app:exitAnim="@anim/fade_out"
+        app:popEnterAnim="@anim/fade_in"
+        app:popExitAnim="@anim/fade_out" />
 
     <include app:graph="@navigation/season_details_nav_graph" />
     <action
         android:id="@+id/action_global_to_season_details"
-        app:destination="@id/season_details_nav_graph" />
+        app:destination="@id/season_details_nav_graph"
+        app:enterAnim="@anim/fade_in"
+        app:exitAnim="@anim/fade_out"
+        app:popEnterAnim="@anim/fade_in"
+        app:popExitAnim="@anim/fade_out" />
 
 </navigation>
