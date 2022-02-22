@@ -81,4 +81,13 @@
         <item name="android:textColor">?defaultAppTextColor</item>
     </style>
 
+    <!-- Filter  -->
+    <style name="FilterCategory" >
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:checkMark">?android:listChoiceIndicatorMultiple</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">@dimen/app_offset_medium</item>
+        <item name="android:paddingBottom">@dimen/app_offset_medium</item>
+    </style>
+
 </resources>

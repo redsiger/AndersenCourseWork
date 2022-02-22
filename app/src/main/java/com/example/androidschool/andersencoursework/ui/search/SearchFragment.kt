@@ -1,6 +1,7 @@
 package com.example.androidschool.andersencoursework.ui.search
 
 import android.content.Context
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -20,6 +21,7 @@ import com.example.androidschool.andersencoursework.ui.core.recycler.CompositeAd
 import com.example.androidschool.andersencoursework.ui.core.recycler.DiffComparable
 import com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListDelegateAdapter
 import com.example.androidschool.andersencoursework.ui.search.filter.SearchFilter
+import com.example.androidschool.andersencoursework.ui.search.filter.SearchFilterFragment.Companion.FILTERS
 import com.example.androidschool.andersencoursework.util.OffsetRecyclerDecorator
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.delay
@@ -28,6 +30,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
+
+    companion object {
+        const val FILTER_KEY = "FILTER_KEY"
+    }
 
     @Inject
     lateinit var mContext: Context
@@ -72,6 +78,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         super.onAttach(context)
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        with(viewBinding) {
+            initSearch(
+                fragmentSearchInput,
+                fragmentSearchClearBtn,
+                ::search
+            )
+        }
+    }
+
     override fun initBinding(view: View): FragmentSearchBinding = FragmentSearchBinding.bind(view)
 
     override fun initFragment() {
@@ -82,26 +99,16 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
         initSearchResultList()
 
-        with(viewBinding) {
-            initSearch(
-                fragmentSearchInput,
-                fragmentSearchClearBtn,
-                ::search
-            )
-        }
-
         collectStates()
+
         viewBinding.fragmentSearchFilterBtn.setOnClickListener { toFilter(SearchFilter(viewModel.currentFilter)) }
         viewBinding.searchFragmentRefreshContainer.setOnRefreshListener { viewModel.retry() }
     }
 
     private fun registerResultListener() {
-        setFragmentResultListener("FILTER") { key, bundle ->
-            val filter = bundle.getParcelable<SearchFilter>("FILTER")
-            filter?.let {
-                viewModel.filter(filter.filter)
-                Log.e("FILTER", "$filter")
-            }
+        setFragmentResultListener(FILTER_KEY) { _, bundle ->
+            val filter = bundle.getParcelable<SearchFilter>(FILTERS)
+            filter?.let { viewModel.filter(filter.filter) }
         }
     }
 
@@ -120,9 +127,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     }
 
     private fun collectStates() {
+
         lifecycleScope.launchWhenStarted {
-            viewModel.uiState.collectLatest { state ->
-                handleState(state)
+            viewModel.uiState.collectLatest {
+                handleState(it)
             }
         }
     }
@@ -140,6 +148,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     }
 
     private fun handleInitial() {
+        hideLoading()
         hideAll()
     }
 
@@ -227,6 +236,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             private var prevQuery = ""
             override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
 
+                Log.e("onTextChanged", text.toString())
+
                 text?.trim()?.apply {
                     val query = this.toString()
                     if (prevQuery == query) return
@@ -237,6 +248,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                         delay(500)
                         if (prevQuery != query) return@launch
                         actionSearch(prevQuery)
+                        Log.e("ACTION", prevQuery)
                     }
                 }
             }

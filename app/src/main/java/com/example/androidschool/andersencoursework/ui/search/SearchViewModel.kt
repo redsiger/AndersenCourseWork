@@ -1,8 +1,6 @@
 package com.example.androidschool.andersencoursework.ui.search
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.androidschool.andersencoursework.di.dispatchers.DispatcherIO
 import com.example.androidschool.andersencoursework.ui.characters.models.UIMapper
 import com.example.androidschool.andersencoursework.ui.core.recycler.DiffComparable
@@ -19,13 +17,14 @@ import javax.inject.Inject
 class SearchViewModel(
     private val searchInteractor: SearchInteractor,
     private val mapper: UIMapper,
-    private val dispatcher: CoroutineDispatcher
+    dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _searchString = MutableStateFlow("")
+
     private val _filter = MutableStateFlow<List<ListItemType>>(listOf())
 
-    private val _searchParameters = combine(
+    private val _searchParameters: Flow<SearchParametersUI> = combine(
         _searchString,
         _filter
     ) { _searchQuery, _filter -> SearchParametersUI(_searchQuery, _filter) }
@@ -34,7 +33,6 @@ class SearchViewModel(
             started = SharingStarted.WhileSubscribed(0),
             initialValue = SearchParametersUI()
         )
-
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: Flow<SearchState<DiffComparable>> =
@@ -67,15 +65,14 @@ class SearchViewModel(
                             }
                         }
                     }
-
                 }
-                    .flowOn(dispatcher)
-                    .stateIn(
-                        scope = viewModelScope,
-                        started = SharingStarted.WhileSubscribed(0),
-                        initialValue = SearchState.Initial
-                    )
             }
+            .flowOn(dispatcher)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Eagerly,
+                initialValue = SearchState.Initial
+            )
 
     fun search(query: String) {
         _searchString.value = query

@@ -22,26 +22,18 @@
 
     <CheckedTextView
         android:id="@+id/fragment_search_filter_isCharacter"
+        style="@style/FilterCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/app_offset_medium"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:checkMark="?android:listChoiceIndicatorMultiple"
-        android:gravity="center"
-        android:paddingTop="@dimen/app_offset_medium"
-        android:paddingBottom="@dimen/app_offset_medium"
-        android:text="Characters" />
+        android:text="@string/filter_category_characters_title" />
 
     <CheckedTextView
         android:id="@+id/fragment_search_filter_isEpisode"
+        style="@style/FilterCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:checkMark="?android:listChoiceIndicatorMultiple"
-        android:gravity="center"
-        android:paddingTop="@dimen/app_offset_medium"
-        android:paddingBottom="@dimen/app_offset_medium"
-        android:text="Episodes" />
+        android:text="@string/filter_category_episodes_title" />
 
     <Button
         android:id="@+id/fragment_search_filter_btn_apply"
@@ -53,9 +45,9 @@
 
     <Button
         android:id="@+id/fragment_search_filter_btn_cancel"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="?attr/materialButtonOutlinedStyle"
         android:text="@string/cancel_btn_title" />
 
 </LinearLayout>

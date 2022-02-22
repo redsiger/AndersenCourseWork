@@ -38,6 +38,8 @@
     <string name="default_emptyData_message">Nothing to show here</string>
     <string name="fragment_filter_title">Filter</string>
     <string name="filter_category_title">Category</string>
+    <string name="filter_category_characters_title">Characters</string>
+    <string name="filter_category_episodes_title">Episodes</string>
     <string name="start_typing_something">Start typing something…</string>
 
     <!--  Seasons  -->

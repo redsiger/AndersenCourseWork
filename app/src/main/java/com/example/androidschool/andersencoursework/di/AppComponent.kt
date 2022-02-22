@@ -5,7 +5,6 @@ import com.example.androidschool.andersencoursework.ui.characters.details.Charac
 import com.example.androidschool.andersencoursework.ui.characters.list.CharactersListFragment
 import com.example.androidschool.andersencoursework.ui.edpisode.details.EpisodeDetailsFragment
 import com.example.androidschool.andersencoursework.ui.edpisode.list.EpisodesListFragment
-import com.example.androidschool.andersencoursework.ui.favorites.FavoritesFragment
 import com.example.androidschool.andersencoursework.ui.search.SearchFragment
 import com.example.androidschool.andersencoursework.ui.seasons.details.SeasonDetailsFragment
 import com.example.androidschool.andersencoursework.ui.seasons.list.SeasonsListFragment
@@ -33,6 +32,5 @@ interface AppComponent {
     fun inject(fragment: SeasonDetailsFragment)
     fun inject(fragment: EpisodesListFragment)
     fun inject(fragment: EpisodeDetailsFragment)
-    fun inject(fragment: FavoritesFragment)
     fun inject(fragment: SearchFragment)
 }
