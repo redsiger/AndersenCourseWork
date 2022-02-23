@@ -5,7 +5,7 @@
     <string name="refresh_btn_title">Refresh</string>
     <string name="retry_btn_title">Retry</string>
     <string name="apply_btn_title">Apply</string>
-    <string name="cancel_btn_title">@android:string/cancel</string>
+    <string name="cancel_btn_title">Cancel</string>
 
     <!--  MenuItems  -->
     <string name="menu_item_search_title">Search</string>
