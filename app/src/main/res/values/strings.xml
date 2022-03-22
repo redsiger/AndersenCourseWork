@@ -51,4 +51,10 @@
     <string name="img_desc_clear_btn">Clear button</string>
     <string name="img_desc_filter_btn">Filter button</string>
 
+    <!--  Yandex Map  -->
+    <string name="yandex_map_title">Yandex Map</string>
+
+    <!--  Biometric  -->
+    <string name="biometric">Biometric</string>
+
 </resources>

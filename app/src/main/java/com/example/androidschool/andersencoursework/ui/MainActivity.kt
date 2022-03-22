@@ -8,9 +8,11 @@ import androidx.core.view.WindowInsetsCompat.toWindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.androidschool.andersencoursework.BuildConfig
 import com.example.androidschool.andersencoursework.R
 import com.example.androidschool.andersencoursework.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.yandex.mapkit.MapKitFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +22,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MapKitFactory.setApiKey(BuildConfig.YANDEX_MAP_API_KEY)
+
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 

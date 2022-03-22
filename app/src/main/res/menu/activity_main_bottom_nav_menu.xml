@@ -11,4 +11,12 @@
         android:icon="@drawable/ic_episode"
         android:title="@string/seasons_fragment_title"/>
 
+    <item
+        android:id="@+id/map_nav_graph"
+        android:title="@string/yandex_map_title"/>
+
+    <item
+        android:id="@+id/biometric_nav_graph"
+        android:title="@string/biometric"/>
+
 </menu>

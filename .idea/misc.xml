@@ -29,8 +29,11 @@
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/menu/activity_main_bottom_nav_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/menu/search_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/AndersenCourseWork/feature_characters/src/main/res/layout/fragment_characters_list.xml" value="0.5" />
+        <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_biometric.xml" value="0.25416666666666665" />
+        <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_character_details.xml" value="0.17222222222222222" />
         <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_characters_list.xml" value="0.25416666666666665" />
         <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_episodes_list.xml" value="0.264" />
+        <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_map.xml" value="0.136" />
         <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/fragment_search.xml" value="0.25416666666666665" />
         <entry key="..\:/Soft/AndroidStudioProjects/AndersenCourseWork/app/src/main/res/layout/merge_toolbar_decor.xml" value="0.25416666666666665" />
       </map>

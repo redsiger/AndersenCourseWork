@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/biometric_nav_graph"
+    app:startDestination="@id/biometricFragment">
+
+    <fragment
+        android:id="@+id/biometricFragment"
+        android:name="com.example.androidschool.andersencoursework.ui.biometric.BiometricFragment"
+        android:label="BiometricFragment" />
+
+</navigation>

@@ -6,6 +6,8 @@
 
     <include app:graph="@navigation/characters_nav_graph" />
     <include app:graph="@navigation/seasons_nav_graph" />
+    <include app:graph="@navigation/map_nav_graph" />
+    <include app:graph="@navigation/biometric_nav_graph" />
 
     <include app:graph="@navigation/search_nav_graph" />
     <action

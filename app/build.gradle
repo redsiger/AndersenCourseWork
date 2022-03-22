@@ -24,6 +24,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            buildConfigField "String", "YANDEX_MAP_API_KEY", "\"2bd107b7-1bcb-429e-8a7a-7dfa5c73ea2c\""
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -47,7 +50,13 @@ dependencies {
     implementation project(':data')
     implementation project(':domain')
 
-    // Flows
+    // Biometric
+    def biometric_ver = '1.1.0'
+    implementation("androidx.biometric:biometric:$biometric_ver")
+
+    // Yandex Maps
+    def yandex_maps_ver = '4.0.0-lite'
+    implementation "com.yandex.android:maps.mobile:$yandex_maps_ver"
 
     // Retrofit and OkHttp
     def retrofit_version = '2.9.0'
